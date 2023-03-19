@@ -6,16 +6,36 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "mocha -r ts-node/register test/**/*.test.ts --exit",
+    "build:tailwind": "tailwindcss --input input.css --output tailwind.css --no-autoprefixer && tailwind-rn",
+    "dev:tailwind": "concurrently \"tailwindcss --input input.css --output tailwind.css --no-autoprefixer --watch\" \"tailwind-rn --watch\""
   },
   "dependencies": {
-    "expo": "~48.0.6",
+    "@react-native-async-storage/async-storage": "1.17.11",
+    "@react-native-material/core": "^1.3.7",
+    "@types/react": "~18.0.27",
+    "axios": "^1.3.4",
+    "expo": "^48",
     "expo-status-bar": "~1.4.4",
+    "fast-xml-parser": "^4.1.3",
+    "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-native": "0.71.3"
+    "react-native": "0.71.3",
+    "react-native-svg": "13.4.0",
+    "twrnc": "^3.6.0",
+    "typescript": "^4.9.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "chai": "^4.3.7",
+    "concurrently": "^7.6.0",
+    "mocha": "^10.2.0",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.7",
+    "@types/react-native": "~0.67.6"
   },
   "private": true
 }

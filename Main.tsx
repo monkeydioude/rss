@@ -10,6 +10,7 @@ import { Button } from '@react-native-material/core';
 import tw from 'twrnc';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { FeedsContext } from './src/context/feedsContext';
+import Swipe, { Directions, Distance } from './src/component/swipe';
 
 export default (): JSX.Element => {
   const { toggleMenu, setMenuStyle } = useContext(MenuContext);
@@ -26,17 +27,22 @@ export default (): JSX.Element => {
   }, []);
 
   return (
-    <View className='fontSans' style={{height}}>
-      <StatusBar style="auto" />
-      <TitleBar label={config.appTitle} />
-      <Button
-        title="Open Settings"
-        onPress={toggleMenu}
-        variant="outlined"
-        leading={props => <Icon name="menu-open" {...props} />}
-        />
-      <AddFeedInput setFeeds={setFeeds} />
-      <FeedsView feeds={feeds} />
-    </View>
-    );
-  }
+    <Swipe
+      direction={Directions.Right}
+      distance={Distance.Short}
+      onSwipe={toggleMenu}>
+      <View className='fontSans' style={{height}}>
+        <StatusBar style="auto" />
+        <TitleBar label={config.appTitle} />
+        <Button
+          title="Open Settings"
+          onPress={toggleMenu}
+          variant="outlined"
+          leading={props => <Icon name="menu-open" {...props} />}
+          />
+        <AddFeedInput setFeeds={setFeeds} />
+        <FeedsView feeds={feeds} />
+      </View>
+    </Swipe>
+  );
+}

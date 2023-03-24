@@ -1,6 +1,6 @@
 export default {
     fetchThreshold: 30 * 1000, // in millisecond
-    bypassServerAddr: "192.168.1.12:8080",
+    bypassServerAddr: "https://bypasscors-mtwkyutmvq-uc.a.run.app",
     recommendedFeeds: [{
         url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
         title: "WSJ: Markets"
@@ -17,9 +17,10 @@ export default {
     },
     events: {
         set_feeds: "set_feeds",
+        swipe_config: "swipe_config",
     },
     maxItemPerFeed: 10,
     feedsRefreshTimer: 60 * 1000, // in millisecond
     appTitle: "RSS",
-    settingsMenuAnimationDuration: 300,
+    settingsMenuAnimationDuration: 450,
 }

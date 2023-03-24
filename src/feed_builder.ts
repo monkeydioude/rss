@@ -42,6 +42,9 @@ const fetchAndUpdateCollection = async (url: string, rssColl: DataCollection<RSS
     return;
   }
   newFeeds.rss.lastFetchDate = +new Date();
+  newFeeds.rss.channel.item.forEach((item: RSSItem) => {
+    item.channelTitle = newFeeds.rss.channel.title;
+  })
   rssColl.set(url, newFeeds.rss);
 }
 
@@ -87,6 +90,7 @@ export const filtersOutUnsubedProviders = async (): Promise<DataCollection<RSSDa
 
 export const reloadFeeds = async (updateCb: (f: RSSItem[]) => void): Promise<void> => {
   try {
+    console.log("reloading");
     const rssColl = await filtersOutUnsubedProviders();
     updateCb(trimFeeds(rssColl.getStack()));
   } catch (e) {

@@ -7,9 +7,9 @@ export type RSSItem = {
     link: string;
     pubDate: string;
     title: string;
-    'wsj:articleType': string;
     'content:encoded': string;
     guid: string;
+    channelTitle?: string;
 }
 
 export type RSSChannel = {
@@ -27,7 +27,7 @@ export type RSSChannel = {
     link: string;
     pubDate: string;
     title: string;
-    item: RSSItem[]
+    item: RSSItem[];
 }
   
 export type RSSData = {

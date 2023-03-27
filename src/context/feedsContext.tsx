@@ -4,6 +4,7 @@ import React from "react";
 import { loadAndUpdateFeeds } from "../feed_builder";
 import config from "../../config";
 import { EventsContext } from "./eventsContext";
+import { ConfigContext } from "./configContext";
 
 type FeedContext = {
     setFeeds: (feeds: RSSItem[]) => void,
@@ -22,6 +23,8 @@ type Props = {
 const FeedsProvider = ({ children }: Props): JSX.Element => {
     const [ feeds, setFeeds ] = useState<RSSItem[]>([]);
     const { trigger } = useContext(EventsContext);
+    const { loadConfig } = useContext(ConfigContext);
+
     const setFeedsProvider = (f: RSSItem[]) => {
         setFeeds(f);
         trigger(config.events.set_feeds);
@@ -30,18 +33,19 @@ const FeedsProvider = ({ children }: Props): JSX.Element => {
     useEffect(() => {
         loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]))
         .then(() => {
-          setInterval(() => {
-            loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]));
-          }, config.feedsRefreshTimer)  
+            loadConfig();
+            setInterval(() => {
+                loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]));
+            }, config.feedsRefreshTimer)  
         });
-      }, []);
+    }, []);
 
     return (
         <FeedsContext.Provider value={{
             setFeeds: setFeedsProvider,
             feeds,
         }}>
-            {children}
+        {children}
         </FeedsContext.Provider>
     )
 }

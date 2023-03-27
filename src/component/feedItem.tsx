@@ -1,8 +1,10 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Linking, Text, View } from "react-native";
 import { RSSItem } from "../data_struct";
 import tw from 'twrnc';
 import { ConfigContext, ConfigKeys, ChannelTitleMode } from "../context/configContext";
+import { EventsContext } from "../context/eventsContext";
+import config from "../../config";
 
 type Props = {
     item: RSSItem;
@@ -10,14 +12,21 @@ type Props = {
 
 const FeedItem = ({ item }: Props): JSX.Element => {
     const isOpened = useRef(false);
-    const { getConfig, onConfigChange } = useContext(ConfigContext);
+    const { onConfigChange } = useContext(ConfigContext);
     const slideValue = new Animated.Value(-20);
     const [ channelDisplay, setChannelDisplay ] = useState<ChannelTitleMode>(ChannelTitleMode.NewLine);
 
-    onConfigChange(
-        ConfigKeys.DisplayChannelTitle,
-        () => setChannelDisplay(getConfig(ConfigKeys.DisplayChannelTitle))
-    );
+    
+    useEffect(() => {
+        const [ leaveEvent ] = onConfigChange(<Config,>(config: Config) => {
+            setChannelDisplay(config[ConfigKeys.DisplayChannelTitle]);
+        });
+
+        return () => {
+            leaveEvent();
+        }
+    }, []);
+
     const preTagChar = channelDisplay === ChannelTitleMode.Inline ? " " : "\n";
     let toValue = 130;
 
@@ -26,7 +35,6 @@ const FeedItem = ({ item }: Props): JSX.Element => {
             <Text
                     style={tw`font-medium text-base px-1 pb-0`}
                     onPress={() => {
-                        console.log(item);
                         if (!isOpened.current) {
                             slideValue.setValue(-20);
                             toValue = 130;
@@ -52,7 +60,6 @@ const FeedItem = ({ item }: Props): JSX.Element => {
                 <Text
                     style={tw`font-medium text-base m-1 p-0 underline`}
                     onPress={() => {
-                        console.log(item.link, isOpened.current)
                         if (isOpened.current) {
                             Linking.openURL(item.link);
                         }

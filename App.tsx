@@ -8,8 +8,8 @@ import EventsProvider from './src/context/eventsContext';
 import ConfigProvider from './src/context/configContext';
 
 export default (): JSX.Element => (
-  <ConfigProvider>
-    <EventsProvider>
+  <EventsProvider>
+    <ConfigProvider>
       <FeedsProvider>
         <MenuProvider
           MenuComponent={SideMenu}
@@ -20,6 +20,6 @@ export default (): JSX.Element => (
           <Main />
         </MenuProvider>
       </FeedsProvider>
-    </EventsProvider>
-  </ConfigProvider>
+    </ConfigProvider>
+  </EventsProvider>
 )

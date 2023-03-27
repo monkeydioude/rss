@@ -34,12 +34,11 @@ export default ({ toggleMenu }: MenuProps): JSX.Element => {
 
     const reloadSub = async () => setSubscriptions(await getSubscriptions());
 
-    onEvent(
-        config.events.set_feeds,
-        reloadSub
-    );
-
     useEffect(() => {
+        const s = onEvent(
+            config.events.set_feeds,
+            reloadSub
+        );
         reloadSub();
     }, []);
     return (

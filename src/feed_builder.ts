@@ -3,7 +3,7 @@ import config from "../config";
 import { RSSData, DataCollection, RSSItem, XMLData, Provider } from "./data_struct";
 
 const getURL = (url: string): string => {
-  return `http://${config.bypassServerAddr}/${url}`;
+  return `${config.bypassServerAddr}/${url}`;
 }
 
 // fetchXMLData retrieves a provider's feed
@@ -90,7 +90,6 @@ export const filtersOutUnsubedProviders = async (): Promise<DataCollection<RSSDa
 
 export const reloadFeeds = async (updateCb: (f: RSSItem[]) => void): Promise<void> => {
   try {
-    console.log("reloading");
     const rssColl = await filtersOutUnsubedProviders();
     updateCb(trimFeeds(rssColl.getStack()));
   } catch (e) {
@@ -125,7 +124,7 @@ export const loadAndUpdateFeeds = async (updateCb: (f: RSSItem[]) => void) => {
       await rssColl.write();
     }
 
-    updateCb(trimFeeds(rssColl.getStack()))
+    updateCb(trimFeeds(rssColl.getStack()));
   } catch (e) {
     // @todo: warning/error msg in app
     console.error("Could not build data feed:", e);

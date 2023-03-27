@@ -13,8 +13,8 @@ type AppSettingsProps = {
 const AppSetting = ({ style, title, children }: AppSettingsProps): JSX.Element => {
     return (
         <View style={style}>
-            <View style={tw`flex flex-row justify-start items-center `}>
-                <Text style={tw`text-lg text-center text-white text-basis flex-wrap basis-2/6`}>{title}</Text>
+            <View style={tw`flex flex-row justify-start items-center`}>
+                <Text style={tw`text-lg text-center text-neutral-100 flex-wrap basis-2/6 bg-purple-600 rounded-lg`}>{title}</Text>
                 <View style={tw`flex flex-shrink flex-row items-center basis-4/6 justify-center`}>{children}</View>
             </View>
         </View>
@@ -26,7 +26,7 @@ export const ChannelTitle = (): JSX.Element => {
     const { setConfig } = useContext(ConfigContext);
  
     return (
-        <AppSetting style={tw`border-l-8 border-purple-600`} title="Channel Title Placement">
+        <AppSetting style={tw``} title="Channel Title Placement">
             <Text style={tw`text-lg text-white shrink`}>Inline</Text>
             <Switch value={checked}
                 style={tw`shrink`}

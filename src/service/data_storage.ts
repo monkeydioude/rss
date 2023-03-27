@@ -39,7 +39,13 @@ export class Locker {
   }
 }
 
-export class Storage {
+export interface DBStorage {
+  insert(data: string): Promise<void>;
+  select(): Promise<string>;
+  delete(): Promise<void>;
+}
+
+export class Storage implements DBStorage {
   readonly key: string;
   
   constructor(key: string) {
@@ -86,4 +92,36 @@ export const clearAllData = async (): Promise<void> => {
     // @todo: warning/error msg in app
     console.error(e);
   }
-} 
+}
+
+export interface Entity<T> {
+  update(entity: T): Promise<void>;
+  retrieve(): Promise<T>;
+}
+
+export class JSONStorage<T> implements Entity<T> {
+  readonly storage: Storage;
+
+  constructor(key: string) {
+    this.storage = new Storage(key);
+  }
+
+  async update(entity: T): Promise<void> {
+    try {
+      await this.storage.insert(JSON.stringify(entity));
+    } catch (e) {
+      // @todo: warning/error msg in app
+      console.error(e);
+    }
+  }
+
+  async retrieve(): Promise<T> {
+    try {
+      const res = await this.storage.select();
+      return JSON.parse(res);
+    } catch (e) {
+      // @todo: warning/error msg in app
+      console.error(e);
+    }
+  }
+}

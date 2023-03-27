@@ -14,10 +14,12 @@ export default {
     storageKeys: {
         rss: "rss",
         providers_list: "providers_list",
+        global_config: "global_config",
     },
     events: {
         set_feeds: "set_feeds",
         swipe_config: "swipe_config",
+        update_global_config: "update_global_config", 
     },
     maxItemPerFeed: 10,
     feedsRefreshTimer: 60 * 1000, // in millisecond

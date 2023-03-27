@@ -1,11 +1,14 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
+import config from "../../config";
+import { JSONStorage } from "../service/data_storage";
+import { EventsContext, Unsubber } from "./eventsContext";
 
 export enum ChannelTitleMode {
     Inline,
     NewLine,
 }
 
-type Config = {
+export type Config = {
     displayChannelTitle: ChannelTitleMode
 };
 
@@ -13,16 +16,18 @@ export enum ConfigKeys {
     DisplayChannelTitle = "displayChannelTitle",
 }
 
-type ConfigContext = {
+interface ConfigContext {
     setConfig: <T,>(key: string, value: T) => void,
     getConfig: <T,>(key: string) => T,
-    onConfigChange: (key: string, cb: () => void) => void,
+    onConfigChange: (cb: <T,>(value?: T) => void) => [Unsubber, Symbol],
+    loadConfig: () => void,
 }
 
 export const ConfigContext = createContext<ConfigContext>({
     setConfig: () => {},
     getConfig: <T,>(): T => null,
-    onConfigChange: () => {},
+    onConfigChange: () => {return null},
+    loadConfig: () => {},
 });
 
 type Props = {
@@ -30,22 +35,39 @@ type Props = {
 }
 
 const ConfigProvider = ({ children }: Props): JSX.Element => {
-    const listeners = new Map<string, (() => void)[]>();
+    const configStorage = useRef(new JSONStorage<Config>(config.storageKeys.global_config));
+    const { onEvent, trigger } = useContext(EventsContext);
     const [ fullConfig, setFullConfig ] = useState<Config>({
         displayChannelTitle: ChannelTitleMode.NewLine,
     });
 
-    const setConfig = <T,>(key: string, value: T) => {
-        if (fullConfig[key] === undefined) {
-            return;
+    const loadConfig = async () => {
+        try {
+            let res = await configStorage.current.retrieve();
+            if (!res) {
+                res = fullConfig;
+            }
+            trigger<Config>(config.events.update_global_config, res);
+            setFullConfig({...res});
+        } catch (e) {
+            // @todo: warning/error msg in app
+            console.error(e);
         }
-        fullConfig[key] = value;
-        setFullConfig({...fullConfig});
-        const c = listeners.get(key);
-        if (!c) {
-            return;
+    };
+
+    const setConfig = async <T,>(key: string, value: T) => {
+        try {
+            if (fullConfig[key] === undefined) {
+                return;
+            }
+            fullConfig[key] = value;
+            await configStorage.current.update(fullConfig);
+            trigger<Config>(config.events.update_global_config, fullConfig);
+            setFullConfig({...fullConfig});
+        } catch (e) {
+          // @todo: warning/error msg in app
+          console.error(e);
         }
-        c.forEach(cb => cb());
     }
 
     const getConfig = <T,>(key: string): T => {
@@ -55,14 +77,8 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
         return fullConfig[key];
     }
 
-    const onConfigChange = (key: string, cb: () => void) => {
-        let c = listeners.get(key);
-
-        if (!c) {
-            c = [];
-        }
-        c.push(cb)
-        listeners.set(key, c);
+    const onConfigChange = (kcb: <T,>(value: T) => void): [Unsubber, Symbol] => {
+        return onEvent(config.events.update_global_config, kcb);
     }
 
     return (
@@ -70,6 +86,7 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
             setConfig,
             getConfig,
             onConfigChange,
+            loadConfig,
         }}>{children}</ConfigContext.Provider>
     )
 }

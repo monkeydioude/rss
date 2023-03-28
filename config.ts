@@ -1,4 +1,5 @@
 export default {
+    fetchRequestTimeout: 2 * 1000, // in millisecond
     fetchThreshold: 30 * 1000, // in millisecond
     bypassServerAddr: "https://bypasscors-mtwkyutmvq-uc.a.run.app",
     recommendedFeeds: [{

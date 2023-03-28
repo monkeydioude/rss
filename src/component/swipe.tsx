@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { GestureResponderEvent, View } from "react-native";
 import swipeConfig from "../config/swipe";
+import { EventsContext } from "../context/eventsContext";
 
 type Props = {
     direction: Directions;
@@ -10,6 +11,7 @@ type Props = {
 }
 
 export enum Directions {
+    None,
     Left = 1,
     Right = 2,
     Up = 3,
@@ -27,19 +29,13 @@ export type SwipeConfig = {
 }
 
 const Swipe = ({ direction, distance, children, onSwipe }: Props): JSX.Element => {
-    // let { onEvent } = useContext(EventsContext);
     let value = useRef(0);
-    // let [ swipeConfig, setSwipeConfig ] = useState<SwipeConfig>({
-    //     swipeEnabled: true,
-    // });
 
-    // onEvent(config.events.swipe_config, <SwipeConfig,>(c: SwipeConfig) => {
-    //     setSwipeConfig(c);
-    // })
     return (
         <View
             onTouchStart={(e: GestureResponderEvent) => {
                 e.preventDefault();
+                e.stopPropagation();
                 switch (direction) {
                     case Directions.Left:
                     case Directions.Right:
@@ -77,7 +73,6 @@ const Swipe = ({ direction, distance, children, onSwipe }: Props): JSX.Element =
                         console.error("swipe failed");
                         return;
                 }
-
                 if (goalValue <= distance) {
                     return;
                 }

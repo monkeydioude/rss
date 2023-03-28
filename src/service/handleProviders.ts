@@ -1,4 +1,5 @@
 import { newProviderDataCollection, Provider } from "../data_struct"
+import { addFeed } from "../feed_builder";
 
 export const providersUnsub = async (providerName: string): Promise<void> => {
     await providersChangeSub(providerName, false);
@@ -14,6 +15,7 @@ export const providersChangeSub = async (providerName: string, subscribed: boole
         const provider = plist.get(providerName);
         provider.subscribed = subscribed;
         plist.set(providerName, provider);
+
         await plist.write();
         return Object.values(plist.getStack());
     } catch (e) {

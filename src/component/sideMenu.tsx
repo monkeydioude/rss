@@ -8,19 +8,36 @@ import config from '../../config';
 import { FeedsContext } from '../context/feedsContext';
 import AddFeedInput from './addFeedInput';
 import { clearAllData } from '../service/data_storage';
-import { Provider, newProviderDataCollection } from '../data_struct';
+import { Provider, newProviderDataCollection, RSSItem } from '../data_struct';
 import { MenuSectionTitle, MenuSettingsTitle, MenuFeedsSectionTitle } from './menuSectionTitle';
 import { EventsContext } from '../context/eventsContext';
 import CheckButton from './checkButton';
 import { providersChangeSub } from '../service/handleProviders';
 import tw from 'twrnc';
-import { reloadFeeds } from '../feed_builder';
+import { addFeed, reloadFeeds } from '../feed_builder';
 import Swipe, { Directions, Distance } from './swipe';
 import { ChannelTitle } from './appSettings';
 
 const getSubscriptions = async (): Promise<Provider[]> => {
     try {
         return Array.from((await newProviderDataCollection().update()).getStack().values());
+    } catch (e) {
+        // @todo: warning/error msg in app
+        console.error(e);
+    }
+}
+
+const onCheckButtonPress = async (
+    url: string,
+    isChecked: boolean,
+    setFeeds: (f: RSSItem[]) => void
+) => {
+    try {
+        await providersChangeSub(url, isChecked);
+        if (isChecked === true) {
+            await addFeed(url, setFeeds);
+        }
+        await reloadFeeds(setFeeds)
     } catch (e) {
         // @todo: warning/error msg in app
         console.error(e);
@@ -59,10 +76,7 @@ export default ({ toggleMenu }: MenuProps): JSX.Element => {
                             key={idx}
                             title={sub.url}
                             checked={sub.subscribed}
-                            onPress={async (isChecked) => {
-                                await providersChangeSub(sub.url, isChecked);
-                                await reloadFeeds(setFeeds)
-                            }} />
+                            onPress={(isChecked) => onCheckButtonPress(sub.url, isChecked, setFeeds)} />
                     ))}
                 </View>
                 <View>

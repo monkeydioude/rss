@@ -7,14 +7,23 @@ const getURL = (url: string): string => {
 }
 
 // fetchXMLData retrieves a provider's feed
-export const fetchXMLData = async (url: string): Promise<XMLData> => (
-  fetch(getURL(url), {
-    method: "GET"
-  })
-  .then(async (res: Response) => {
-    return new XMLParser().parse(await res.text());
-  })
-)
+export const fetchXMLData = async (url: string): Promise<XMLData> => {
+  const ctrl = new AbortController();
+  console.log("starts fetchXMLData");
+  
+  setTimeout(() => ctrl.abort(), config.fetchRequestTimeout); 
+  return fetch(getURL(url), {
+      method: "GET",
+      signal: ctrl.signal,
+    })
+    .then(async (res: Response) => {
+      return new XMLParser().parse(await res.text());
+    })
+    .catch((err) => {
+      console.log("fetchXMLData", err);
+      throw "took too long"
+    })
+}
 
 // isUpdatable compare the sum of the rss provider's date and an update threshold
 // against the now date 
@@ -37,15 +46,20 @@ const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Pro
 // fetchAndUpdateCollection fires a request to the feed's provider
 // and update its lastFetchDate
 const fetchAndUpdateCollection = async (url: string, rssColl: DataCollection<RSSData>) => {
-  const newFeeds = await fetchXMLData(url);
-  if (!newFeeds || !newFeeds.rss) {
-    return;
+  try {
+    const newFeeds = await fetchXMLData(url);
+    if (!newFeeds || !newFeeds.rss) {
+      return;
+    }
+    newFeeds.rss.lastFetchDate = +new Date();
+    newFeeds.rss.channel.item.forEach((item: RSSItem) => {
+      item.channelTitle = newFeeds.rss.channel.title;
+    })
+    rssColl.set(url, newFeeds.rss);
+  } catch (e) {
+      // @todo: warning/error msg in app
+      console.error("Could not fetch feeds from source URL:", e);
   }
-  newFeeds.rss.lastFetchDate = +new Date();
-  newFeeds.rss.channel.item.forEach((item: RSSItem) => {
-    item.channelTitle = newFeeds.rss.channel.title;
-  })
-  rssColl.set(url, newFeeds.rss);
 }
 
 // addFeed tries to add a new feed url to parse
@@ -78,12 +92,15 @@ export const addFeed = async (
 export const filtersOutUnsubedProviders = async (): Promise<DataCollection<RSSData>> => {
   const plist = await new DataCollection<Provider>(config.storageKeys.providers_list).update();
   const rssColl = await (new DataCollection<RSSData>(config.storageKeys.rss)).update();
+  console.log("plist", plist);
 
   for (let [url, p] of plist.getStack()) {
-    if (p.subscribed == false){
+    if (p.subscribed === false) {
       rssColl.delete(url);
     }
   }
+
+  console.log("rssColl", rssColl);
 
   return rssColl;
 }
@@ -180,4 +197,8 @@ export const trimFeeds = (feeds: Map<string, RSSData>): RSSItem[] => {
     console.error(e);
     return [];
   }
+}
+
+export const getUnsubbedProvidersFeeds =  async(): Promise<RSSItem[]> => {
+  return Object.values((await filtersOutUnsubedProviders()).getStack());
 }

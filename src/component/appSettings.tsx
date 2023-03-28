@@ -22,9 +22,11 @@ const AppSetting = ({ style, title, children }: AppSettingsProps): JSX.Element =
 }
 
 export const ChannelTitle = (): JSX.Element => {
-    const [ checked, setChecked ] = useState<boolean>(true);
-    const { setConfig } = useContext(ConfigContext);
- 
+    const { setConfig, getConfig } = useContext(ConfigContext);
+    const [ checked, setChecked ] = useState<boolean>(
+        getConfig(ConfigKeys.DisplayChannelTitle) !== ChannelTitleMode.Inline
+    );
+
     return (
         <AppSetting style={tw``} title="Channel Title Placement">
             <Text style={tw`text-lg text-white shrink`}>Inline</Text>
@@ -34,6 +36,7 @@ export const ChannelTitle = (): JSX.Element => {
                 onValueChange={() => {
                     setConfig<ChannelTitleMode>(
                         ConfigKeys.DisplayChannelTitle,
+                        // Opposite, cause defining next state, aftet hitting the switch
                         checked ? ChannelTitleMode.Inline : ChannelTitleMode.NewLine
                     );
                     setChecked(!checked);

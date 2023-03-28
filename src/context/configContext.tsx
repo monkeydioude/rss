@@ -19,7 +19,7 @@ export enum ConfigKeys {
 interface ConfigContext {
     setConfig: <T,>(key: string, value: T) => void,
     getConfig: <T,>(key: string) => T,
-    onConfigChange: (cb: <T,>(value?: T) => void) => [Unsubber, Symbol],
+    onConfigChange: (cb: (value?: Config) => void) => [Unsubber, Symbol],
     loadConfig: () => void,
 }
 
@@ -47,8 +47,9 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
             if (!res) {
                 res = fullConfig;
             }
-            trigger<Config>(config.events.update_global_config, res);
             setFullConfig({...res});
+            console.log(res)
+            trigger<Config>(config.events.update_global_config, res);
         } catch (e) {
             // @todo: warning/error msg in app
             console.error(e);
@@ -62,8 +63,8 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
             }
             fullConfig[key] = value;
             await configStorage.current.update(fullConfig);
-            trigger<Config>(config.events.update_global_config, fullConfig);
             setFullConfig({...fullConfig});
+            trigger<Config>(config.events.update_global_config, fullConfig);
         } catch (e) {
           // @todo: warning/error msg in app
           console.error(e);
@@ -77,7 +78,7 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
         return fullConfig[key];
     }
 
-    const onConfigChange = (kcb: <T,>(value: T) => void): [Unsubber, Symbol] => {
+    const onConfigChange = (kcb: (value: Config) => void): [Unsubber, Symbol] => {
         return onEvent(config.events.update_global_config, kcb);
     }
 

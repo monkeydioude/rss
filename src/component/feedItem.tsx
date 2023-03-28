@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Linking, Text, View } from "react-native";
 import { RSSItem } from "../data_struct";
 import tw from 'twrnc';
-import { ConfigContext, ConfigKeys, ChannelTitleMode } from "../context/configContext";
-import { EventsContext } from "../context/eventsContext";
-import config from "../../config";
+import { ConfigContext, ChannelTitleMode, Config, ConfigKeys } from "../context/configContext";
 
 type Props = {
     item: RSSItem;
@@ -12,14 +10,15 @@ type Props = {
 
 const FeedItem = ({ item }: Props): JSX.Element => {
     const isOpened = useRef(false);
-    const { onConfigChange } = useContext(ConfigContext);
+    const { getConfig, onConfigChange } = useContext(ConfigContext);
     const slideValue = new Animated.Value(-20);
-    const [ channelDisplay, setChannelDisplay ] = useState<ChannelTitleMode>(ChannelTitleMode.NewLine);
+    const [ channelDisplay, setChannelDisplay ] = useState<ChannelTitleMode>(
+        getConfig(ConfigKeys.DisplayChannelTitle)
+    );
 
-    
     useEffect(() => {
-        const [ leaveEvent ] = onConfigChange(<Config,>(config: Config) => {
-            setChannelDisplay(config[ConfigKeys.DisplayChannelTitle]);
+        const [ leaveEvent ] = onConfigChange((config: Config) => {
+            setChannelDisplay(config.displayChannelTitle);
         });
 
         return () => {

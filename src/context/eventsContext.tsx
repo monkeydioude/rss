@@ -1,6 +1,6 @@
 import React, { useRef, createContext } from 'react';
 
-type CB = <T,>(value: T) => void;
+type CB = (value: any) => void;
 export type Unsubber = () => void;
 
 type CBContainer = {
@@ -55,6 +55,8 @@ const EventsProvider = ({ children }): JSX.Element => {
         if (!c) {
             return;
         }
+
+        console.log("trigger", id, "to", c.length, "listeners");
 
         c.forEach((cbc: CBContainer) => cbc.cb(value));
     }

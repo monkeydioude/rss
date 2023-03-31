@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import config from "../../config";
 import { JSONStorage } from "../service/data_storage";
 import { EventsContext, Unsubber } from "./eventsContext";
@@ -9,12 +9,9 @@ export enum ChannelTitleMode {
 }
 
 export type Config = {
-    displayChannelTitle: ChannelTitleMode
+    displayChannelTitle: ChannelTitleMode;
+    itemsPerChannel: number;
 };
-
-export enum ConfigKeys {
-    DisplayChannelTitle = "displayChannelTitle",
-}
 
 interface ConfigContext {
     setConfig: <T,>(key: string, value: T) => void,
@@ -34,11 +31,13 @@ type Props = {
     children: JSX.Element,
 }
 
+
 const ConfigProvider = ({ children }: Props): JSX.Element => {
     const configStorage = useRef(new JSONStorage<Config>(config.storageKeys.global_config));
     const { onEvent, trigger } = useContext(EventsContext);
     const [ fullConfig, setFullConfig ] = useState<Config>({
         displayChannelTitle: ChannelTitleMode.NewLine,
+        itemsPerChannel: config.maxItemPerFeed,
     });
 
     const loadConfig = async () => {
@@ -48,7 +47,6 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
                 res = fullConfig;
             }
             setFullConfig({...res});
-            console.log(res)
             trigger<Config>(config.events.update_global_config, res);
         } catch (e) {
             // @todo: warning/error msg in app

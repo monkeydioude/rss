@@ -1,7 +1,6 @@
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import { GestureResponderEvent, View } from "react-native";
-import swipeConfig from "../config/swipe";
-import { EventsContext } from "../context/eventsContext";
+import config from "../../config";
 
 type Props = {
     direction: Directions;
@@ -19,9 +18,9 @@ export enum Directions {
 }
 
 export enum Distance {
-    Short = 1 * swipeConfig.swipeBaseRange,
-    Mid = 2 * swipeConfig.swipeBaseRange,
-    Long = 3 * swipeConfig.swipeBaseRange,
+    Short = 1 * config.swipeBaseRange,
+    Mid = 2 * config.swipeBaseRange,
+    Long = 3 * config.swipeBaseRange,
 }
 
 export type SwipeConfig = {
@@ -51,6 +50,7 @@ const Swipe = ({ direction, distance, children, onSwipe }: Props): JSX.Element =
             }}
             onTouchEnd={(e: GestureResponderEvent) => {
                 e.preventDefault();
+                e.stopPropagation();
                 let goalValue = value.current;
                 value.current = 0;
                 if (goalValue == -1) {

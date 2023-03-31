@@ -1,6 +1,6 @@
 import { createContext, useEffect, useRef, useState } from 'react';
 import React from 'react';
-import { Animated, ColorValue, Dimensions, View } from 'react-native';
+import { Animated, ColorValue, Dimensions, Keyboard, View } from 'react-native';
 
 type MenuContext = {
   toggleMenu: () => void,
@@ -57,6 +57,7 @@ const MenuProvider = ({ children, MenuComponent, animation }: Props): JSX.Elemen
 
   const menuProps: MenuProps = {
     toggleMenu: () => {
+      Keyboard.dismiss();
       setIsMenuOpen(!isMenuOpen)
     }
   }

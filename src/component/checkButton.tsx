@@ -1,7 +1,7 @@
 import { Button, Text } from "@react-native-material/core";
 import React, { useState } from "react";
 import { StyleProp, TextStyle, View } from "react-native";
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import tw from 'twrnc';
 
 type Props = {
@@ -31,7 +31,7 @@ const CheckButton = ({
                     }}
                     title={
                         <View style={tw`flex flex-row items-center`}>
-                            <Icon name='check' color="white" style={tw`w-2.5`} />
+                            <Ionicons name='checkmark' color="white" style={tw`w-2.5`} />
                             <Text style={tw`text-sm text-white p-1`} >{title}</Text>
                         </View>
                     } />
@@ -46,7 +46,7 @@ const CheckButton = ({
                     }}
                     title={
                         <View style={tw`flex flex-row items-center`}>
-                            <Icon name='close' style={tw`w-2.5 text-red-600`} />
+                            <Ionicons name='close' style={tw`w-2.5 text-red-600`} />
                             <Text style={tw`text-sm text-red-600 p-1`} >{title}</Text>
                         </View>
                     } />

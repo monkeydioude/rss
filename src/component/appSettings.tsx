@@ -1,50 +1,57 @@
 import { Switch } from "@react-native-material/core";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import tw from 'twrnc';
-import { ChannelTitleMode, ConfigContext, ConfigKeys } from "../context/configContext";
+import { ChannelTitleMode, Config, ConfigContext } from "../context/configContext";
 
 type AppSettingsProps = {
     style?: StyleProp<ViewStyle>;
     title: string;
-    children: JSX.Element[];
+    children: JSX.Element;
 }
 
 const AppSetting = ({ style, title, children }: AppSettingsProps): JSX.Element => {
     return (
         <View style={style}>
-            <View style={tw`flex flex-row justify-start items-center`}>
-                <Text style={tw`text-lg text-center text-neutral-100 flex-wrap basis-2/6 bg-purple-600 rounded-lg`}>{title}</Text>
-                <View style={tw`flex flex-shrink flex-row items-center basis-4/6 justify-center`}>{children}</View>
+            <View style={tw`flex flex-col justify-start items-center bg-purple-600`}>
+                <Text style={tw`text-center text-neutral-100 flex-wrap rounded-lg w-100 pt-1 text-lg uppercase`}>{title}</Text>
+                <View style={tw`flex flex-shrink flex-row items-center justify-center m-0 p-0`}>{children}</View>
             </View>
         </View>
     )
 }
 
 export const ChannelTitle = (): JSX.Element => {
-    const { setConfig, getConfig } = useContext(ConfigContext);
-    const [ checked, setChecked ] = useState<boolean>(
-        getConfig(ConfigKeys.DisplayChannelTitle) !== ChannelTitleMode.Inline
-    );
+    const { setConfig, onConfigChange } = useContext(ConfigContext);
+    const [ checked, setChecked ] = useState<boolean>(true);
+
+    useEffect(() => {
+        const [ unsub ] = onConfigChange((config: Config) => {
+            setChecked(config.displayChannelTitle === ChannelTitleMode.NewLine);
+        })
+        return unsub;
+    }, []);
 
     return (
-        <AppSetting style={tw``} title="Channel Title Placement">
-            <Text style={tw`text-lg text-white shrink`}>Inline</Text>
-            <Switch value={checked}
-                style={tw`shrink`}
-                thumbColor="#6200EE"
-                onValueChange={() => {
-                    setConfig<ChannelTitleMode>(
-                        ConfigKeys.DisplayChannelTitle,
-                        // Opposite, cause defining next state, aftet hitting the switch
-                        checked ? ChannelTitleMode.Inline : ChannelTitleMode.NewLine
-                    );
-                    setChecked(!checked);
-                }}
-                trackColor={{
-                    // false: "gray"
-                }}/>
-            <Text style={tw`text-lg text-white shrink`}>Break Line</Text>
+        <AppSetting title="Channel title placement in feed item">
+            <View style={tw`font-medium flex flex-row items-center`}>
+                <Text style={tw`text-white shrink mr-2 text-lg uppercase`}>Inline</Text>
+                <Switch value={checked}
+                    style={tw`shrink`}
+                    thumbColor="#6200EE"
+                    onValueChange={() => {
+                        setConfig<ChannelTitleMode>(
+                            "displayChannelTitle",
+                            // Opposite, cause defining next state, aftet hitting the switch
+                            checked ? ChannelTitleMode.Inline : ChannelTitleMode.NewLine
+                        );
+                        setChecked(!checked);
+                    }}
+                    trackColor={{
+                        // false: "gray"
+                    }}/>
+                <Text style={tw`text-white shrink  ml-1 text-lg uppercase`}>Break Line</Text>
+            </View>
         </AppSetting>
     )
 }

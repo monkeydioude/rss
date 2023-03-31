@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useEffect } from 'react';
-import { View, Dimensions, StatusBar as NativeStatusBar } from 'react-native';
+import { View, Dimensions, StatusBar as NativeStatusBar, Keyboard } from 'react-native';
 import config from './config';
 import AddFeedInput from './src/component/addFeedInput';
 import TitleBar from './src/component/titleBar';
@@ -31,7 +31,7 @@ export default (): JSX.Element => {
       direction={Directions.Right}
       distance={Distance.Short}
       onSwipe={toggleMenu}>
-      <View className='fontSans' style={{height}}>
+      <View className='fontSans' style={{height}} onTouchStart={() => Keyboard.dismiss()}>
         <StatusBar style="auto" />
         <TitleBar label={config.appTitle} />
         <Button

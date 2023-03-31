@@ -20,10 +20,12 @@ export default {
     events: {
         set_feeds: "set_feeds",
         swipe_config: "swipe_config",
-        update_global_config: "update_global_config", 
+        update_global_config: "update_global_config",
+        feed_desc_open: "feed_desc_open",
     },
     maxItemPerFeed: 10,
     feedsRefreshTimer: 60 * 1000, // in millisecond
     appTitle: "RSS",
     settingsMenuAnimationDuration: 450,
+    swipeBaseRange: 10,
 }

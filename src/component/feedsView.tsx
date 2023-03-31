@@ -7,6 +7,7 @@ import { FeedsContext } from '../context/feedsContext';
 import { RSSItem } from '../data_struct'
 import { getUnsubbedProvidersFeeds, loadAndUpdateFeeds } from '../feed_builder';
 import FeedItem from './feedItem';
+import tw from 'twrnc';
 
 type Props = {
     feeds: RSSItem[],
@@ -36,14 +37,10 @@ export default ({ feeds }: Props): JSX.Element => {
     }, []);
     
     return (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, margin: 0, padding: 0}}>
             <ScrollView
+                style={tw`m-0 p-0`}
                 scrollEnabled={true}
-                nestedScrollEnabled={true}
-                onTouchStart={(e) => {
-                    e.preventDefault();
-                    return
-                }}
                 refreshControl={
                     <RefreshControl
                     refreshing={refreshing}
@@ -57,9 +54,9 @@ export default ({ feeds }: Props): JSX.Element => {
                 {feeds.map((item: RSSItem, idx: number): JSX.Element => (
                     <View key={idx}>
                     {idx > 0 && 
-                        <Divider />
+                        <Divider style={tw`m-0 mb-1`} />
                     }
-                    <FeedItem item={item} />
+                        <FeedItem item={item} it={idx} />
                     </View>
                 ))}
                 </Stack>

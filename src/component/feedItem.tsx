@@ -3,8 +3,9 @@ import { Animated, Linking, Text, View } from "react-native";
 import { RSSItem } from "../data_struct";
 import tw from 'twrnc';
 import { ConfigContext, ChannelTitleMode, Config } from "../context/configContext";
-import { EventsContext } from "../context/eventsContext";
-import config from "../../config";
+import { cleanString } from "../service/string";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 type Props = {
     item: RSSItem;
@@ -14,7 +15,6 @@ type Props = {
 const FeedItem = ({ item, it: key }: Props): JSX.Element => {
     const isOpened = useRef(false);
     const { getConfig, onConfigChange } = useContext(ConfigContext);
-    const { trigger, onEvent } = useContext(EventsContext);
     const slideValue = new Animated.Value(-20);
     const [ channelDisplay, setChannelDisplay ] = useState<ChannelTitleMode>(
         getConfig("displayChannelTitle")
@@ -24,24 +24,8 @@ const FeedItem = ({ item, it: key }: Props): JSX.Element => {
         const [ leaveEventConfig ] = onConfigChange((config: Config) => {
             setChannelDisplay(config.displayChannelTitle);
         });
-
-        const [ leaveEventDesc ] = onEvent(
-            config.events.feed_desc_open,
-            (k: number) => {
-                if (k === key) {
-                    return;
-                }
-                slideValue.setValue(100);
-                toValue = -20;
-                Animated.timing(slideValue, {
-                    toValue,
-                    duration: 200,
-                    useNativeDriver: false,
-                }).start();
-        })
         return () => {
             leaveEventConfig();
-            leaveEventDesc();
         }
     }, []);
 
@@ -57,7 +41,6 @@ const FeedItem = ({ item, it: key }: Props): JSX.Element => {
                             slideValue.setValue(-20);
                             toValue = 130;
                         } else {
-                            trigger(config.events.feed_desc_open, key);
                             slideValue.setValue(100);
                             toValue = -20;
                         }
@@ -67,7 +50,7 @@ const FeedItem = ({ item, it: key }: Props): JSX.Element => {
                             useNativeDriver: false,
                         }).start();
                         isOpened.current = !isOpened.current;
-                    }}>{item.title}
+                    }}>{cleanString(item.title)}
                 {item.channelTitle && 
                     <Text style={tw`text-neutral-400 text-sm m-0 p-0`}>{preTagChar}@{item.channelTitle}</Text>
                 }
@@ -77,13 +60,13 @@ const FeedItem = ({ item, it: key }: Props): JSX.Element => {
                     maxHeight: slideValue,
                 }}>
                 <Text
-                    style={tw`font-medium text-base m-0.5 p-0 underline`}
+                    style={tw`font-medium text-base m-0 p-0 pl-1 underline`}
                     onPress={() => {
                         if (isOpened.current) {
                             Linking.openURL(item.link);
                         }
                     }}>
-                    {item.description.trim()}</Text>
+                    <Ionicons name="megaphone" /> {cleanString(item.description)}</Text>
             </Animated.View>
         </View>
     )

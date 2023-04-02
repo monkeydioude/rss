@@ -71,7 +71,7 @@ export default ({ toggleMenu }: MenuProps): JSX.Element => {
     return (
         <Swipe
             direction={Directions.Left}
-            distance={Distance.Mid}
+            distance={Distance.Long}
             onSwipe={toggleMenu}>
             <ScrollView
                 style={tw`m-0 p-0`}

@@ -1,5 +1,5 @@
 export default {
-    fetchRequestTimeout: 2 * 1000, // in millisecond
+    fetchRequestTimeout: 4 * 1000, // in millisecond
     fetchThreshold: 30 * 1000, // in millisecond
     bypassServerAddr: "https://bypasscors-mtwkyutmvq-uc.a.run.app",
     recommendedFeeds: [{
@@ -27,5 +27,5 @@ export default {
     feedsRefreshTimer: 60 * 1000, // in millisecond
     appTitle: "RSS",
     settingsMenuAnimationDuration: 450,
-    swipeBaseRange: 10,
+    swipeBaseRange: 4,
 }

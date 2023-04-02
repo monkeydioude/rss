@@ -14,7 +14,7 @@ const AppSetting = ({ style, title, children }: AppSettingsProps): JSX.Element =
     return (
         <View style={style}>
             <View style={tw`flex flex-col justify-start items-center bg-purple-600`}>
-                <Text style={tw`text-center text-neutral-100 flex-wrap rounded-lg w-100 pt-1 text-lg uppercase`}>{title}</Text>
+                <Text style={tw`text-center text-neutral-100 flex-wrap rounded-lg w-100 pt-1 uppercase`}>{title}</Text>
                 <View style={tw`flex flex-shrink flex-row items-center justify-center m-0 p-0`}>{children}</View>
             </View>
         </View>
@@ -35,7 +35,7 @@ export const ChannelTitle = (): JSX.Element => {
     return (
         <AppSetting title="Channel title placement in feed item">
             <View style={tw`font-medium flex flex-row items-center`}>
-                <Text style={tw`text-white shrink mr-2 text-lg uppercase`}>Inline</Text>
+                <Text style={tw`text-white shrink mr-2 uppercase`}>Inline</Text>
                 <Switch value={checked}
                     style={tw`shrink`}
                     thumbColor="#6200EE"
@@ -50,7 +50,7 @@ export const ChannelTitle = (): JSX.Element => {
                     trackColor={{
                         // false: "gray"
                     }}/>
-                <Text style={tw`text-white shrink  ml-1 text-lg uppercase`}>Break Line</Text>
+                <Text style={tw`text-white shrink  ml-1 uppercase`}>Break Line</Text>
             </View>
         </AppSetting>
     )

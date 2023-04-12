@@ -5,7 +5,6 @@ import tw from 'twrnc';
 import { ConfigContext, ChannelTitleMode, Config } from "../context/configContext";
 import { cleanString } from "../service/string";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { EventsContext } from "../context/eventsContext";
 import config from "../../config";
 
 type Props = {
@@ -16,49 +15,40 @@ type Props = {
 const FeedItem = ({ item, it: key }: Props): JSX.Element => {
     const isOpened = useRef(false);
     const { getConfig, onConfigChange } = useContext(ConfigContext);
-    const { onEvent } = useContext(EventsContext);
     const slideValue = new Animated.Value(-20);
     const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(
         getConfig("displayChannelTitle")
     );
-    const swipStarted = useRef(false);
+    const descH = useRef(-20);
 
 
     useEffect(() => {
         const [leaveEventConfig] = onConfigChange((config: Config) => {
             setChannelDisplay(config.displayChannelTitle);
         });
-        const [swipEventDestructor] = onEvent(config.events.swipe_action, (v:boolean) => {
-            swipStarted.current = v;
-        })
         return () => {
             leaveEventConfig();
-            swipEventDestructor();
         }
     }, []);
 
     const preTagChar = channelDisplay === ChannelTitleMode.Inline ? " " : "\n";
-    let toValue = 138;
+    let toValue = config.maxHeightFeedDescAnimation;
 
     return (
         <View style={tw`pb-0.5`}>
             <Text
                 style={tw`font-medium text-base px-1 pb-0 m-0`}
                 onPress={() => {
-                    if (swipStarted.current) {
-                        console.log("wesh alors?")
-                        return;
-                    }
                     if (!isOpened.current) {
-                        slideValue.setValue(-20);
-                        toValue = 130;
+                        slideValue.setValue(0);
+                        toValue = config.maxHeightFeedDescAnimation;
                     } else {
-                        slideValue.setValue(100);
-                        toValue = -20;
+                        slideValue.setValue(descH.current);
+                        toValue = 0;
                     }
                     Animated.timing(slideValue, {
                         toValue,
-                        duration: 200,
+                        duration: descH.current / config.maxHeightFeedDescAnimation * config.openSpeedDescAnimation,
                         useNativeDriver: false,
                     }).start();
                     isOpened.current = !isOpened.current;
@@ -73,11 +63,11 @@ const FeedItem = ({ item, it: key }: Props): JSX.Element => {
                 }}>
                 <Text
                     style={tw`font-medium text-base m-0 p-0 pl-1 underline`}
+                    onLayout={e => {
+                        descH.current = e.nativeEvent.layout.height; 
+                    }}
                     onPress={() => {
-                        if (swipStarted.current) {
-                           console.log("wesh alors!!")
-                        }
-                        if (isOpened.current && !swipStarted.current) {
+                        if (isOpened.current) {
                             Linking.openURL(item.link);
                         }
                     }}>

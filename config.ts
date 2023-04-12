@@ -23,6 +23,8 @@ export default {
         update_global_config: "update_global_config",
         feed_desc_open: "feed_desc_open",
     },
+    maxHeightFeedDescAnimation: 500,
+    openSpeedDescAnimation: 500,
     maxItemPerFeed: 10,
     feedsRefreshTimer: 60 * 1000, // in millisecond
     appTitle: "RSS",

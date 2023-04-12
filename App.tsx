@@ -1,5 +1,5 @@
 import React from 'react';
-import SideMenu from './src/component/sideMenu';
+import SideMenu from './src/component/sideMenu/sideMenu';
 import MenuProvider from './src/context/menuContext';
 import Main from './Main';
 import config from './config';
@@ -11,14 +11,14 @@ export default (): JSX.Element => (
   <EventsProvider>
     <ConfigProvider>
       <FeedsProvider>
-        <MenuProvider
+        {/* <MenuProvider
           MenuComponent={SideMenu}
           animation={{
             type: "slide",
             duration: config.settingsMenuAnimationDuration
-          }}>
+          }}> */}
           <Main />
-        </MenuProvider>
+        {/* </MenuProvider> */}
       </FeedsProvider>
     </ConfigProvider>
   </EventsProvider>

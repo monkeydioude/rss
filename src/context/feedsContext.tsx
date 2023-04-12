@@ -4,6 +4,8 @@ import React from "react";
 import config from "../../config";
 import { EventsContext } from "./eventsContext";
 
+export type SetFeedsCB = (f: RSSItem[]) => void;
+
 type FeedContext = {
     setFeeds: (feeds: RSSItem[]) => void,
     feeds: RSSItem[],

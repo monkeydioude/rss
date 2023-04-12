@@ -94,6 +94,18 @@ export const clearAllData = async (): Promise<void> => {
   }
 }
 
+export const getAllData = async (): Promise<Map<string, string>> => {
+  const data: Map<string, string> = new Map();
+  try {
+    for (const key of await AsyncStorage.getAllKeys()) {
+      data.set(key, await AsyncStorage.getItem(key));
+    };
+  } catch (e) {
+    console.error(e);
+  }
+  return data;
+}
+
 export interface Entity<T> {
   update(entity: T): Promise<void>;
   retrieve(): Promise<T>;

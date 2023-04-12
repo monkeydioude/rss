@@ -7,11 +7,10 @@ const getURL = (url: string): string => {
 }
 
 // fetchXMLData retrieves a provider's feed
-export const fetchXMLData = async (url: string): Promise<XMLData> => {
+export const fetchXMLData = async (url: string, timeOut: number): Promise<XMLData> => {
   const ctrl = new AbortController();
-  console.log("starts fetchXMLData");
   
-  setTimeout(() => ctrl.abort(), config.fetchRequestTimeout); 
+  setTimeout(() => ctrl.abort(), timeOut); 
   return fetch(getURL(url), {
       method: "GET",
       signal: ctrl.signal,
@@ -45,9 +44,9 @@ const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Pro
 
 // fetchAndUpdateCollection fires a request to the feed's provider
 // and update its lastFetchDate
-const fetchAndUpdateCollection = async (url: string, rssColl: DataCollection<RSSData>) => {
+const fetchAndUpdateCollection = async (url: string, rssColl: DataCollection<RSSData>, timeOut = config.fetchRequestTimeout) => {
   try {
-    const newFeeds = await fetchXMLData(url);
+    const newFeeds = await fetchXMLData(url, timeOut);
     if (!newFeeds || !newFeeds.rss) {
       return;
     }
@@ -120,7 +119,7 @@ export const reloadFeeds = async (updateCb: (f: RSSItem[]) => void): Promise<voi
 // check if they can be updated, if so request a new version
 // of the feed, then put the updated feed into storage
 // and then triggers the update state callback
-export const loadAndUpdateFeeds = async (updateCb: (f: RSSItem[]) => void) => {
+export const loadAndUpdateFeeds = async (updateCb: (f: RSSItem[]) => void, timeOut = config.fetchRequestTimeout) => {
   try {
     const rssColl = await filtersOutUnsubedProviders();
     const feeds = rssColl.getStack();
@@ -132,7 +131,7 @@ export const loadAndUpdateFeeds = async (updateCb: (f: RSSItem[]) => void) => {
         continue;
       }
       updated = true;
-      promises.push(fetchAndUpdateCollection(url, rssColl));
+      promises.push(fetchAndUpdateCollection(url, rssColl, timeOut));
     }
 
     await Promise.all(promises);

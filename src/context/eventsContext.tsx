@@ -39,7 +39,7 @@ const EventsProvider = ({ children }): JSX.Element => {
         if (!channels.current.get(id)) {
             newChannel(id);
         }
-        console.log("onEvent", id, channels.current.get(id).length +1);
+        console.log(`onEvent ${id} ${channels.current.get(id).length +1} listeners`);
         const c = channels.current.get(id);
         const symbol = Symbol();
         c.push({
@@ -71,7 +71,7 @@ const EventsProvider = ({ children }): JSX.Element => {
             const cbc = c[idx];
             if (cbc.symbol === symbol) {
                 c.splice(parseInt(idx), 1);
-                console.log("leaveEvent", id, c.length);
+                console.log(`left event ${id}, ${c.length} listeners`);
                 return true;
             }
         }

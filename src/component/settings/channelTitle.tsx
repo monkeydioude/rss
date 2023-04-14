@@ -1,9 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ChannelTitleMode, Config, ConfigContext } from "../../context/configContext";
-import SettingBlock from "./settingBlock";
-import { Text, View } from "react-native";
-import { Switch } from "@react-native-material/core";
-import tw from 'twrnc';
 import SettingWithSwitch from "./settingWithSwitch";
 
 const ChannelTitle = (): JSX.Element => {

@@ -52,19 +52,21 @@ export default ({ closeMenu }: Props): JSX.Element => {
     }, []);
 
     return (
-        <ScrollView
-            style={{...tw`m-0 p-0 bg-purple-700`, height}}
-            scrollEnabled={true}>
-            <View style={tw`w-full`} onTouchStart={() => Keyboard.dismiss()}>
-                <Button
-                    title="Close Settings"
-                    onPress={closeMenu}
-                    leading={props => <Icon name="close" {...props} />} />
-                <AddFeedInput setFeeds={setFeeds} />
-                <ChannelsSubscriptions subscriptions={subscriptions} setFeeds={setFeeds} />
-                <RecommendedFeeds setFeeds={setFeeds} />
-                <AppSettings setFeeds={setFeeds} />
-            </View>
-        </ScrollView>
+        <View style={{height, overflow: "visible"}}>
+            <ScrollView
+                style={{...tw`m-0 p-0 bg-purple-700 h-full`}}
+                scrollEnabled={true}>
+                <View style={tw`w-full h-full flex flex-col overflow-visible pb-12`} onTouchStart={() => Keyboard.dismiss()}>
+                    <Button
+                        title="Close Settings"
+                        onPress={closeMenu}
+                        leading={props => <Icon name="close" {...props} />} />
+                    <AddFeedInput setFeeds={setFeeds} />
+                    <ChannelsSubscriptions subscriptions={subscriptions} setFeeds={setFeeds} />
+                    <RecommendedFeeds setFeeds={setFeeds} />
+                    <AppSettings setFeeds={setFeeds} />
+                </View>
+            </ScrollView>
+        </View>
     );
 }

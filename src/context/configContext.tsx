@@ -73,12 +73,17 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
         if (fullConfig[key] === undefined) {
             return null;
         }
+        console.log(key, fullConfig[key]);
         return fullConfig[key];
     }
 
     const onConfigChange = (kcb: (value: Config) => void): [Unsubber, Symbol] => {
         return onEvent(config.events.update_global_config, kcb);
     }
+
+    useEffect(() => {
+        loadConfig();
+    }, [])
 
     return (
         <ConfigContext.Provider value={{

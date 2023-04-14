@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, Dimensions, StatusBar as NativeStatusBar, Keyboard, ScrollView, Text } from 'react-native';
 import config from './config';
 import AddFeedInput from './src/component/addFeedInput';
@@ -10,13 +10,14 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { FeedsContext } from './src/context/feedsContext';
 import SideMenu from './src/component/sideMenu/sideMenu';
 
+
 export default (): JSX.Element => {
     const { feeds, setFeeds } = useContext(FeedsContext);
     const scroll = useRef<ScrollView>(null);
 
     let { height, width } = Dimensions.get("window");
     height += NativeStatusBar.currentHeight;
-
+    
     return (
         <View className='fontSans' style={{ height }} onTouchStart={() => Keyboard.dismiss()}>
             <StatusBar style="auto" />

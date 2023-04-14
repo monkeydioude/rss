@@ -7,6 +7,7 @@ import { Button } from '@react-native-material/core';
 import { clearAllData } from "../../service/data_storage";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import LocalDataView from "./localDataView";
+import MaxItemPerFeed from "../settings/maxItemPerFeed";
 
 type Props = {
     setFeeds: SetFeedsCB,
@@ -17,7 +18,9 @@ const AppSettings = ({ setFeeds }: Props): JSX.Element => {
         <View>
             <MenuSettingsTitle label='App Settings' />
             <ChannelTitle />
+            <MaxItemPerFeed />
             <Button
+                style={{zIndex: -1}}
                 title="Erase All Local Data"
                 onPress={async () => {
                     

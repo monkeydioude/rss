@@ -26,6 +26,7 @@ export default {
     maxHeightFeedDescAnimation: 500,
     openSpeedDescAnimation: 500,
     maxItemPerFeed: 10,
+    maxItemPerFeedChoices: [5, 10, 15, 20],
     feedsRefreshTimer: 60 * 1000, // in millisecond
     appTitle: "RSS",
     settingsMenuAnimationDuration: 450,

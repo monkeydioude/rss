@@ -18,7 +18,7 @@ const LocalDataView = (): JSX.Element => {
     }
 
     return (
-        <View>
+        <View style={{zIndex: -1}}>
             <Button
                 title="View Local Data"
                 variant="outlined"

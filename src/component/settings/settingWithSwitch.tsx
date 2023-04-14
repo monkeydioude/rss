@@ -17,9 +17,9 @@ const SettingWithSwitch = ({ label, onValueChange, checked, style }: Props): JSX
             ...SettingCSS.container,
             ...style
         }}>
-            <Text style={tw`text-xl m-0 p-0 pl-1 shrink-1 text-white`}>{label}</Text>
+            <Text style={SettingCSS.textLabel}>{label}</Text>
             <Switch
-                style={tw`p-0 m-0 grow-1`}
+                style={SettingCSS.item}
                 value={checked}
                 thumbColor="#6200EE" 
                 trackColor={{

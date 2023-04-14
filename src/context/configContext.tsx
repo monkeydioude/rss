@@ -73,7 +73,6 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
         if (fullConfig[key] === undefined) {
             return null;
         }
-        console.log(key, fullConfig[key]);
         return fullConfig[key];
     }
 

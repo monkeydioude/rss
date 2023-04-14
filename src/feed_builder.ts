@@ -91,15 +91,12 @@ export const addFeed = async (
 export const filtersOutUnsubedProviders = async (): Promise<DataCollection<RSSData>> => {
   const plist = await new DataCollection<Provider>(config.storageKeys.providers_list).update();
   const rssColl = await (new DataCollection<RSSData>(config.storageKeys.rss)).update();
-  console.log("plist", plist);
 
   for (let [url, p] of plist.getStack()) {
     if (p.subscribed === false) {
       rssColl.delete(url);
     }
   }
-
-  console.log("rssColl", rssColl);
 
   return rssColl;
 }

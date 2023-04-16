@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 import tw from 'twrnc';
 import SettingCSS from "./settings.css";
 import Ionicons from '@expo/vector-icons/Ionicons';

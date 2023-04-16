@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import SettingWithSelect from "./settingWithSelect";
 import tw from "twrnc";
 import defaultConfig from "../../../defaultConfig";

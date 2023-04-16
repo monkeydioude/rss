@@ -1,11 +1,11 @@
 import { Button } from '@react-native-material/core';
 import React, { useContext, useEffect, useState } from 'react';
-import { Dimensions, Keyboard, ScrollView, StatusBar, View } from 'react-native';
+import { Dimensions, ScrollView, StatusBar, View } from 'react-native';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import config, { events } from '../../../defaultConfig';
+import config from '../../../defaultConfig';
 import { FeedsContext } from '../../context/feedsContext';
 import AddFeedInput from '../addFeedInput';
-import { Provider, newProviderDataCollection, RSSItem } from '../../data_struct';
+import { Provider, newProviderDataCollection } from '../../data_struct';
 import { EventsContext } from '../../context/eventsContext';
 import tw from 'twrnc';
 import ChannelsSubscriptions from './channelsSubscriptions';

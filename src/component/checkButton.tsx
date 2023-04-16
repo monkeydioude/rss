@@ -1,6 +1,6 @@
 import { Button, Text } from "@react-native-material/core";
 import React from "react";
-import { GestureResponderEvent, StyleProp, TextStyle, View } from "react-native";
+import { GestureResponderEvent, TextStyle, View } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import tw from 'twrnc';
 

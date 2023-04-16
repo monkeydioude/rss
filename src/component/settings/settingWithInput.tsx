@@ -1,6 +1,6 @@
 import { Text } from "@react-native-material/core";
-import React, { useEffect, useRef, useState } from "react";
-import { View, NativeSyntheticEvent, TextInputSubmitEditingEventData, Keyboard, TextInputTextInputEventData, ViewStyle, Pressable, TextInput, KeyboardEventListener, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, NativeSyntheticEvent, TextInputSubmitEditingEventData, Keyboard, ViewStyle, Pressable, TextInput } from "react-native";
 import tw from 'twrnc';
 import SettingCSS from "./settings.css";
 import Ionicons from '@expo/vector-icons/Ionicons';

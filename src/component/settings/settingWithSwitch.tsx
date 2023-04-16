@@ -1,6 +1,5 @@
 import React from "react";
-import { Text, Switch, View, StyleProp, ViewStyle } from "react-native";
-import tw from 'twrnc';
+import { Text, Switch, View, ViewStyle } from "react-native";
 import SettingCSS from "./settings.css";
 
 type Props = {

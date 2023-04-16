@@ -1,6 +1,6 @@
 import { TextInput } from "@react-native-material/core";
 import React, { useRef, useState } from "react"
-import { Keyboard, NativeSyntheticEvent, Pressable, Text, TextInputSubmitEditingEventData, TextInputTextInputEventData, View } from "react-native";
+import { Keyboard, NativeSyntheticEvent, Pressable, TextInputSubmitEditingEventData, View } from "react-native";
 import { RSSItem } from "../data_struct";
 import { addFeed } from "../feed_builder";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";

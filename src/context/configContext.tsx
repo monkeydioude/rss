@@ -1,7 +1,13 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext } from "react";
 import { events } from "../../defaultConfig";
 import { EventsContext, Unsubber } from "./eventsContext";
 import config, { Config, ConfigProps } from "../service/config";
+
+/**
+ * Only for setting config and listening to config change.
+ * Config reading should be done through the "../service/config singleton".
+ * Gonna migrate this context soon to depend only on the singleton, maybe
+ */
 
 interface ConfigContext {
     setConfig: (newConf: Partial<ConfigProps>) => void,

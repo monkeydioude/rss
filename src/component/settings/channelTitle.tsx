@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ConfigContext } from "../../context/configContext";
 import SettingWithSwitch from "./settingWithSwitch";
 import config from "../../service/config";

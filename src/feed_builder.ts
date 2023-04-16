@@ -11,18 +11,22 @@ const getURL = (url: string): string => {
 export const fetchXMLData = async (url: string, timeOut: number): Promise<XMLData> => {
   const ctrl = new AbortController();
   
+  let parsed: XMLData = null;
   setTimeout(() => ctrl.abort(), timeOut); 
-  return fetch(getURL(url), {
+
+  try {
+    const res = await fetch(getURL(url), {
       method: "GET",
       signal: ctrl.signal,
-    })
-    .then(async (res: Response) => {
-      return new XMLParser().parse(await res.text());
-    })
-    .catch((err) => {
-      console.log("fetchXMLData", err);
-      throw "took too long"
-    })
+    });
+
+    const text = await res.text();
+    parsed = new XMLParser().parse(text);
+  } catch (err) {
+    console.log("fetchXMLData", err);
+    throw "could not fetch data"
+  }
+  return parsed;
 }
 
 // isUpdatable compare the sum of the rss provider's date and an update threshold
@@ -51,6 +55,7 @@ const fetchAndUpdateCollection = async (url: string, rssColl: DataCollection<RSS
     if (!newFeeds || !newFeeds.rss) {
       return;
     }
+
     newFeeds.rss.lastFetchDate = +new Date();
     newFeeds.rss.channel.item.forEach((item: RSSItem) => {
       item.channelTitle = newFeeds.rss.channel.title;
@@ -74,10 +79,9 @@ export const addFeed = async (
     //   return;
     // }
 
-    console.log(rssColl.get(url))
-    // if (rssColl.get(url)) {
-    //   return
-    // }
+    if (rssColl.get(url)) {
+      return
+    }
 
     await fetchAndUpdateCollection(url, rssColl);
     await (new DataCollection<Provider>(defaultConfig.storageKeys.providers_list)).insert(url, {

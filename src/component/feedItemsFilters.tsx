@@ -6,11 +6,11 @@ import { addFeed } from "../feed_builder";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import tw from 'twrnc';
 
-type Props = {
-  setFeeds: (f: React.SetStateAction<RSSItem[]>) => void,
+interface Props {
+  setFeeds: (f: React.SetStateAction<RSSItem[]>) => void;
 }
 
-const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
+const FeedItemsFilters = ({ setFeeds }: Props): JSX.Element => {
   const [ text, setText ] = useState<string>("");
 
   const trailing = useRef(<View>
@@ -26,7 +26,7 @@ const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
       <TextInput
         onSubmitEditing={async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
           event.persist();
-          addFeed(event.nativeEvent.text, (f: RSSItem[]) => setFeeds([...f]));
+          addFeed(event.nativeEvent.text.toLocaleLowerCase(), (f: RSSItem[]) => setFeeds([...f]));
           setText("");
           Keyboard.dismiss();
         }}
@@ -44,4 +44,4 @@ const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
   )
 }
 
-export default AddFeedInput;
+export default FeedItemsFilters;

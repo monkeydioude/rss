@@ -1,4 +1,15 @@
-export default {
+export enum ChannelTitleMode {
+    Inline,
+    NewLine,
+}
+
+export const events = {
+    set_feeds: "set_feeds",
+    update_global_config: "update_global_config",
+    feed_desc_open: "feed_desc_open",
+};
+
+const defaultConfig = {
     fetchRequestTimeout: 4 * 1000, // in millisecond
     bootFetchRequestTimeout: 8 * 1000,
     fetchThreshold: 30 * 1000, // in millisecond
@@ -18,11 +29,7 @@ export default {
         providers_list: "providers_list",
         global_config: "global_config",
     },
-    events: {
-        set_feeds: "set_feeds",
-        update_global_config: "update_global_config",
-        feed_desc_open: "feed_desc_open",
-    },
+    events: events,
     maxHeightFeedDescAnimation: 500,
     openSpeedDescAnimation: 500,
     maxItemPerFeed: 10,
@@ -32,4 +39,7 @@ export default {
     settingsMenuAnimationDuration: 450,
     swipeBaseRange: 4,
     swipCancelPressDist: 2,
+    displayChannelTitle: ChannelTitleMode.NewLine,
 }
+
+export default defaultConfig;

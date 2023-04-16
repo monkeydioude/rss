@@ -14,15 +14,13 @@ type Props = {
 export default ({ feeds }: Props): JSX.Element => {
     const [ refreshing, setRefreshing ] = useState<boolean>(false);
     const { setFeeds } = useContext(FeedsContext);
-    const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
     return (
         <View style={{flex: 1, margin: 0, padding: 0}}>
             <ScrollView
                 style={tw`m-0 p-0`}
-                scrollEnabled={scrollEnabled}
+                scrollEnabled={true}
                 canCancelContentTouches={false}
-                onTouchCancel={() => {return scrollEnabled}}
                 refreshControl={
                     <RefreshControl
                     refreshing={refreshing}

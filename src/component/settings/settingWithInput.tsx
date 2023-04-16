@@ -20,7 +20,6 @@ const SettingWithEditInput = ({ label, onSubmitEditing, text:_text, style }: Pro
     // const inputRef = useRef<TextInput>(null);
 
     useEffect(() => {
-
         const kbh = Keyboard.addListener("keyboardDidHide", e => {
             setInputVisible(false);
         })

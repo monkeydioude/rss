@@ -1,28 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ChannelTitleMode, Config, ConfigContext } from "../../context/configContext";
+import { ConfigContext } from "../../context/configContext";
 import SettingWithSwitch from "./settingWithSwitch";
+import config from "../../service/config";
+import { ChannelTitleMode } from "../../../defaultConfig";
 
 const ChannelTitle = (): JSX.Element => {
-    const { setConfig, onConfigChange } = useContext(ConfigContext);
-    const [ checked, setChecked ] = useState<boolean>(true);
-
-    useEffect(() => {
-        const [ unsub ] = onConfigChange((config: Config) => {
-            setChecked(config.displayChannelTitle === ChannelTitleMode.NewLine);
-        })
-        return unsub;
-    }, []);
+    const { setConfig } = useContext(ConfigContext);
+    const [ checked, setChecked ] = useState<boolean>(config.props.displayChannelTitle === ChannelTitleMode.NewLine);
 
     return (
         <SettingWithSwitch
             label="Channel title breaks line"
             checked={checked}
             onValueChange={() => {
-                setConfig<ChannelTitleMode>(
-                    "displayChannelTitle",
-                    // Opposite, cause defining next state, aftet hitting the switch
-                    checked ? ChannelTitleMode.Inline : ChannelTitleMode.NewLine
-                );
+                setConfig({
+                    displayChannelTitle: checked ? ChannelTitleMode.Inline : ChannelTitleMode.NewLine
+                });
                 setChecked(!checked);
             }}
         />

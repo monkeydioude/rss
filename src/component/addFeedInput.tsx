@@ -30,18 +30,14 @@ const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
           setText("");
           Keyboard.dismiss();
         }}
-        onTextInput={(e: NativeSyntheticEvent<TextInputTextInputEventData>) => {
-          setText(e.nativeEvent.text);
+        onChangeText={(text) => {
+          setText(text);
         }}
         value={text}
-        leading={(
-          <>
-            <Icon style={tw`text-lg`} name="rss" />
-          </>
-        )}
+        leading={<Icon style={tw`text-lg`} name="rss" />}
         trailing={text != "" && trailing.current}
         nativeID='add_feed'
-        placeholder='Add feed'
+        placeholder='Add new feed source'
         style={tw`grow`}
         className="border-gray-900" />
     </View>

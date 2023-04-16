@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 import { View, Dimensions, StatusBar as NativeStatusBar, Keyboard, ScrollView, Text } from 'react-native';
-import config from './config';
+import defaultConfig from './defaultConfig';
 import AddFeedInput from './src/component/addFeedInput';
 import TitleBar from './src/component/titleBar';
 import FeedsView from './src/component/feedsView';
@@ -19,9 +19,13 @@ export default (): JSX.Element => {
     height += NativeStatusBar.currentHeight;
     
     return (
-        <View className='fontSans' style={{ height }} onTouchStart={() => Keyboard.dismiss()}>
+        <View
+            className='fontSans'
+            style={{ height }}
+            // onTouchStart={() => Keyboard.dismiss()}
+            >
             <StatusBar style="auto" />
-            <TitleBar label={config.appTitle} />
+            <TitleBar label={defaultConfig.appTitle} />
             <ScrollView
                 contentOffset={{
                     x: width,

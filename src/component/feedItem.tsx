@@ -2,29 +2,27 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Linking, Text, View } from "react-native";
 import { RSSItem } from "../data_struct";
 import tw from 'twrnc';
-import { ConfigContext, ChannelTitleMode, Config } from "../context/configContext";
+import { ConfigContext } from "../context/configContext";
 import { cleanString } from "../service/string";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import config from "../../config";
+import defaultConfig, { ChannelTitleMode } from "../../defaultConfig";
+import config, { Config } from "../service/config";
 
 type Props = {
     item: RSSItem;
     it: number;
 }
 
-const FeedItem = ({ item, it: key }: Props): JSX.Element => {
+const FeedItem = ({ item }: Props): JSX.Element => {
     const isOpened = useRef(false);
-    const { getConfig, onConfigChange } = useContext(ConfigContext);
+    const { onConfigChange } = useContext(ConfigContext);
     const slideValue = new Animated.Value(-20);
-    const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(
-        getConfig("displayChannelTitle")
-    );
+    const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.props.displayChannelTitle);
     const descH = useRef(-20);
-
 
     useEffect(() => {
         const [leaveEventConfig] = onConfigChange((config: Config) => {
-            setChannelDisplay(config.displayChannelTitle);
+            setChannelDisplay(config.props.displayChannelTitle);
         });
         return () => {
             leaveEventConfig();
@@ -32,7 +30,7 @@ const FeedItem = ({ item, it: key }: Props): JSX.Element => {
     }, []);
 
     const preTagChar = channelDisplay === ChannelTitleMode.Inline ? " " : "\n";
-    let toValue = config.maxHeightFeedDescAnimation;
+    let toValue = defaultConfig.maxHeightFeedDescAnimation;
 
     return (
         <View style={tw`pb-0.5`}>
@@ -41,14 +39,14 @@ const FeedItem = ({ item, it: key }: Props): JSX.Element => {
                 onPress={() => {
                     if (!isOpened.current) {
                         slideValue.setValue(0);
-                        toValue = config.maxHeightFeedDescAnimation;
+                        toValue = defaultConfig.maxHeightFeedDescAnimation;
                     } else {
                         slideValue.setValue(descH.current);
                         toValue = 0;
                     }
                     Animated.timing(slideValue, {
                         toValue,
-                        duration: descH.current / config.maxHeightFeedDescAnimation * config.openSpeedDescAnimation,
+                        duration: descH.current / defaultConfig.maxHeightFeedDescAnimation * defaultConfig.openSpeedDescAnimation,
                         useNativeDriver: false,
                     }).start();
                     isOpened.current = !isOpened.current;

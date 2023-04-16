@@ -1,9 +1,10 @@
 import { XMLParser } from "fast-xml-parser";
-import config from "../config";
+import defaultConfig from "../defaultConfig";
 import { RSSData, DataCollection, RSSItem, XMLData, Provider } from "./data_struct";
+import config from "./service/config";
 
 const getURL = (url: string): string => {
-  return `${config.bypassServerAddr}/${url}`;
+  return `${defaultConfig.bypassServerAddr}/${url}`;
 }
 
 // fetchXMLData retrieves a provider's feed
@@ -26,7 +27,7 @@ export const fetchXMLData = async (url: string, timeOut: number): Promise<XMLDat
 
 // isUpdatable compare the sum of the rss provider's date and an update threshold
 // against the now date 
-const isUpdatable = (data: RSSData): boolean => (data.lastFetchDate + config.fetchThreshold < +new Date())
+const isUpdatable = (data: RSSData): boolean => (data.lastFetchDate + defaultConfig.fetchThreshold < +new Date())
 
 const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Promise<boolean> => {
   try {
@@ -44,7 +45,7 @@ const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Pro
 
 // fetchAndUpdateCollection fires a request to the feed's provider
 // and update its lastFetchDate
-const fetchAndUpdateCollection = async (url: string, rssColl: DataCollection<RSSData>, timeOut = config.fetchRequestTimeout) => {
+const fetchAndUpdateCollection = async (url: string, rssColl: DataCollection<RSSData>, timeOut = defaultConfig.fetchRequestTimeout) => {
   try {
     const newFeeds = await fetchXMLData(url, timeOut);
     if (!newFeeds || !newFeeds.rss) {
@@ -69,12 +70,17 @@ export const addFeed = async (
 ) => {
   try {
     const rssColl = await filtersOutUnsubedProviders();
-    if (!await shouldUpdateFeed(url, rssColl)) {
-      return;
-    }
+    // if (!await shouldUpdateFeed(url, rssColl)) {
+    //   return;
+    // }
+
+    console.log(rssColl.get(url))
+    // if (rssColl.get(url)) {
+    //   return
+    // }
 
     await fetchAndUpdateCollection(url, rssColl);
-    await (new DataCollection<Provider>(config.storageKeys.providers_list)).insert(url, {
+    await (new DataCollection<Provider>(defaultConfig.storageKeys.providers_list)).insert(url, {
       id: url,
       url,
       name: rssColl.get(url).channel.title,
@@ -89,8 +95,8 @@ export const addFeed = async (
 }
 
 export const filtersOutUnsubedProviders = async (): Promise<DataCollection<RSSData>> => {
-  const plist = await new DataCollection<Provider>(config.storageKeys.providers_list).update();
-  const rssColl = await (new DataCollection<RSSData>(config.storageKeys.rss)).update();
+  const plist = await new DataCollection<Provider>(defaultConfig.storageKeys.providers_list).update();
+  const rssColl = await (new DataCollection<RSSData>(defaultConfig.storageKeys.rss)).update();
 
   for (let [url, p] of plist.getStack()) {
     if (p.subscribed === false) {
@@ -116,7 +122,7 @@ export const reloadFeeds = async (updateCb: (f: RSSItem[]) => void): Promise<voi
 // check if they can be updated, if so request a new version
 // of the feed, then put the updated feed into storage
 // and then triggers the update state callback
-export const loadAndUpdateFeeds = async (updateCb: (f: RSSItem[]) => void, timeOut = config.fetchRequestTimeout) => {
+export const loadAndUpdateFeeds = async (updateCb: (f: RSSItem[]) => void, timeOut = defaultConfig.fetchRequestTimeout) => {
   try {
     const rssColl = await filtersOutUnsubedProviders();
     const feeds = rssColl.getStack();
@@ -183,7 +189,7 @@ export const trimFeeds = (feeds: Map<string, RSSData>): RSSItem[] => {
   try {
     const rssItems = Array.from(feeds.values())
     .flatMap((data: RSSData): RSSItem[] => (
-      data.channel.item.splice(0, config.maxItemPerFeed)
+      data.channel.item.splice(0, config.props.maxItemPerFeed)
     ));
 
   // reverse array if order is set to ASC

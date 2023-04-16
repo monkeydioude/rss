@@ -3,7 +3,7 @@ import { SetFeedsCB } from "../../context/feedsContext";
 import { View } from "react-native";
 import { MenuFeedsSectionTitle } from "../menuSectionTitle";
 import AddStaticFeedButton from "../addStaticFeedButton";
-import config from "../../../config";
+import config from "../../../defaultConfig";
 
 type Props = {
     setFeeds: SetFeedsCB,

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { RSSItem } from "../data_struct";
 import React from "react";
-import config from "../../config";
+import config from "../../defaultConfig";
 import { EventsContext } from "./eventsContext";
 
 export type SetFeedsCB = (f: RSSItem[]) => void;

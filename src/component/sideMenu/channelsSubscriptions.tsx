@@ -33,8 +33,7 @@ type ChannelSubProps = {
     idx: number,
 }
 
-// HERE
-const ChannelSub = ({ setFeeds, sub, idx }: ChannelSubProps): JSX.Element => {
+const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
     const [ checked, setChecked ] = useState<boolean>(sub.subscribed);
     const [ settingOpen, setSettingOpen ] = useState<boolean>(false);
 
@@ -42,13 +41,17 @@ const ChannelSub = ({ setFeeds, sub, idx }: ChannelSubProps): JSX.Element => {
         await providersChangeURL(urlBefore, urlNow);
         reloadFeeds(setFeeds);
     }
-
     return (
-        <View style={tw`flex flex-col`}>
+        <View style={{
+            ...tw`flex flex-col`,
+            zIndex: -1,
+            elevation: -1
+        }}>
             <CheckButton
                 title={sub.name}
                 checked={checked}
-                trailing={<Icon name={`menu-${settingOpen ? "down" : "up"}`} style={tw`text-xl text-white`} />}
+                trailing={<Icon name={`menu-${settingOpen ? "up" : "down"}`}
+                style={tw`text-xl text-white`} />}
                 onLongPress={async () => {
                     try {
                         setChecked(!checked);
@@ -58,9 +61,9 @@ const ChannelSub = ({ setFeeds, sub, idx }: ChannelSubProps): JSX.Element => {
                     }
                 }}
                 onPress={() => {
-                    // onCheckButtonPress(sub.url, isPressed, setFeeds);
                     setSettingOpen(!settingOpen);
-                }} />
+                }} 
+                />
             { settingOpen &&
                 <View style={tw`flex mb-2`}>
                     <SettingWithSwitch
@@ -87,12 +90,14 @@ type ChannelsSubscriptionsProps = {
 
 const ChannelsSubscriptions = ({ subscriptions, setFeeds }: ChannelsSubscriptionsProps): JSX.Element => {
     return (
-        <View style={tw`justify-center`}>
-        <MenuSectionTitle label='Feeds Subscription' />
-        {subscriptions.map((sub: Provider, idx: number) => (
-            <ChannelSub key={idx} setFeeds={setFeeds} sub={sub} idx={idx} />
-        ))}
-    </View>
+        <View style={{
+            ...tw`justify-center`,
+            }}>
+            <MenuSectionTitle label='Feeds Subscription' />
+            {subscriptions.map((sub: Provider, idx: number) => (
+                <ChannelSub key={idx} setFeeds={setFeeds} sub={sub} idx={idx} />
+            ))}
+        </View>
     )
 }
 

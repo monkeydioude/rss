@@ -1,30 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import SettingWithSelect from "./settingWithSelect";
-import config from "../../../config";
 import tw from "twrnc";
-import { ConfigContext } from "../../context/configContext";
+import defaultConfig from "../../../defaultConfig";
 
-const MaxItemPerFeed = (): JSX.Element => {
-    const { setConfig, getConfig, onConfigChange } = useContext(ConfigContext);
-    const [ value, setValue ] = useState<number>(config.maxItemPerFeed);
+interface Props {
+    onValueChange: (value:string|number) => void;
+    value: number;
+}
 
-    useEffect(() => {
-        try {
-            setValue(getConfig("itemsPerChannel"));
-        } catch (err) {
-            console.error("could not set iterms per channel:", err);
-        }
-    }, []);
+const MaxItemPerFeed = ({ onValueChange, value: _value }: Props): JSX.Element => {
+    const [ value, setValue ] = useState<number|string>(_value);
 
     return (
         <SettingWithSelect
             style={tw`mb-2`}
-            onValueChange={(value: string|number) => {
-                setConfig("itemsPerChannel", value.toString());
+            onValueChange={(value: number|string) => {
+                setValue(value);
+                onValueChange(value);
             }}
             label="Max items per channel"
             value={value}
-            items={config.maxItemPerFeedChoices} />
+            items={defaultConfig.maxItemPerFeedChoices} />
     )
 }
 

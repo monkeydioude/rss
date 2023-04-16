@@ -1,4 +1,4 @@
-import config from "../config";
+import defaultConfig from "../defaultConfig";
 import { Storage } from "./service/data_storage";
 
 export type RSSItem = {
@@ -134,5 +134,5 @@ export class DataCollection<T> {
     }
 }
 
-export const newRSSDataCollection = (): DataCollection<RSSData> => new DataCollection<RSSData>(config.storageKeys.rss);
-export const newProviderDataCollection = (): DataCollection<Provider> => new DataCollection<Provider>(config.storageKeys.providers_list);
+export const newRSSDataCollection = (): DataCollection<RSSData> => new DataCollection<RSSData>(defaultConfig.storageKeys.rss);
+export const newProviderDataCollection = (): DataCollection<Provider> => new DataCollection<Provider>(defaultConfig.storageKeys.providers_list);

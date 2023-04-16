@@ -38,3 +38,17 @@ export const providersChangeURL = async (urlBefore: string, urlNow: string) => {
         console.error(e);
     }
 }
+
+// export const providersChangeItemAmount = async (providerName: string, maxItemPerFeed: number) => {
+//     try {
+//         const plist = await newProviderDataCollection().update();
+//         const provider = plist.get(providerName);
+//         provider.maxItemPerFeed = maxItemPerFeed;
+//         plist.set(providerName, provider);
+
+//         await plist.write();
+//     } catch (e) {
+//         // @todo: warning/error msg in app
+//         console.error(e);
+//     }
+// }

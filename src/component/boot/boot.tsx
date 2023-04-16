@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ConfigContext } from "../../context/configContext";
 import { FeedsContext } from "../../context/feedsContext";
 import { getUnsubbedProvidersFeeds, loadAndUpdateFeeds } from "../../feed_builder";
 import { RSSItem } from "../../data_struct";
-import config from "../../../config";
+import defaultConfig from "../../../defaultConfig";
+import config from "../../service/config";
 
 interface Props {
     onBootFinish?: () => void;
@@ -12,20 +12,19 @@ interface Props {
 
 const Boot = ({ onBootFinish, children }: Props): JSX.Element => {
     const [bootFinish, setBootFinish] = useState<boolean>(false);
-    const { loadConfig } = useContext(ConfigContext);
     const { setFeeds } = useContext(FeedsContext);
-
 
     useEffect(() => {
         (async () => {
             try {
                 // start app boot routine.
-                loadConfig();
+                await config.load();
+                console.log("boot_config", config);
                 setFeeds(await getUnsubbedProvidersFeeds());
-                await loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]), config.bootFetchRequestTimeout);
+                await loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]), defaultConfig.bootFetchRequestTimeout);
                 setInterval(() => {
                     loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]));
-                }, config.feedsRefreshTimer);
+                }, defaultConfig.feedsRefreshTimer);
 
                 if (onBootFinish) {
                     onBootFinish();

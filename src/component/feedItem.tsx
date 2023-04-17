@@ -13,12 +13,12 @@ type Props = {
     it: number;
 }
 
-const FeedItem = ({ item }: Props): JSX.Element => {
+const FeedItem = ({ it, item }: Props): JSX.Element => {
     const isOpened = useRef(false);
     const { onConfigChange } = useContext(ConfigContext);
-    const slideValue = new Animated.Value(-20);
+    const slideValue = new Animated.Value(0);
     const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.props.displayChannelTitle);
-    const descH = useRef(-20);
+    const descH = useRef(0);
 
     useEffect(() => {
         const [leaveEventConfig] = onConfigChange((config: Config) => {
@@ -29,13 +29,17 @@ const FeedItem = ({ item }: Props): JSX.Element => {
         }
     }, []);
 
+
     const preTagChar = channelDisplay === ChannelTitleMode.Inline ? " " : "\n";
     let toValue = defaultConfig.maxHeightFeedDescAnimation;
 
     return (
-        <View style={tw`pb-0.5`}>
+        <View style={{
+            ...tw`pb-0.5`,
+            backgroundColor: it % 2 === 1 ? "rgba(255, 200, 94, 0.15)" : "",
+        }}>
             <Text
-                style={tw`font-medium text-base px-1 pb-0 m-0`}
+                style={tw`font-medium text-base px-1 pt-0.5 pb-0 m-0`}
                 onPress={() => {
                     if (!isOpened.current) {
                         slideValue.setValue(0);
@@ -58,9 +62,11 @@ const FeedItem = ({ item }: Props): JSX.Element => {
             <Animated.View
                 style={{
                     maxHeight: slideValue,
+                    margin: 0,
+                    padding: 0,
                 }}>
                 <Text
-                    style={tw`font-medium text-base m-0 p-0 pl-1 underline`}
+                    style={tw`font-medium text-base m-0 p-0 underline`}
                     onLayout={e => {
                         descH.current = e.nativeEvent.layout.height; 
                     }}
@@ -69,7 +75,8 @@ const FeedItem = ({ item }: Props): JSX.Element => {
                             Linking.openURL(item.link);
                         }
                     }}>
-                    <Ionicons name="megaphone" /> {cleanString(item.description)}</Text>
+                    <Ionicons name="megaphone" /> {cleanString(item.description)}
+                </Text>
             </Animated.View>
         </View>
     )

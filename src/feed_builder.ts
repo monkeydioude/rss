@@ -23,7 +23,6 @@ export const fetchXMLData = async (url: string, timeOut: number): Promise<XMLDat
     const text = await res.text();
     parsed = new XMLParser().parse(text);
   } catch (err) {
-    console.log("fetchXMLData", err);
     throw "could not fetch data"
   }
   return parsed;

@@ -12,19 +12,21 @@ interface Props {
 
 const Boot = ({ onBootFinish, children }: Props): JSX.Element => {
     const [bootFinish, setBootFinish] = useState<boolean>(false);
-    const { setFeeds } = useContext(FeedsContext);
+    const { reloadFeeds, setFeeds } = useContext(FeedsContext);
+
+    const reloadAndSetInterval = async () => {
+        await loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]), defaultConfig.bootFetchRequestTimeout);
+        setInterval(() => {
+            loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]));
+        }, defaultConfig.feedsRefreshTimer);
+    }
 
     useEffect(() => {
         (async () => {
             try {
                 // start app boot routine.
                 await config.load();
-                console.log("boot_config", config);
-                setFeeds(await getUnsubbedProvidersFeeds());
-                await loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]), defaultConfig.bootFetchRequestTimeout);
-                setInterval(() => {
-                    loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]));
-                }, defaultConfig.feedsRefreshTimer);
+                await reloadAndSetInterval();
 
                 if (onBootFinish) {
                     onBootFinish();

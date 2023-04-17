@@ -23,12 +23,12 @@ export default ({ feeds }: Props): JSX.Element => {
                 canCancelContentTouches={false}
                 refreshControl={
                     <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={async () => {
-                        setRefreshing(true);
-                        await loadAndUpdateFeeds(setFeeds);
-                        setRefreshing(false);
-                    }} />
+                        refreshing={refreshing}
+                        onRefresh={async () => {
+                            setRefreshing(true);
+                            await loadAndUpdateFeeds(setFeeds);
+                            setRefreshing(false);
+                        }} />
                 } className='h-full'>
                 <Stack fill spacing={2}>
                     {feeds.length === 0 && 
@@ -37,7 +37,7 @@ export default ({ feeds }: Props): JSX.Element => {
                     </View>
                     }
                     {feeds.map((item: RSSItem, idx: number): JSX.Element => (
-                    <View key={idx}>
+                    <View key={item.title}>
                     {idx > 0 && 
                         <Divider style={tw`m-0 mb-1`} />
                     }

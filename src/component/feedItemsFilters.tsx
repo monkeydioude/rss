@@ -1,47 +1,67 @@
 import { TextInput } from "@react-native-material/core";
-import React, { useRef, useState } from "react"
-import { Keyboard, NativeSyntheticEvent, Pressable, TextInputSubmitEditingEventData, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react"
+import { Keyboard, Pressable, View } from "react-native";
 import { RSSItem } from "../data_struct";
-import { addFeed } from "../feed_builder";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import tw from 'twrnc';
+import { FeedItemFilter, FeedItemFilterRemover, FeedsContext } from "../context/feedsContext";
 
-interface Props {
-  setFeeds: (f: React.SetStateAction<RSSItem[]>) => void;
-}
+const FeedItemsFilters = (): JSX.Element => {
+    const { reloadFeeds, pushFilter } = useContext(FeedsContext);
+    const [filterRemover, setFilterRemover] = useState<FeedItemFilterRemover|null>(null);
+    const [text, setText] = useState<string>("");
 
-const FeedItemsFilters = ({ setFeeds }: Props): JSX.Element => {
-  const [ text, setText ] = useState<string>("");
 
-  const trailing = useRef(<View>
-      <Pressable onPress={() => {
-        setText("");
-      }}>
-        <Icon style={tw`text-lg`} name="close" />
-      </Pressable>
-    </View>);
+    useEffect(() => {
+        reloadFeeds();
+    }, [filterRemover]);
 
-  return (
-    <View>
-      <TextInput
-        onSubmitEditing={async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-          event.persist();
-          addFeed(event.nativeEvent.text.toLocaleLowerCase(), (f: RSSItem[]) => setFeeds([...f]));
-          setText("");
-          Keyboard.dismiss();
-        }}
-        onChangeText={(text) => {
-          setText(text);
-        }}
-        value={text}
-        leading={<Icon style={tw`text-lg`} name="rss" />}
-        trailing={text != "" && trailing.current}
-        nativeID='add_feed'
-        placeholder='Add new feed source'
-        style={tw`grow`}
-        className="border-gray-900" />
-    </View>
-  )
+    const textFilter: FeedItemFilter = (item: RSSItem) => {
+        let textL = text.toLowerCase();
+        return (item.category && !!item.category.toLowerCase().match(textL)) ||
+            (item.description && !!item.description.toLowerCase().match(textL)) ||
+            (item.title && !!item.title.toLowerCase().match(textL));
+    };
+
+    return (
+        <View>
+            <TextInput
+                onSubmitEditing={async () => {
+                    if (filterRemover) {
+                        filterRemover();
+                    }
+                    const rmer = pushFilter(textFilter);
+                    setFilterRemover(() => rmer);
+                    // await reloadFeeds();
+
+                    Keyboard.dismiss();
+                }}
+                onChangeText={(_text: string) => {
+                    setText(_text);
+                }}
+                value={text}
+                leading={<Icon style={tw`text-lg`} name="magnify" />}
+                trailing={text != "" && (
+                    <View>
+                        <Pressable onPress={async () => {
+                            setText("");
+                            if (filterRemover) {
+                                filterRemover();
+                            }
+                            setFilterRemover(null);
+                            // await reloadFeeds();
+
+                        }}>
+                            <Icon style={tw`text-lg`} name="close" />
+                        </Pressable>
+                    </View>
+                )}
+                nativeID='filter_text'
+                placeholder='Filter by text'
+                style={tw`grow`}
+                className="border-gray-900" />
+        </View>
+    )
 }
 
 export default FeedItemsFilters;

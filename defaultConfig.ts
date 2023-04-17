@@ -34,7 +34,7 @@ const defaultConfig = {
     openSpeedDescAnimation: 500,
     maxItemPerFeed: 10,
     maxItemPerFeedChoices: [5, 10, 15, 20],
-    feedsRefreshTimer: 60 * 1000, // in millisecond
+    feedsRefreshTimer: 20 * 1000, // in millisecond
     appTitle: "RSS",
     settingsMenuAnimationDuration: 450,
     swipeBaseRange: 4,

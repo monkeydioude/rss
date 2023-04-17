@@ -29,7 +29,6 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
     const setConfig = async (newConf: Partial<ConfigProps>) => {
         try {
             config.set(newConf);
-            console.log("ConfigProvider", config.props);
             await config.save();
             trigger<Config>(events.update_global_config, config);
         } catch (e) {

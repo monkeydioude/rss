@@ -1,18 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useRef } from 'react';
-import { View, Dimensions, StatusBar as NativeStatusBar, Keyboard, ScrollView, Text } from 'react-native';
+import { View, Dimensions, StatusBar as NativeStatusBar, ScrollView } from 'react-native';
 import defaultConfig from './defaultConfig';
-import AddFeedInput from './src/component/addFeedInput';
 import TitleBar from './src/component/titleBar';
 import FeedsView from './src/component/feedsView';
 import { Button } from '@react-native-material/core';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { FeedsContext } from './src/context/feedsContext';
 import SideMenu from './src/component/sideMenu/sideMenu';
+import FeedItemsFilters from './src/component/feedItemsFilters';
 
 
 export default (): JSX.Element => {
-    const { feeds, setFeeds } = useContext(FeedsContext);
+    const { feeds } = useContext(FeedsContext);
     const scroll = useRef<ScrollView>(null);
 
     let { height, width } = Dimensions.get("window");
@@ -49,7 +49,7 @@ export default (): JSX.Element => {
                         variant="outlined"
                         leading={props => <Icon name="menu-open" {...props} />}
                         />
-                    <AddFeedInput setFeeds={setFeeds} />
+                    <FeedItemsFilters />
                     <FeedsView feeds={feeds} />
                 </View>
             </ScrollView>

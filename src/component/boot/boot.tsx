@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FeedsContext } from "../../context/feedsContext";
-import { getUnsubbedProvidersFeeds, loadAndUpdateFeeds } from "../../feed_builder";
+import { loadAndUpdateFeeds } from "../../feed_builder";
 import { RSSItem } from "../../data_struct";
 import defaultConfig from "../../../defaultConfig";
 import config from "../../service/config";

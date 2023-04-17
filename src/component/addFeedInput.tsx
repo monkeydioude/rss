@@ -37,7 +37,7 @@ const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
         leading={<Icon style={tw`text-lg`} name="rss" />}
         trailing={text != "" && trailing.current}
         nativeID='add_feed'
-        placeholder='Add new feed source'
+        placeholder='ADD NEW FEED SOURCE (https://)'
         style={tw`grow`}
         className="border-gray-900" />
     </View>

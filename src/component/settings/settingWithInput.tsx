@@ -12,12 +12,10 @@ type Props = {
     style?: ViewStyle;
 }
 
-const SettingWithEditInput = ({ label, onSubmitEditing, text:_text, style }: Props): JSX.Element => {
+const SettingWithEditInput = ({ onSubmitEditing, text:_text, style }: Props): JSX.Element => {
     const [text, setText] = useState<string>(_text);
     const [inputVisible, setInputVisible] = useState<boolean>(false);
     const [inputText, setInputText] = useState<string>(_text);
-    const [heightOffset, setHeightOffset] = useState<number>(0);
-    // const inputRef = useRef<TextInput>(null);
 
     useEffect(() => {
         const kbh = Keyboard.addListener("keyboardDidHide", e => {

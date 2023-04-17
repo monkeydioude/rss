@@ -10,10 +10,12 @@ type Props = {
   title: string,
 }
 
-export default ({ title, url, setFeeds }: Props): JSX.Element => (
+const AddStaticFeedButton = ({ title, url, setFeeds }: Props): JSX.Element => (
   <View>
     <Button
       title={title}
       onPress={async () => addFeed(url, (f: RSSItem[]) => setFeeds([...f]))} />
   </View>
 )
+
+export default AddStaticFeedButton;

@@ -57,9 +57,9 @@ const FeedItemsFilters = (): JSX.Element => {
                     </View>
                 )}
                 nativeID='filter_text'
-                placeholder='Filter by text'
-                style={tw`grow`}
-                className="border-gray-900" />
+                placeholder='FILTER BY TEXT'
+                className="border-gray-900 grow"
+            />
         </View>
     )
 }

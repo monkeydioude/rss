@@ -1,5 +1,5 @@
 import { describe } from "mocha";
-import { Config, ConfigProps } from "../src/service/config";
+import { Config } from "../src/service/config";
 import { assert } from "chai";
 
 describe("config operations", () => {

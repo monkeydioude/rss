@@ -11,7 +11,7 @@ type Props = {
     feeds: RSSItem[],
 }
 
-export default ({ feeds }: Props): JSX.Element => {
+const FeedsView = ({ feeds }: Props): JSX.Element => {
     const [ refreshing, setRefreshing ] = useState<boolean>(false);
     const { setFeeds } = useContext(FeedsContext);
 
@@ -49,3 +49,5 @@ export default ({ feeds }: Props): JSX.Element => {
         </View>
     )
 }
+
+export default FeedsView;

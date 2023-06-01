@@ -4,6 +4,7 @@ import { loadAndUpdateFeeds } from "../../feed_builder";
 import { RSSItem } from "../../data_struct";
 import defaultConfig from "../../../defaultConfig";
 import config from "../../service/config";
+import { newRSSDataCollection } from "../../data_struct";
 
 interface Props {
     onBootFinish?: () => void;
@@ -12,9 +13,10 @@ interface Props {
 
 const Boot = ({ onBootFinish, children }: Props): JSX.Element => {
     const [bootFinish, setBootFinish] = useState<boolean>(false);
-    const { reloadFeeds, setFeeds } = useContext(FeedsContext);
+    const { setFeeds } = useContext(FeedsContext);
 
     const reloadAndSetInterval = async () => {
+        // newRSSDataCollection().delete_all();
         await loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]), defaultConfig.bootFetchRequestTimeout);
         setInterval(() => {
             loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]));

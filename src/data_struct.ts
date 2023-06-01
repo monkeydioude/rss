@@ -132,6 +132,10 @@ export class DataCollection<T> {
         this.stack = await this.select_all();
         return this;
     }
+
+    async delete_all(): Promise<void> {
+        await this.storage.delete();
+    }
 }
 
 export const newRSSDataCollection = (): DataCollection<RSSData> => new DataCollection<RSSData>(defaultConfig.storageKeys.rss);

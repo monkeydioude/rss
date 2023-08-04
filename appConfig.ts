@@ -10,8 +10,8 @@ export const events = {
 };
 
 const appConfig = {
-    // logchestAPIURL: "https://cookie-logstash-mtwkyutmvq-ew.a.run.app/log",
-    logchestAPIURL: "http://0.0.0.0:8080/log",
+    logchestAPIURL: "https://cookie-logstash-mtwkyutmvq-ew.a.run.app/log",
+    // logchestAPIURL: "http://0.0.0.0:8080/log",
     fetchRequestTimeout: 4 * 1000, // in millisecond
     bootFetchRequestTimeout: 8 * 1000,
     fetchThreshold: 30 * 1000, // in millisecond

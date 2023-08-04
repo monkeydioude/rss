@@ -22,8 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.monkeydioude.rss",
-      "versionCode": 2
+      "package": "com.monkeydioude.rss"
     },
     "web": {
       "favicon": "./assets/favicon.png"

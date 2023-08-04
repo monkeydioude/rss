@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import sleep from './sleep';
-import { sendError } from './logchest';
+import { log } from './logchest';
 
 let locked = false;
 
@@ -91,7 +91,7 @@ export const clearAllData = async (): Promise<void> => {
     await AsyncStorage.clear();
   } catch (e) {
     // @todo: warning/error msg in app
-    sendError("" + e);
+    log("" + e);
     console.error(e);
   }
 }
@@ -103,7 +103,7 @@ export const getAllData = async (): Promise<Map<string, string>> => {
       data.set(key, await AsyncStorage.getItem(key));
     };
   } catch (e) {
-    sendError("" + e);
+    log("" + e);
     console.error(e);
   }
   return data;
@@ -126,7 +126,7 @@ export class JSONStorage<T> implements Entity<T> {
       await this.storage.insert(JSON.stringify(entity));
     } catch (e) {
       // @todo: warning/error msg in app
-      sendError("" + e);
+      log("" + e);
       console.error(e);
     }
   }
@@ -137,7 +137,7 @@ export class JSONStorage<T> implements Entity<T> {
       return JSON.parse(res);
     } catch (e) {
       // @todo: warning/error msg in app
-      sendError("" + e);
+      log("" + e);
       console.error(e);
     }
   }

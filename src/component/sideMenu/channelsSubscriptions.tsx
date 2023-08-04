@@ -9,7 +9,7 @@ import tw from 'twrnc';
 import SettingWithSwitch from "../settings/settingWithSwitch";
 import SettingWithEditInput from "../settings/settingWithInput";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { sendError } from "../../service/logchest";
+import { log } from "../../service/logchest";
 
 const onCheckButtonPress = async (
     url: string,
@@ -24,7 +24,7 @@ const onCheckButtonPress = async (
         await reloadFeeds(setFeeds)
     } catch (e) {
         // @todo: warning/error msg in app
-        sendError("" + e);
+        log("" + e);
         console.error(e);
     }
 }

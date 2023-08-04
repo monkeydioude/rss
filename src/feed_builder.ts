@@ -2,8 +2,7 @@ import { XMLParser } from "fast-xml-parser";
 import appConfig from "../appConfig";
 import { RSSData, DataCollection, RSSItem, XMLData, Provider } from "./data_struct";
 import config from "./service/config";
-import { Alert } from "react-native";
-import { sendError } from "./service/logchest";
+import { log } from "./service/logchest";
 
 const getURL = (url: string): string => {
   return `${appConfig.bypassServerAddr}/${url}`;
@@ -45,7 +44,7 @@ const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Pro
     return isUpdatable(data);
   } catch (e) {
     // @todo: warning/error msg in app
-    sendError("" + e);
+    log("" + e);
     console.error(e);
     return false
   }
@@ -184,7 +183,7 @@ export const loadAndUpdateFeeds = async (
     updateCb(trimFeeds(rssColl.getStack()));
   } catch (e) {
     try {
-      sendError("error while building data feed: " + e + "\nTrying once more");
+      log("error while building data feed: " + e + "\nTrying once more");
       console.warn("error while building data feed:", e, "\nTrying once more")
       await resyncSubbedRssFeed(rssColl);
       if (rssColl.getStack().size === 0) {
@@ -194,7 +193,7 @@ export const loadAndUpdateFeeds = async (
       updateCb(trimFeeds(rssColl.getStack()));
     }
     catch (err) {
-      sendError("Could not build data feed: " + e);
+      log("Could not build data feed: " + e);
       // @todo: warning/error msg in app
       alert("Could not build data feed: " + e);
       console.error("Could not build data feed:", e);
@@ -248,7 +247,7 @@ export const trimFeeds = (feeds: Map<string, RSSData>): RSSItem[] => {
     return bubbleSortNews(rssItems, 0, 0, Order.DESC);
   } catch (e) {
     // @todo: warning/error msg in app
-    sendError("" + e);
+    log("" + e);
     console.error(e);
     return [];
   }

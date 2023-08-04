@@ -11,14 +11,14 @@ import tw from 'twrnc';
 import ChannelsSubscriptions from './channelsSubscriptions';
 import RecommendedFeeds from './recommendedFeeds';
 import AppSettings from './appSettings';
-import { sendError } from '../../service/logchest';
+import { log } from '../../service/logchest';
 
 const getSubscriptions = async (): Promise<Provider[]> => {
     try {
         return Array.from((await newProviderDataCollection().update()).getStack().values());
     } catch (e) {
         // @todo: warning/error msg in app
-        sendError("" + e);
+        log("" + e);
         console.error(e);
     }
 }

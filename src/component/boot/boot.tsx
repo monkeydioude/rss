@@ -5,7 +5,7 @@ import { RSSItem } from "../../data_struct";
 import appConfig from "../../../appConfig";
 import config from "../../service/config";
 import { newRSSDataCollection } from "../../data_struct";
-import { sendError } from "../../service/logchest";
+import { log } from "../../service/logchest";
 
 interface Props {
     onBootFinish?: () => void;
@@ -37,7 +37,7 @@ const Boot = ({ onBootFinish, children }: Props): JSX.Element => {
                 setBootFinish(true);
             } catch (e) {
                 // @todo: warning/error msg in app
-                sendError("" + e);
+                log("" + e);
                 console.error(e);
             }
         })();

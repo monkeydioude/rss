@@ -1,6 +1,6 @@
 import appConfig, { ChannelTitleMode } from "../../appConfig";
 import { JSONStorage } from "./data_storage";
-import { sendError } from "./logchest";
+import { log } from "./logchest";
 
 export interface ConfigProps {
     readonly displayChannelTitle: ChannelTitleMode;
@@ -36,7 +36,7 @@ export class Config {
             this.update(res);
         } catch (e) {
             // @todo: warning/error msg in app
-            sendError("" + e);
+            log("" + e);
             console.error(e);
         }
     }
@@ -57,7 +57,7 @@ export class Config {
             this.props = { ...baseProps };
         } catch (e) {
             // @todo: warning/error msg in app
-            sendError("" + e);
+            log("" + e);
             console.error(e);
         }
     }

@@ -1,5 +1,5 @@
 import { newProviderDataCollection, Provider } from "../data_struct"
-import { sendError } from "./logchest";
+import { log } from "./logchest";
 
 export const providersUnsub = async (providerName: string): Promise<void> => {
     await providersChangeSub(providerName, false);
@@ -20,7 +20,7 @@ export const providersChangeSub = async (providerName: string, subscribed: boole
         return Object.values(plist.getStack());
     } catch (e) {
         // @todo: warning/error msg in app
-        sendError("" + e);
+        log("" + e);
         console.error(e);
     }
 }
@@ -37,7 +37,7 @@ export const providersChangeURL = async (urlBefore: string, urlNow: string) => {
         await plist.write();
     } catch (e) {
         // @todo: warning/error msg in app
-        sendError("" + e);
+        log("" + e);
         console.error(e);
     }
 }

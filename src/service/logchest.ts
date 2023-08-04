@@ -5,15 +5,14 @@ export interface Log {
     level: number;
 }
 
-export const sendError = async (msg: string) => {
+export const log = async (msg: string): Promise<Response> => {
     const ctrl = new AbortController();
 
     setTimeout(() => ctrl.abort(), 20000);
-    const res = await fetch(appConfig.logchestAPIURL, {
+    return fetch(appConfig.logchestAPIURL, {
         method: "POST",
         body: JSON.stringify({
             msg,
-            level: 0,
         }),
         headers: {
             'Accept': 'application/json',

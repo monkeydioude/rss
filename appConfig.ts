@@ -10,8 +10,7 @@ export const events = {
 };
 
 const appConfig = {
-    logchestAPIURL: "https://cookie-logstash-mtwkyutmvq-ew.a.run.app/log",
-    // logchestAPIURL: "http://0.0.0.0:8080/log",
+    logchestAPIURL: process.env && process.env.NODE_ENV && process.env.NODE_ENV === "development" ? "http://0.0.0.0:8080" : "http://4thehoard.com/logchest",
     fetchRequestTimeout: 4 * 1000, // in millisecond
     bootFetchRequestTimeout: 8 * 1000,
     fetchThreshold: 30 * 1000, // in millisecond

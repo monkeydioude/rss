@@ -59,6 +59,7 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                         setChecked(!checked);
                         await onCheckButtonPress(sub.url, !checked, setFeeds);
                     } catch (err) {
+                        log("" + err);
                         console.error(err);
                     }
                 }}

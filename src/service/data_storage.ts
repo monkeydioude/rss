@@ -91,8 +91,8 @@ export const clearAllData = async (): Promise<void> => {
     await AsyncStorage.clear();
   } catch (e) {
     // @todo: warning/error msg in app
-    log("" + e);
-    console.error(e);
+    log("Storage.clearAllData() " + e);
+    console.error("Storage.clearAllData()", e);
   }
 }
 
@@ -103,8 +103,8 @@ export const getAllData = async (): Promise<Map<string, string>> => {
       data.set(key, await AsyncStorage.getItem(key));
     };
   } catch (e) {
-    log("" + e);
-    console.error(e);
+    log("Storage.getAllData() " + e);
+    console.error("Storage.getAllData() " + e);
   }
   return data;
 }
@@ -126,8 +126,8 @@ export class JSONStorage<T> implements Entity<T> {
       await this.storage.insert(JSON.stringify(entity));
     } catch (e) {
       // @todo: warning/error msg in app
-      log("" + e);
-      console.error(e);
+      log("JSONStorage.update() " + e);
+      console.error("JSONStorage.update() " + e);
     }
   }
 
@@ -137,8 +137,8 @@ export class JSONStorage<T> implements Entity<T> {
       return JSON.parse(res);
     } catch (e) {
       // @todo: warning/error msg in app
-      log("" + e);
-      console.error(e);
+      log("JSONStorage.retrieve() " + e);
+      console.error("JSONStorage.retrieve() " + e);
     }
   }
 }

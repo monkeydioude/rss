@@ -70,6 +70,7 @@ const fetchAndUpdateCollection = async (
     rssColl.set(url, newFeeds.rss);
   } catch (e) {
     // @todo: warning/error msg in app
+    log("Could not fetch feeds from source URL: "+ e);
     console.error("Could not fetch feeds from source URL:", e);
   }
 }
@@ -101,6 +102,7 @@ export const addFeed = async (
     updateCb(trimFeeds(rssColl.getStack()));
   } catch (e) {
     // @todo: warning/error msg in app
+    log("Could not build data feed:" + e);
     console.error("Could not build data feed:", e);
   }
 }
@@ -136,6 +138,7 @@ export const reloadFeeds = async (updateCb: (f: RSSItem[]) => void): Promise<voi
   } catch (e) {
     // @todo: warning/error msg in app
     console.error("Could not build data feed:", e);
+    log("Could not build data feed:" + e);
   }
 
 }
@@ -156,6 +159,7 @@ export const loadAndUpdateFeeds = async (
     } catch (err) {
       // @todo: warning/error msg in app
       console.error(err);
+      log("" + err);
     }
 
     if (rssColl.getStack().size === 0) {

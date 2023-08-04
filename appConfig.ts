@@ -3,6 +3,17 @@ export enum ChannelTitleMode {
     NewLine,
 }
 
+const isDev = (): boolean => (
+    process.env && process.env.NODE_ENV && process.env.NODE_ENV === "development"
+)
+
+const getLogchestAPIURL = (): string => (
+    isDev() ? "http://192.168.1.12:8081/logchest" : "http://4thehoard.com/logchest"
+)
+const getBypassServerAddr = (): string => (
+    isDev() ? "http://192.168.1.12:8080/bypasscors" : "http://4thehoard.com/bypasscors"
+)
+
 export const events = {
     set_feeds: "set_feeds",
     update_global_config: "update_global_config",
@@ -10,11 +21,11 @@ export const events = {
 };
 
 const appConfig = {
-    logchestAPIURL: process.env && process.env.NODE_ENV && process.env.NODE_ENV === "development" ? "http://0.0.0.0:8080" : "http://4thehoard.com/logchest",
+    logchestAPIURL: getLogchestAPIURL(),
     fetchRequestTimeout: 4 * 1000, // in millisecond
     bootFetchRequestTimeout: 8 * 1000,
     fetchThreshold: 30 * 1000, // in millisecond
-    bypassServerAddr: "http://4thehoard.com/bypasscors",
+    bypassServerAddr: getBypassServerAddr(),
     recommendedFeeds: [{
         url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
         title: "WSJ: Markets"

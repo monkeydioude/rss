@@ -20,8 +20,8 @@ export const providersChangeSub = async (providerName: string, subscribed: boole
         return Object.values(plist.getStack());
     } catch (e) {
         // @todo: warning/error msg in app
-        log("" + e);
-        console.error(e);
+        log("providersChangeSub() " + e);
+        console.error("providersChangeSub() " + e);
     }
 }
 
@@ -37,7 +37,7 @@ export const providersChangeURL = async (urlBefore: string, urlNow: string) => {
         await plist.write();
     } catch (e) {
         // @todo: warning/error msg in app
-        log("" + e);
-        console.error(e);
+        log("providersChangeURL() " + e);
+        console.error("providersChangeURL() " + e);
     }
 }

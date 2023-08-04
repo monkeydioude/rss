@@ -9,10 +9,11 @@ export const log = async (msg: string): Promise<Response> => {
     const ctrl = new AbortController();
 
     setTimeout(() => ctrl.abort(), 20000);
-    return fetch(appConfig.logchestAPIURL, {
+    return fetch(appConfig.logchestAPIURL+"/log", {
         method: "POST",
         body: JSON.stringify({
             msg,
+            date: +new Date(),
         }),
         headers: {
             'Accept': 'application/json',

@@ -36,8 +36,8 @@ export class Config {
             this.update(res);
         } catch (e) {
             // @todo: warning/error msg in app
-            log("" + e);
-            console.error(e);
+            log("config.load(): " + e);
+            console.error("config.load():", e);
         }
     }
 
@@ -57,7 +57,7 @@ export class Config {
             this.props = { ...baseProps };
         } catch (e) {
             // @todo: warning/error msg in app
-            log("" + e);
+            log("config.set() " + e);
             console.error(e);
         }
     }

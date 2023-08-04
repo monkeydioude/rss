@@ -1,4 +1,5 @@
 import React, { useRef, createContext } from 'react';
+import { log } from '../service/logchest';
 
 type CB = (value: any) => void;
 export type Unsubber = () => void;
@@ -18,6 +19,7 @@ interface EventsContext {
 export const EventsContext = createContext<EventsContext>({
     newChannel: () => {},
     onEvent: (id: string) => {
+        log("too early to setup any event "+ id);
         console.error("too early to setup any event", id);
         return null;
     },

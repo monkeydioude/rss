@@ -5,8 +5,9 @@ import tw from 'twrnc';
 import { ConfigContext } from "../context/configContext";
 import { cleanString } from "../service/string";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import defaultConfig, { ChannelTitleMode } from "../../defaultConfig";
+import appConfig, { ChannelTitleMode } from "../../appConfig";
 import config, { Config } from "../service/config";
+import style from "../style/style";
 
 type Props = {
     item: RSSItem;
@@ -19,6 +20,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
     const slideValue = new Animated.Value(0);
     const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.props.displayChannelTitle);
     const descH = useRef(0);
+    const formatedPubDate = new Date(item.pubDate).toLocaleDateString();
 
     useEffect(() => {
         const [leaveEventConfig] = onConfigChange((config: Config) => {
@@ -29,34 +31,43 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
         }
     }, []);
 
+    const animate = () => {
+        if (!isOpened.current) {
+            slideValue.setValue(0);
+            toValue = appConfig.maxHeightFeedDescAnimation;
+        } else {
+            slideValue.setValue(descH.current);
+            toValue = 0;
+        }
+        Animated.timing(slideValue, {
+            toValue,
+            duration: descH.current / appConfig.maxHeightFeedDescAnimation * appConfig.openSpeedDescAnimation,
+            useNativeDriver: false,
+        }).start();
+        isOpened.current = !isOpened.current;
+    };
+
+    const openMegaphoneLink = () => {
+        if (isOpened.current) {
+            Linking.openURL(item.link);
+        }
+    };
 
     const preTagChar = channelDisplay === ChannelTitleMode.Inline ? " " : "\n";
-    let toValue = defaultConfig.maxHeightFeedDescAnimation;
+    let toValue = appConfig.maxHeightFeedDescAnimation;
 
     return (
         <View style={{
             ...tw`pb-0.5`,
-            backgroundColor: it % 2 === 1 ? "rgba(255, 200, 94, 0.15)" : "",
+            backgroundColor: it % 2 === 1 ? style.beige : "",
         }}>
             <Text
                 style={tw`font-medium text-base px-1 pt-0.5 pb-0 m-0`}
-                onPress={() => {
-                    if (!isOpened.current) {
-                        slideValue.setValue(0);
-                        toValue = defaultConfig.maxHeightFeedDescAnimation;
-                    } else {
-                        slideValue.setValue(descH.current);
-                        toValue = 0;
-                    }
-                    Animated.timing(slideValue, {
-                        toValue,
-                        duration: descH.current / defaultConfig.maxHeightFeedDescAnimation * defaultConfig.openSpeedDescAnimation,
-                        useNativeDriver: false,
-                    }).start();
-                    isOpened.current = !isOpened.current;
-                }}>{cleanString(item.title)}
+                onPress={animate}
+            >
+                {cleanString(item.title)}
                 {item.channelTitle &&
-                    <Text style={tw`text-neutral-400 text-sm m-0 p-0`}>{preTagChar}@{item.channelTitle}</Text>
+                    <Text style={tw`text-neutral-400 text-sm m-0 p-0`}>{preTagChar}@{item.channelTitle} ~{formatedPubDate} </Text>
                 }
             </Text>
             <Animated.View
@@ -67,14 +78,8 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
                 }}>
                 <Text
                     style={tw`font-medium text-base m-0 p-0 underline`}
-                    onLayout={e => {
-                        descH.current = e.nativeEvent.layout.height; 
-                    }}
-                    onPress={() => {
-                        if (isOpened.current) {
-                            Linking.openURL(item.link);
-                        }
-                    }}>
+                    onLayout={e => descH.current = e.nativeEvent.layout.height}
+                    onPress={openMegaphoneLink}>
                     <Ionicons name="megaphone" /> {cleanString(item.description)}
                 </Text>
             </Animated.View>

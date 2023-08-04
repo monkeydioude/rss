@@ -9,11 +9,13 @@ export const events = {
     feed_desc_open: "feed_desc_open",
 };
 
-const defaultConfig = {
+const appConfig = {
+    // logchestAPIURL: "https://cookie-logstash-mtwkyutmvq-ew.a.run.app/log",
+    logchestAPIURL: "http://0.0.0.0:8080/log",
     fetchRequestTimeout: 4 * 1000, // in millisecond
     bootFetchRequestTimeout: 8 * 1000,
     fetchThreshold: 30 * 1000, // in millisecond
-    bypassServerAddr: "https://bypasscors-mtwkyutmvq-uc.a.run.app",
+    bypassServerAddr: "http://4thehoard.com/bypasscors",
     recommendedFeeds: [{
         url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
         title: "WSJ: Markets"
@@ -40,6 +42,7 @@ const defaultConfig = {
     swipeBaseRange: 4,
     swipCancelPressDist: 2,
     displayChannelTitle: ChannelTitleMode.NewLine,
+    appVersion: "v0.0.2",
 }
 
-export default defaultConfig;
+export default appConfig;

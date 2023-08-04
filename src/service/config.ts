@@ -1,5 +1,6 @@
-import defaultConfig, { ChannelTitleMode } from "../../defaultConfig";
+import appConfig, { ChannelTitleMode } from "../../appConfig";
 import { JSONStorage } from "./data_storage";
+import { sendError } from "./logchest";
 
 export interface ConfigProps {
     readonly displayChannelTitle: ChannelTitleMode;
@@ -8,11 +9,11 @@ export interface ConfigProps {
 
 export class Config {
     props: ConfigProps = {
-        displayChannelTitle: defaultConfig.displayChannelTitle,
-        maxItemPerFeed: defaultConfig.maxItemPerFeed,
+        displayChannelTitle: appConfig.displayChannelTitle,
+        maxItemPerFeed: appConfig.maxItemPerFeed,
     }
 
-    storage = new JSONStorage<ConfigProps>(defaultConfig.storageKeys.global_config);
+    storage = new JSONStorage<ConfigProps>(appConfig.storageKeys.global_config);
 
     update(conf: ConfigProps): Config {
         this.props = {
@@ -35,6 +36,7 @@ export class Config {
             this.update(res);
         } catch (e) {
             // @todo: warning/error msg in app
+            sendError("" + e);
             console.error(e);
         }
     }
@@ -55,6 +57,7 @@ export class Config {
             this.props = { ...baseProps };
         } catch (e) {
             // @todo: warning/error msg in app
+            sendError("" + e);
             console.error(e);
         }
     }

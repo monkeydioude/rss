@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { RSSItem } from "../data_struct";
 import React from "react";
-import config from "../../defaultConfig";
+import config from "../../appConfig";
 import { EventsContext } from "./eventsContext";
 import { reloadFeeds as _reloadFeeds } from "../feed_builder";
 

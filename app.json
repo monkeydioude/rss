@@ -2,7 +2,7 @@
   "expo": {
     "name": "rss",
     "slug": "rss",
-    "version": "1.0.0",
+    "version": "0.0.2",
     "orientation": "portrait",
     "icon": "./assets/rsscookie.png",
     "userInterfaceStyle": "light",

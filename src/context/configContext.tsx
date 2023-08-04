@@ -1,7 +1,8 @@
 import React, { createContext, useContext } from "react";
-import { events } from "../../defaultConfig";
+import { events } from "../../appConfig";
 import { EventsContext, Unsubber } from "./eventsContext";
 import config, { Config, ConfigProps } from "../service/config";
+import { sendError } from "../service/logchest";
 
 /**
  * Only for setting config and listening to config change.
@@ -15,8 +16,8 @@ interface ConfigContext {
 }
 
 export const ConfigContext = createContext<ConfigContext>({
-    setConfig: () => {},
-    onConfigChange: () => {return null},
+    setConfig: () => { },
+    onConfigChange: () => { return null },
 });
 
 type Props = {
@@ -32,8 +33,9 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
             await config.save();
             trigger<Config>(events.update_global_config, config);
         } catch (e) {
-          // @todo: warning/error msg in app
-          console.error(e);
+            // @todo: warning/error msg in app
+            sendError("" + e);
+            console.error(e);
         }
     }
 

@@ -9,6 +9,7 @@ import tw from 'twrnc';
 import SettingWithSwitch from "../settings/settingWithSwitch";
 import SettingWithEditInput from "../settings/settingWithInput";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { sendError } from "../../service/logchest";
 
 const onCheckButtonPress = async (
     url: string,
@@ -23,6 +24,7 @@ const onCheckButtonPress = async (
         await reloadFeeds(setFeeds)
     } catch (e) {
         // @todo: warning/error msg in app
+        sendError("" + e);
         console.error(e);
     }
 }
@@ -34,8 +36,8 @@ type ChannelSubProps = {
 }
 
 const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
-    const [ checked, setChecked ] = useState<boolean>(sub.subscribed);
-    const [ settingOpen, setSettingOpen ] = useState<boolean>(false);
+    const [checked, setChecked] = useState<boolean>(sub.subscribed);
+    const [settingOpen, setSettingOpen] = useState<boolean>(false);
 
     const changeProvidersURL = async (urlBefore: string, urlNow: string) => {
         await providersChangeURL(urlBefore, urlNow);
@@ -51,7 +53,7 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                 title={sub.name}
                 checked={checked}
                 trailing={<Icon name={`menu-${settingOpen ? "up" : "down"}`}
-                style={tw`text-xl text-white`} />}
+                    style={tw`text-lg text-white`} />}
                 onLongPress={async () => {
                     try {
                         setChecked(!checked);
@@ -62,9 +64,9 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                 }}
                 onPress={() => {
                     setSettingOpen(!settingOpen);
-                }} 
-                />
-            { settingOpen &&
+                }}
+            />
+            {settingOpen &&
                 <View style={tw`flex mb-2`}>
                     <SettingWithSwitch
                         label="Subscribed"
@@ -72,7 +74,7 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                         onValueChange={async (value: boolean) => {
                             setChecked(value);
                             await onCheckButtonPress(sub.url, value, setFeeds);
-                        } } />
+                        }} />
                     <SettingWithEditInput
                         label="URL"
                         onSubmitEditing={async (urlNow: string) => changeProvidersURL(sub.url, urlNow)}
@@ -80,7 +82,7 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                 </View>
             }
         </View>
-        )
+    )
 }
 
 type ChannelsSubscriptionsProps = {
@@ -92,7 +94,7 @@ const ChannelsSubscriptions = ({ subscriptions, setFeeds }: ChannelsSubscription
     return (
         <View style={{
             ...tw`justify-center`,
-            }}>
+        }}>
             <MenuSectionTitle label='Feeds Subscription' />
             {subscriptions.map((sub: Provider, idx: number) => (
                 <ChannelSub key={idx} setFeeds={setFeeds} sub={sub} idx={idx} />

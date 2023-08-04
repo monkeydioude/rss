@@ -22,8 +22,8 @@ const SettingWithSwitch = ({ label, onValueChange, checked, style }: Props): JSX
                 value={checked}
                 thumbColor="#6200EE" 
                 trackColor={{
-                    false: "rgb(100 116 139)",
-                    true: "rgb(22 163 74)"
+                    false: "white",
+                    true: "#ffc85e"
                 }}
                 onValueChange={onValueChange} />
         </View>

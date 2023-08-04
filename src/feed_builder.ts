@@ -1,11 +1,12 @@
 import { XMLParser } from "fast-xml-parser";
-import defaultConfig from "../defaultConfig";
+import appConfig from "../appConfig";
 import { RSSData, DataCollection, RSSItem, XMLData, Provider } from "./data_struct";
 import config from "./service/config";
 import { Alert } from "react-native";
+import { sendError } from "./service/logchest";
 
 const getURL = (url: string): string => {
-  return `${defaultConfig.bypassServerAddr}/${url}`;
+  return `${appConfig.bypassServerAddr}/${url}`;
 }
 
 // fetchXMLData retrieves a provider's feed
@@ -32,7 +33,7 @@ export const fetchXMLData = async (url: string, timeOut: number): Promise<XMLDat
 // isUpdatable compare the sum of the rss provider's date and an update threshold
 // against the now date 
 const isUpdatable = (data: RSSData): boolean => (
-  !data || !data.lastFetchDate || (data.lastFetchDate + defaultConfig.fetchThreshold < +new Date())
+  !data || !data.lastFetchDate || (data.lastFetchDate + appConfig.fetchThreshold < +new Date())
 )
 
 const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Promise<boolean> => {
@@ -44,6 +45,7 @@ const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Pro
     return isUpdatable(data);
   } catch (e) {
     // @todo: warning/error msg in app
+    sendError("" + e);
     console.error(e);
     return false
   }
@@ -54,7 +56,7 @@ const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Pro
 const fetchAndUpdateCollection = async (
   url: string,
   rssColl: DataCollection<RSSData>,
-  timeOut = defaultConfig.fetchRequestTimeout,
+  timeOut = appConfig.fetchRequestTimeout,
 ) => {
   try {
     const newFeeds = await fetchXMLData(url, timeOut);
@@ -90,7 +92,7 @@ export const addFeed = async (
     }
 
     await fetchAndUpdateCollection(url, rssColl);
-    await (new DataCollection<Provider>(defaultConfig.storageKeys.providers_list)).insert(url, {
+    await (new DataCollection<Provider>(appConfig.storageKeys.providers_list)).insert(url, {
       id: url,
       url,
       name: rssColl.get(url).channel.title,
@@ -105,8 +107,8 @@ export const addFeed = async (
 }
 
 export const filtersOutUnsubedProviders = async (): Promise<DataCollection<RSSData>> => {
-  const plist = await new DataCollection<Provider>(defaultConfig.storageKeys.providers_list).update();
-  const rssColl = await (new DataCollection<RSSData>(defaultConfig.storageKeys.rss)).update();
+  const plist = await new DataCollection<Provider>(appConfig.storageKeys.providers_list).update();
+  const rssColl = await (new DataCollection<RSSData>(appConfig.storageKeys.rss)).update();
 
   for (let [url, p] of plist.getStack()) {
     if (p.subscribed === false) {
@@ -118,7 +120,7 @@ export const filtersOutUnsubedProviders = async (): Promise<DataCollection<RSSDa
 }
 
 export const resyncSubbedRssFeed = async (rssColl: DataCollection<RSSData>): Promise<void> => {
-  const plist = await new DataCollection<Provider>(defaultConfig.storageKeys.providers_list).update();
+  const plist = await new DataCollection<Provider>(appConfig.storageKeys.providers_list).update();
 
   const ps: Promise<void>[] = [];
   for (let [url] of plist.getStack()) {
@@ -145,9 +147,9 @@ export const reloadFeeds = async (updateCb: (f: RSSItem[]) => void): Promise<voi
 // and then triggers the update state callback
 export const loadAndUpdateFeeds = async (
   updateCb: (f: RSSItem[]) => void,
-  timeOut = defaultConfig.fetchRequestTimeout,
+  timeOut = appConfig.fetchRequestTimeout,
 ) => {
-  let rssColl = new DataCollection<RSSData>(defaultConfig.storageKeys.rss);
+  let rssColl = new DataCollection<RSSData>(appConfig.storageKeys.rss);
   try {
 
     try {
@@ -182,6 +184,7 @@ export const loadAndUpdateFeeds = async (
     updateCb(trimFeeds(rssColl.getStack()));
   } catch (e) {
     try {
+      sendError("error while building data feed: " + e + "\nTrying once more");
       console.warn("error while building data feed:", e, "\nTrying once more")
       await resyncSubbedRssFeed(rssColl);
       if (rssColl.getStack().size === 0) {
@@ -191,8 +194,9 @@ export const loadAndUpdateFeeds = async (
       updateCb(trimFeeds(rssColl.getStack()));
     }
     catch (err) {
+      sendError("Could not build data feed: " + e);
       // @todo: warning/error msg in app
-      alert("Could not build data feed: "+ e);
+      alert("Could not build data feed: " + e);
       console.error("Could not build data feed:", e);
     }
   }
@@ -244,6 +248,7 @@ export const trimFeeds = (feeds: Map<string, RSSData>): RSSItem[] => {
     return bubbleSortNews(rssItems, 0, 0, Order.DESC);
   } catch (e) {
     // @todo: warning/error msg in app
+    sendError("" + e);
     console.error(e);
     return [];
   }

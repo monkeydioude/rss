@@ -1,6 +1,6 @@
 {
   "name": "rss",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -22,27 +22,28 @@
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.6",
+    "react-native": "0.71.8",
     "react-native-element-dropdown": "^2.9.0",
+    "react-native-input-select": "^0.32.0",
     "react-native-select-dropdown": "^3.3.2",
     "react-native-svg": "13.4.0",
     "react-native-web": "~0.18.10",
     "twrnc": "^3.6.0"
   },
   "devDependencies": {
-    "typescript": "^4.9.4",
     "@babel/core": "^7.20.0",
     "@expo/webpack-config": "^18.0.1",
     "@types/chai": "^4.3.4",
     "@types/mocha": "^10.0.1",
-    "@types/react-native": "~0.67.6",
     "@types/react": "~18.0.27",
+    "@types/react-native": "~0.67.6",
     "chai": "^4.3.7",
     "concurrently": "^7.6.0",
     "mocha": "^10.2.0",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
   },
   "private": true
 }

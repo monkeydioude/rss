@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useRef } from 'react';
 import { View, Dimensions, StatusBar as NativeStatusBar, ScrollView } from 'react-native';
-import defaultConfig from './defaultConfig';
+import appConfig from './appConfig';
 import TitleBar from './src/component/titleBar';
 import FeedsView from './src/component/feedsView';
 import { Button } from '@react-native-material/core';
@@ -25,7 +25,7 @@ export default (): JSX.Element => {
             // onTouchStart={() => Keyboard.dismiss()}
             >
             <StatusBar style="auto" />
-            <TitleBar label={defaultConfig.appTitle} />
+            <TitleBar label={appConfig.appTitle} />
             <ScrollView
                 contentOffset={{
                     x: width,

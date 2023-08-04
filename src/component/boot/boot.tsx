@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { FeedsContext } from "../../context/feedsContext";
 import { loadAndUpdateFeeds } from "../../feed_builder";
 import { RSSItem } from "../../data_struct";
-import defaultConfig from "../../../defaultConfig";
+import appConfig from "../../../appConfig";
 import config from "../../service/config";
 import { newRSSDataCollection } from "../../data_struct";
+import { sendError } from "../../service/logchest";
 
 interface Props {
     onBootFinish?: () => void;
@@ -17,10 +18,10 @@ const Boot = ({ onBootFinish, children }: Props): JSX.Element => {
 
     const reloadAndSetInterval = async () => {
         // newRSSDataCollection().delete_all();
-        await loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]), defaultConfig.bootFetchRequestTimeout);
+        await loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]), appConfig.bootFetchRequestTimeout);
         setInterval(() => {
             loadAndUpdateFeeds((feeds: RSSItem[]) => setFeeds([...feeds]));
-        }, defaultConfig.feedsRefreshTimer);
+        }, appConfig.feedsRefreshTimer);
     }
 
     useEffect(() => {
@@ -36,6 +37,7 @@ const Boot = ({ onBootFinish, children }: Props): JSX.Element => {
                 setBootFinish(true);
             } catch (e) {
                 // @todo: warning/error msg in app
+                sendError("" + e);
                 console.error(e);
             }
         })();

@@ -53,7 +53,7 @@ const appConfig = {
     swipCancelPressDist: 2,
     displayChannelTitle: ChannelTitleMode.NewLine,
     displayCategories: true,
-    appVersion: "v0.0.2",
+    appVersion: "v0.0.3",
 }
 
 export default appConfig;

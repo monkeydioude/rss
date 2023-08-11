@@ -33,9 +33,8 @@ const ConfigProvider = ({ children }: Props): JSX.Element => {
             await config.save();
             trigger<Config>(events.update_global_config, config);
         } catch (e) {
-            // @todo: warning/error msg in app
-            log("" + e);
-            console.error(e);
+            log("setConfig " + e);
+            console.error("setConfig", e);
         }
     }
 

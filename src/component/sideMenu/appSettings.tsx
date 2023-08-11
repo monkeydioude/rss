@@ -13,6 +13,7 @@ import { reloadFeeds } from "../../feed_builder";
 import config from "../../service/config";
 import tw from 'twrnc';
 import appConfig from "../../../appConfig";
+import DisplayCategories from "../settings/displayCategories";
 
 type Props = {
     setFeeds: SetFeedsCB,
@@ -25,6 +26,7 @@ const AppSettings = ({ setFeeds }: Props): JSX.Element => {
         <View style={tw`flex justify-center`}>
             <MenuSettingsTitle label='App Settings' />
             <ChannelTitle />
+            <DisplayCategories />
             <MaxItemPerFeed
                 value={config.props.maxItemPerFeed}
                 onValueChange={(maxItemPerFeed: number) => {

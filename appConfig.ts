@@ -52,6 +52,7 @@ const appConfig = {
     swipeBaseRange: 4,
     swipCancelPressDist: 2,
     displayChannelTitle: ChannelTitleMode.NewLine,
+    displayCategories: true,
     appVersion: "v0.0.2",
 }
 

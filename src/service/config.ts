@@ -5,12 +5,14 @@ import { log } from "./logchest";
 export interface ConfigProps {
     readonly displayChannelTitle: ChannelTitleMode;
     readonly maxItemPerFeed: number;
+    readonly displayCategories: boolean;
 }
 
 export class Config {
     props: ConfigProps = {
         displayChannelTitle: appConfig.displayChannelTitle,
         maxItemPerFeed: appConfig.maxItemPerFeed,
+        displayCategories: appConfig.displayCategories,
     }
 
     storage = new JSONStorage<ConfigProps>(appConfig.storageKeys.global_config);
@@ -19,6 +21,7 @@ export class Config {
         this.props = {
             displayChannelTitle: conf.displayChannelTitle !== undefined ? conf.displayChannelTitle : this.props.displayChannelTitle,
             maxItemPerFeed: +(conf.maxItemPerFeed !== undefined ? conf.maxItemPerFeed : this.props.maxItemPerFeed),
+            displayCategories: conf.displayCategories || this.props.displayCategories,
         }
         return this;
     }

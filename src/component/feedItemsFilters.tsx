@@ -5,6 +5,7 @@ import { RSSItem } from "../data_struct";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import tw from 'twrnc';
 import { FeedItemFilter, FeedItemFilterRemover, FeedsContext } from "../context/feedsContext";
+import { isString } from "../service/type_ops";
 
 const FeedItemsFilters = (): JSX.Element => {
     const { pushFilter, reloadFeeds } = useContext(FeedsContext);
@@ -19,6 +20,7 @@ const FeedItemsFilters = (): JSX.Element => {
     const textFilter: FeedItemFilter = (item: RSSItem) => {
         let textL = text.toLowerCase();
         const res = 
+            (item.category && isString(item.category) && !!(item.category as string).toLowerCase().match(textL)) || 
             (item.description && !!item.description.toLowerCase().match(textL)) ||
             (item.title && !!item.title.toLowerCase().match(textL));
 
@@ -34,7 +36,6 @@ const FeedItemsFilters = (): JSX.Element => {
                     }
                     const rmer = pushFilter(textFilter);
                     setFilterRemover(() => rmer);
-                    // await reloadFeeds();
 
                     Keyboard.dismiss();
                 }}
@@ -51,8 +52,6 @@ const FeedItemsFilters = (): JSX.Element => {
                                 filterRemover();
                             }
                             setFilterRemover(null);
-                            // await reloadFeeds();
-
                         }}>
                             <Icon style={tw`text-lg`} name="close" />
                         </Pressable>

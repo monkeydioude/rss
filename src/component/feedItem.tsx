@@ -9,6 +9,7 @@ import appConfig, { ChannelTitleMode } from "../../appConfig";
 import config, { Config } from "../service/config";
 import style from "../style/style";
 import { normalizePubDate } from "../service/date";
+import { normalizeItemCategory } from "../service/item_ops";
 
 type Props = {
     item: RSSItem;
@@ -22,20 +23,22 @@ const getDateText = (pubDate: string): string => {
     if (!(+d)) {
         return ""
     }
-    return "~"+d.toLocaleDateString();
-} 
+    return "~" + d.toLocaleDateString();
+}
 
 const FeedItem = ({ it, item }: Props): JSX.Element => {
     const isOpened = useRef(false);
     const { onConfigChange } = useContext(ConfigContext);
     const slideValue = new Animated.Value(0);
     const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.props.displayChannelTitle);
+    const [displayCategories, setDisplayCategories] = useState<boolean>(config.props.displayCategories);
     const descH = useRef(0);
     const formatedPubDate = getDateText(item.pubDate);
 
     useEffect(() => {
         const [leaveEventConfig] = onConfigChange((config: Config) => {
             setChannelDisplay(config.props.displayChannelTitle);
+            setDisplayCategories(config.props.displayCategories);
         });
         return () => {
             leaveEventConfig();
@@ -67,6 +70,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
 
     const preTagChar = channelDisplay === ChannelTitleMode.Inline ? " " : "\n";
     let toValue = appConfig.maxHeightFeedDescAnimation;
+    const categories = displayCategories ? normalizeItemCategory(item.category) : "";
 
     return (
         <View style={{
@@ -74,12 +78,13 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
             backgroundColor: it % 2 === 1 ? style.beige : "",
         }}>
             <Text
-                style={tw`font-medium text-base px-1 pt-0.5 pb-0 m-0`}
+                style={tw`font-medium text-base px-1 pt-0.5 pb-0 m-0 flex flex-wrap`}
                 onPress={animate}
             >
                 {cleanString(item.title)}
-                {item.channelTitle &&
-                    <Text style={tw`text-neutral-400 text-sm m-0 p-0`}>{preTagChar}@{item.channelTitle} {formatedPubDate} </Text>
+                
+                {item.channelTitle  &&
+                    <Text style={tw`text-neutral-500 text-sm m-0 p-0 mx-1`}>{preTagChar}@{item.channelTitle} {formatedPubDate}</Text>
                 }
             </Text>
             <Animated.View
@@ -89,12 +94,20 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
                     padding: 0,
                 }}>
                 <Text
-                    style={tw`font-medium text-base m-0 p-0 underline`}
+                    style={{
+                        ...tw`font-medium text-base m-0 p-0 px-1 underline`,
+                        backgroundColor: "rgba(0, 0, 0, 0.03)",
+                    }}
                     onLayout={e => descH.current = e.nativeEvent.layout.height}
                     onPress={openMegaphoneLink}>
                     <Ionicons name="megaphone" /> {cleanString(item.description)}
                 </Text>
             </Animated.View>
+            {categories !== "" &&
+                <Text style={tw`font-medium text-gray-400 m-0 px-1`}>
+                    #{categories}
+                </Text>
+            }
         </View>
     )
 }

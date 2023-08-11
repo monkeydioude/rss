@@ -4,7 +4,6 @@ import { loadAndUpdateFeeds } from "../../feed_builder";
 import { RSSItem } from "../../data_struct";
 import appConfig from "../../../appConfig";
 import config from "../../service/config";
-import { newRSSDataCollection } from "../../data_struct";
 import { log } from "../../service/logchest";
 
 interface Props {

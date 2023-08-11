@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Animated, Linking, Text, View } from "react-native";
+import { Animated, Keyboard, Linking, Text, View } from "react-native";
 import { RSSItem } from "../data_struct";
 import tw from 'twrnc';
 import { ConfigContext } from "../context/configContext";
@@ -8,11 +8,22 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import appConfig, { ChannelTitleMode } from "../../appConfig";
 import config, { Config } from "../service/config";
 import style from "../style/style";
+import { normalizePubDate } from "../service/date";
 
 type Props = {
     item: RSSItem;
     it: number;
 }
+
+const getDateText = (pubDate: string): string => {
+    pubDate = normalizePubDate(pubDate)
+    const d = new Date(pubDate);
+
+    if (!(+d)) {
+        return ""
+    }
+    return "~"+d.toLocaleDateString();
+} 
 
 const FeedItem = ({ it, item }: Props): JSX.Element => {
     const isOpened = useRef(false);
@@ -20,7 +31,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
     const slideValue = new Animated.Value(0);
     const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.props.displayChannelTitle);
     const descH = useRef(0);
-    const formatedPubDate = new Date(item.pubDate).toLocaleDateString();
+    const formatedPubDate = getDateText(item.pubDate);
 
     useEffect(() => {
         const [leaveEventConfig] = onConfigChange((config: Config) => {
@@ -32,6 +43,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
     }, []);
 
     const animate = () => {
+        Keyboard.dismiss();
         if (!isOpened.current) {
             slideValue.setValue(0);
             toValue = appConfig.maxHeightFeedDescAnimation;
@@ -67,7 +79,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
             >
                 {cleanString(item.title)}
                 {item.channelTitle &&
-                    <Text style={tw`text-neutral-400 text-sm m-0 p-0`}>{preTagChar}@{item.channelTitle} ~{formatedPubDate} </Text>
+                    <Text style={tw`text-neutral-400 text-sm m-0 p-0`}>{preTagChar}@{item.channelTitle} {formatedPubDate} </Text>
                 }
             </Text>
             <Animated.View

@@ -7,7 +7,7 @@ import tw from 'twrnc';
 import { FeedItemFilter, FeedItemFilterRemover, FeedsContext } from "../context/feedsContext";
 
 const FeedItemsFilters = (): JSX.Element => {
-    const { reloadFeeds, pushFilter } = useContext(FeedsContext);
+    const { pushFilter, reloadFeeds } = useContext(FeedsContext);
     const [filterRemover, setFilterRemover] = useState<FeedItemFilterRemover|null>(null);
     const [text, setText] = useState<string>("");
 
@@ -18,9 +18,11 @@ const FeedItemsFilters = (): JSX.Element => {
 
     const textFilter: FeedItemFilter = (item: RSSItem) => {
         let textL = text.toLowerCase();
-        return (item.category && !!item.category.toLowerCase().match(textL)) ||
+        const res = 
             (item.description && !!item.description.toLowerCase().match(textL)) ||
             (item.title && !!item.title.toLowerCase().match(textL));
+
+        return res
     };
 
     return (

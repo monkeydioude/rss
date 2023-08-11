@@ -35,21 +35,6 @@ const isUpdatable = (data: RSSData): boolean => (
   !data || !data.lastFetchDate || (data.lastFetchDate + appConfig.fetchThreshold < +new Date())
 )
 
-const shouldUpdateFeed = async (url: string, coll: DataCollection<RSSData>): Promise<boolean> => {
-  try {
-    const data = coll.get(url);
-    if (!data) {
-      return true;
-    }
-    return isUpdatable(data);
-  } catch (e) {
-    // @todo: warning/error msg in app
-    log("" + e);
-    console.error(e);
-    return false
-  }
-}
-
 // fetchAndUpdateCollection fires a request to the feed's provider
 // and update its lastFetchDate
 const fetchAndUpdateCollection = async (
@@ -102,8 +87,8 @@ export const addFeed = async (
     updateCb(trimFeeds(rssColl.getStack()));
   } catch (e) {
     // @todo: warning/error msg in app
-    log("Could not build data feed:" + e);
-    console.error("Could not build data feed:", e);
+    log("addFeed, could not build data feed:" + e);
+    console.error("addFeed, could not build data feed:", e);
   }
 }
 
@@ -134,11 +119,12 @@ export const resyncSubbedRssFeed = async (rssColl: DataCollection<RSSData>): Pro
 export const reloadFeeds = async (updateCb: (f: RSSItem[]) => void): Promise<void> => {
   try {
     const rssColl = await filtersOutUnsubedProviders();
-    updateCb(trimFeeds(rssColl.getStack()));
+    const r = trimFeeds(rssColl.getStack());
+    updateCb(r);
   } catch (e) {
     // @todo: warning/error msg in app
-    console.error("Could not build data feed:", e);
-    log("Could not build data feed:" + e);
+    console.error("reloadFeeds, could not build data feed:", e);
+    log("reloadFeeds, could not build data feed:" + e);
   }
 
 }
@@ -197,10 +183,9 @@ export const loadAndUpdateFeeds = async (
       updateCb(trimFeeds(rssColl.getStack()));
     }
     catch (err) {
-      log("Could not build data feed: " + e);
+      log("loadAndUpdateFeeds, could not build data feed: " + e);
       // @todo: warning/error msg in app
-      alert("Could not build data feed: " + e);
-      console.error("Could not build data feed:", e);
+      console.error("loadAndUpdateFeeds, could not build data feed:", e);
     }
   }
 }

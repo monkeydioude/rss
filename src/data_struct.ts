@@ -2,7 +2,7 @@ import appConfig from "../appConfig";
 import { Storage } from "./service/data_storage";
 
 export type RSSItem = {
-    category: string;
+    category: string[];
     description: string;
     link: string;
     pubDate: string;

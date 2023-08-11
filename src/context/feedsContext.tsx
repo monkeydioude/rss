@@ -4,6 +4,7 @@ import React from "react";
 import config from "../../appConfig";
 import { EventsContext } from "./eventsContext";
 import { reloadFeeds as _reloadFeeds } from "../feed_builder";
+import { log } from "../service/logchest";
 
 export type SetFeedsCB = (f: RSSItem[]) => void;
 export interface FeedItemFilterRemover {
@@ -41,19 +42,6 @@ const FeedsProvider = ({ children }: Props): JSX.Element => {
     const { trigger } = useContext(EventsContext);
     const filters = useRef([]);
 
-    const reloadFeeds = async() => {
-        await _reloadFeeds(setFeedsProvider)
-    }
-
-    const applyFilters = (item: RSSItem): boolean => {
-        if (filters.current.length === 0) {
-            return true;
-        }
-        return filters.current.every((fc: FeedItemFilterContainer) => {
-            return fc.filter(item);
-        })
-    }
-
     const setFeedsProvider = (f: RSSItem[]) => {
         const ff = f.filter((item: RSSItem) => {
             return applyFilters(item);
@@ -62,6 +50,32 @@ const FeedsProvider = ({ children }: Props): JSX.Element => {
         trigger(config.events.set_feeds, ff);
     }
 
+    let reloadFeeds = async() => {
+        await _reloadFeeds(setFeedsProvider)
+    }
+
+    const applyFilters = (item: RSSItem): boolean => {
+        try {
+            if (filters.current.length === 0) {
+                return true;
+            }
+    
+            return filters.current.every((fc: FeedItemFilterContainer) => {
+                try {
+                    return fc.filter(item);
+                }
+                catch (err) {
+                    log("filters.current.every: err with filter "+ fc + ": "+ err)
+                    console.error("filters.current.every: err with filter "+ fc + ": "+ err)
+                }
+            })
+        }
+        catch (err) {
+            log("applyFilters: error: "+ err)
+            console.error("applyFilters: error:"+ err)
+            return false
+        }
+    }
 
     const removeFilter = (symbol: Symbol) => {
         let _filters = [];

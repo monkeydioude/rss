@@ -1,0 +1,10 @@
+services:
+  bypasscors:
+    image: drannoc/bypasscors
+    ports: 
+    - 8080:8080
+  
+  logchest:
+    image: drannoc/logchest
+    ports:
+    - 8081:8081

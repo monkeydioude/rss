@@ -10,6 +10,7 @@ import config, { Config } from "../service/config";
 import style from "../style/style";
 import { normalizePubDate } from "../service/date";
 import { normalizeItemCategory } from "../service/item_ops";
+import { handleHighlights } from "../text_op";
 
 type Props = {
     item: RSSItem;
@@ -81,7 +82,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
                 style={tw`font-medium text-base px-1 pt-0.5 pb-0 m-0 flex flex-wrap`}
                 onPress={animate}
             >
-                {cleanString(item.title)}
+                {handleHighlights(cleanString(item.title))}
                 
                 {item.channelTitle  &&
                     <Text style={tw`text-neutral-500 text-sm m-0 p-0 mx-1`}>{preTagChar}@{item.channelTitle} {formatedPubDate}</Text>
@@ -100,7 +101,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
                     }}
                     onLayout={e => descH.current = e.nativeEvent.layout.height}
                     onPress={openMegaphoneLink}>
-                    <Ionicons name="megaphone" /> {cleanString(item.description)}
+                    <Ionicons name="megaphone" /> {handleHighlights(cleanString(item.description))}
                 </Text>
             </Animated.View>
             {categories !== "" &&

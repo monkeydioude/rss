@@ -4,6 +4,7 @@ import { View, NativeSyntheticEvent, TextInputSubmitEditingEventData, Keyboard, 
 import tw from 'twrnc';
 import SettingCSS from "./settings.css";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import customeStyle from "../../style/style";
 
 type Props = {
     label: string;
@@ -40,15 +41,15 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style }: Props): JS
                 }
                 }>
                 <Text style={{
-                    ...tw`text-center shrink-1 text-white m-0 p-0 ml-1`,
+                    ...tw`text-left text-lg shrink-1 text-white m-0 p-0 underline w-85`,
                     }}>
                     {text.replace(/https?\:\/\//, "")}
                 </Text>
                 <Ionicons
                     name="pencil"
                     style={{
-                    ...tw`text-2xl grow-1 text-white m-0 p-0 pl-5`,
-                    color: "rgb(22 163 74)",
+                    ...tw`text-2xl grow-1 text-white m-0 p-0`,
+                    color: customeStyle.thirdColor,
                 }} />
             </Pressable>
             {inputVisible && 

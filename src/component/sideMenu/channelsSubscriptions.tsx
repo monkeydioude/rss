@@ -45,7 +45,7 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
     }
     return (
         <View style={{
-            ...tw`flex flex-col`,
+            ...tw`flex flex-col pb-0.5 border-b border-purple-700`,
             zIndex: -1,
             elevation: -1
         }}>
@@ -53,7 +53,7 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                 title={sub.name}
                 checked={checked}
                 trailing={<Icon name={`menu-${settingOpen ? "up" : "down"}`}
-                    style={tw`text-lg text-white`} />}
+                    style={tw`text-3xl text-white`} />}
                 onLongPress={async () => {
                     try {
                         setChecked(!checked);
@@ -68,9 +68,9 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                 }}
             />
             {settingOpen &&
-                <View style={tw`flex mb-2`}>
+                <View>
                     <SettingWithSwitch
-                        label="Subscribed"
+                        label="Sub"
                         checked={checked}
                         onValueChange={async (value: boolean) => {
                             setChecked(value);

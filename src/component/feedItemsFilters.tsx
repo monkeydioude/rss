@@ -23,7 +23,15 @@ const FeedItemsFilters = (): JSX.Element => {
             (item.category && isString(item.category) && !!(item.category as string).toLowerCase().match(textL)) || 
             (item.description && !!item.description.toLowerCase().match(textL)) ||
             (item.title && !!item.title.toLowerCase().match(textL));
+        
+        const reg = new RegExp(`(${textL})`, "gi");
 
+        if (item.title) {
+            item.title = item.title.replaceAll(reg, "**$1**");
+        }
+        if (item.description) {
+            item.description = item.description.replaceAll(reg, "**$1**");
+        }
         return res
     };
 

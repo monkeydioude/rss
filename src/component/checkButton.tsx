@@ -3,6 +3,7 @@ import React from "react";
 import { GestureResponderEvent, TextStyle, View } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import tw from 'twrnc';
+import customeStyle from "../style/style"
 
 type Props = {
     checked: boolean;
@@ -21,6 +22,8 @@ const CheckButton = ({
     onLongPress,
     trailing
 }: Props): JSX.Element => {
+    const maxLen = 40;
+    title = title.substring(0, maxLen) + (title.length > maxLen ? "..." : "");
     return (
         <View style={tw`relative`}>
             <Button
@@ -28,6 +31,7 @@ const CheckButton = ({
                     ...style,
                     ...tw`flex grow-1`,
                 }}
+                color={customeStyle.primaryColorDark}
                 onLongPress={(e: GestureResponderEvent) => {
                     if (onLongPress) {
                         onLongPress(e);
@@ -41,13 +45,13 @@ const CheckButton = ({
                     { checked && 
                     <>
                         <Ionicons name='checkmark' color="white" style={tw`w-2.5`} />
-                        <Text style={tw`text-sm text-white p-1`} >{title}</Text>
+                        <Text style={tw`text-white p-1`} >{title}</Text>
                     </>
                     }
                     { !checked && 
                     <>
                         <Ionicons name='close' style={tw`w-2.5 text-red-600`} />
-                        <Text style={tw`text-sm text-red-600 p-1`} >{title}</Text>
+                        <Text style={tw`text-red-600 p-1`} >{title}</Text>
                     </>
                     }
                 </View>

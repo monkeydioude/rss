@@ -9,9 +9,10 @@ import { Provider, newProviderDataCollection } from '../../data_struct';
 import { EventsContext } from '../../context/eventsContext';
 import tw from 'twrnc';
 import ChannelsSubscriptions from './channelsSubscriptions';
-import RecommendedFeeds from './recommendedFeeds';
 import AppSettings from './appSettings';
 import { log } from '../../service/logchest';
+import appConfig from '../../../appConfig';
+import style from '../../style/style';
 
 const getSubscriptions = async (): Promise<Provider[]> => {
     try {
@@ -51,6 +52,7 @@ export default ({ closeMenu }: Props): JSX.Element => {
         <View style={{ ...tw`flex flex-col grow-1 bg-purple-600`, maxHeight: height }}>
             <Button
                 title="Close Settings"
+                color={style.primaryColorDark}
                 onPress={closeMenu}
                 leading={props => <Icon name="close" {...props} />} />
             <AddFeedInput setFeeds={setFeeds} />
@@ -63,7 +65,7 @@ export default ({ closeMenu }: Props): JSX.Element => {
                     // onTouchStart={() => Keyboard.dismiss()}
                     >
                         <ChannelsSubscriptions subscriptions={subscriptions} setFeeds={setFeeds} />
-                        <RecommendedFeeds setFeeds={setFeeds} />
+                        {/* <RecommendedFeeds setFeeds={setFeeds} /> */}
                         <AppSettings setFeeds={setFeeds} />
                     </View>
                 </ScrollView>

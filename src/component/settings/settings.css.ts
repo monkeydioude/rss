@@ -3,15 +3,15 @@ import tw from 'twrnc';
 
 const SettingCSS = StyleSheet.create({
     container: {
-        ...tw`px-2 flex flex-row items-center text-black`,
+        ...tw`px-2 flex flex-row items-center text-black justify-center`,
         // minHeight: 50,
     },
     textLabel: {
-        ...tw`text-lg m-0 p-0 pl-1 text-white flex flex-row items-center`,
+        ...tw`text-lg m-0 p-0 text-white flex flex-row items-center`,
         width: "70%"
     },
     item: {
-        ...tw`p-0 m-0`,
+        ...tw`p-0 m-0 flex justify-center`,
         width: "30%"
     },
     textInput: {

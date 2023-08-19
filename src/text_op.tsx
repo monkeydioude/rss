@@ -8,9 +8,9 @@ export const handleHighlights = (text: string): (string|JSX.Element)[] => {
             return el + " ";
         }
         const res = el.split(m[0])[1];
-        return <>
-            <Text key={idx} style={{fontWeight: "bold", textDecorationLine: "underline", fontStyle: "italic"}}>{el.replace(/\*\*([^*]*)\*\*/, "$1").replace(res, "")}</Text>
+        return <Text key={idx}>
+            <Text style={{fontWeight: "bold", textDecorationLine: "underline", fontStyle: "italic"}}>{el.replace(/\*\*([^*]*)\*\*/, "$1").replace(res, "")}</Text>
             <Text>{res} </Text>
-        </>
+        </Text>
     })
 }

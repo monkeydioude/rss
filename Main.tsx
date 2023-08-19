@@ -9,7 +9,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { FeedsContext } from './src/context/feedsContext';
 import SideMenu from './src/component/sideMenu/sideMenu';
 import FeedItemsFilters from './src/component/feedItemsFilters';
-
+import tw from 'twrnc';
 
 export default (): JSX.Element => {
     const { feeds } = useContext(FeedsContext);
@@ -44,6 +44,7 @@ export default (): JSX.Element => {
                     width,
                 }}>
                     <Button
+                        titleStyle={tw`text-lg`}
                         title="Open Settings"
                         onPress={() => scroll.current.scrollTo({x: 0})}
                         variant="outlined"

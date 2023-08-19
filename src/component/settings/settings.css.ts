@@ -7,7 +7,7 @@ const SettingCSS = StyleSheet.create({
         // minHeight: 50,
     },
     textLabel: {
-        ...tw`text-lg m-0 p-0 text-white flex flex-row items-center`,
+        ...tw`text-xl m-0 p-0 text-white flex flex-row items-center`,
         width: "70%"
     },
     item: {

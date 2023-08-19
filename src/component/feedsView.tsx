@@ -1,11 +1,11 @@
-import { ActivityIndicator, Stack } from '@react-native-material/core';
 import React, { useContext, useState } from 'react';
-import { FlatList, RefreshControl, ScrollView, View } from 'react-native';
+import { FlatList, RefreshControl, ScrollView, Text, View } from 'react-native';
 import { FeedsContext } from '../context/feedsContext';
 import { RSSItem } from '../data_struct';
 import { loadAndUpdateFeeds } from '../feed_builder';
 import FeedItem from './feedItem';
 import tw from 'twrnc';
+import { emojiDispenser } from '../service/emoji_dispenser';
 
 type Props = {
     feeds: RSSItem[],
@@ -13,14 +13,15 @@ type Props = {
 
 const FeedsView = ({ feeds }: Props): JSX.Element => {
     const [ refreshing, setRefreshing ] = useState<boolean>(false);
-    const { setFeeds } = useContext(FeedsContext);
+    const { setFeeds, hasFilters } = useContext(FeedsContext);
 
     return (
         <View style={{flex: 1, margin: 0, padding: 0}}>
-            {feeds.length === 0 && 
-                <View>
-                    <ActivityIndicator size="large" color="#000000" />
-                </View>
+            {feeds.length === 0 && !hasFilters() &&
+                <Text style={tw`text-2xl text-center`}>No items {emojiDispenser("error")}</Text>
+            }
+            {feeds.length === 0 && hasFilters() &&
+                <Text style={tw`text-2xl text-center`}>No items {emojiDispenser("not_found")}</Text>
             }
             <FlatList 
                 data={feeds}

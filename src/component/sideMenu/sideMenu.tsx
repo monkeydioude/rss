@@ -2,7 +2,7 @@ import { Button } from '@react-native-material/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StatusBar, View } from 'react-native';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import config from '../../../appConfig';
+import config, { isDev } from '../../../appConfig';
 import { FeedsContext } from '../../context/feedsContext';
 import AddFeedInput from '../addFeedInput';
 import { Provider, newProviderDataCollection } from '../../data_struct';
@@ -11,12 +11,14 @@ import tw from 'twrnc';
 import ChannelsSubscriptions from './channelsSubscriptions';
 import AppSettings from './appSettings';
 import { log } from '../../service/logchest';
-import appConfig from '../../../appConfig';
 import style from '../../style/style';
+import DoomsDayButton from './doomsDayButton';
 
 const getSubscriptions = async (): Promise<Provider[]> => {
     try {
-        return Array.from((await newProviderDataCollection().update()).getStack().values());
+        const res = Array.from((await newProviderDataCollection().update()).getStack().values());
+        console.log("Res", res)
+        return res;
     } catch (e) {
         // @todo: warning/error msg in app
         log("" + e);
@@ -51,6 +53,7 @@ export default ({ closeMenu }: Props): JSX.Element => {
     return (
         <View style={{ ...tw`flex flex-col grow-1 bg-purple-600`, maxHeight: height }}>
             <Button
+                titleStyle={tw`text-lg`}
                 title="Close Settings"
                 color={style.primaryColorDark}
                 onPress={closeMenu}
@@ -67,6 +70,9 @@ export default ({ closeMenu }: Props): JSX.Element => {
                         <ChannelsSubscriptions subscriptions={subscriptions} setFeeds={setFeeds} />
                         {/* <RecommendedFeeds setFeeds={setFeeds} /> */}
                         <AppSettings setFeeds={setFeeds} />
+                       {isDev() && 
+                        <DoomsDayButton />
+                       }
                     </View>
                 </ScrollView>
             </View>

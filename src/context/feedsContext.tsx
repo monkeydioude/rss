@@ -20,7 +20,8 @@ interface FeedItemFilterContainer {
 }
 
 type FeedContext = {
-    pushFilter: (filter: FeedItemFilter, symbol?: Symbol) => FeedItemFilterRemover;
+    pushFilter: (filter: FeedItemFilter, symbol?: Symbol) => FeedItemFilterRemover,
+    hasFilters: () => boolean,
     setFeeds: (feeds: RSSItem[]) => void,
     feeds: RSSItem[],
     reloadFeeds: () => Promise<void>,
@@ -28,6 +29,7 @@ type FeedContext = {
 
 export const FeedsContext = createContext<FeedContext>({
     pushFilter: (): (() => void) => () => { },
+    hasFilters: () => false,
     setFeeds: _ => { },
     reloadFeeds: async () => {},
     feeds: []
@@ -106,11 +108,16 @@ const FeedsProvider = ({ children }: Props): JSX.Element => {
             removeFilter(symbol);
         };
     }
+    
+    const hasFilters = (): boolean => {
+        return filters.current.length > 0;
+    }
 
     return (
         <FeedsContext.Provider value={{
             reloadFeeds,
             pushFilter,
+            hasFilters,
             setFeeds: setFeedsProvider,
             feeds,
         }}>

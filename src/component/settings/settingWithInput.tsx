@@ -7,13 +7,16 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import customeStyle from "../../style/style";
 
 type Props = {
-    label: string;
+    label?: string;
+    preventUnderline?: boolean
     onSubmitEditing: (value: string) => void
     text: string;
     style?: ViewStyle;
+    textStyle?: ViewStyle;
+    inputStyle?: ViewStyle;
 }
 
-const SettingWithEditInput = ({ onSubmitEditing, text:_text, style }: Props): JSX.Element => {
+const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, inputStyle, label, preventUnderline }: Props): JSX.Element => {
     const [text, setText] = useState<string>(_text);
     const [inputVisible, setInputVisible] = useState<boolean>(false);
     const [inputText, setInputText] = useState<string>(_text);
@@ -41,14 +44,15 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style }: Props): JS
                 }
                 }>
                 <Text style={{
-                    ...tw`text-left text-lg shrink-1 text-white m-0 p-0 underline w-85`,
+                    ...tw`text-left text-xl shrink-1 text-white m-0 p-0 ${preventUnderline ? "" : "underline"} w-85`,
+                    ...textStyle,
                     }}>
-                    {text.replace(/https?\:\/\//, "")}
+                    {label || ""}{text.replace(/https?\:\/\//, "")}
                 </Text>
                 <Ionicons
                     name="pencil"
                     style={{
-                    ...tw`text-2xl grow-1 text-white m-0 p-0`,
+                    ...tw`text-3xl grow-1 text-white m-0 p-0`,
                     color: customeStyle.thirdColor,
                 }} />
             </Pressable>
@@ -56,10 +60,11 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style }: Props): JS
                 <TextInput
                     style={{
                         ...SettingCSS.textInput,
-                        ...tw`grow-1 p-1 flex`,
+                        ...tw`grow-1 p-1 flex text-xl py-3`,
                         position: "absolute",
                         width: "100%",
                         bottom: 0,
+                        ...inputStyle,
                     }}
                     autoFocus={true}
                     onSubmitEditing={async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {

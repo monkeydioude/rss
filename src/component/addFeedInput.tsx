@@ -11,15 +11,19 @@ type Props = {
 }
 
 const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
-  const [ text, setText ] = useState<string>("");
+  const [text, setText] = useState<string>("");
 
   const trailing = useRef(<View>
-      <Pressable onPress={() => {
-        setText("");
-      }}>
-        <Icon style={tw`text-lg`} name="close" />
-      </Pressable>
-    </View>);
+    <Pressable onPress={() => {
+      setText("");
+    }}>
+      <Icon style={{
+        ...tw`text-3xl`,
+        marginTop: -7,
+        marginLeft: -2
+      }} name="close" />
+    </Pressable>
+  </View>);
 
   return (
     <View>
@@ -34,7 +38,11 @@ const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
           setText(text);
         }}
         value={text}
-        leading={<Icon style={tw`text-lg`} name="rss" />}
+        leading={<Icon style={{
+          ...tw`text-3xl`,
+          marginTop: -7,
+          marginLeft: -2
+      }} name="rss" />}
         trailing={text != "" && trailing.current}
         nativeID='add_feed'
         placeholder='ADD NEW FEED SOURCE (https://)'

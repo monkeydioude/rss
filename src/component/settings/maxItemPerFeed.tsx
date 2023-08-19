@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SettingWithSelect from "./settingWithSelect";
 import appConfig from "../../../appConfig";
 import { View } from "react-native";
+import tw from "twrnc";
 
 interface Props {
     onValueChange: (value: string | number) => void;
@@ -14,6 +15,7 @@ const MaxItemPerFeed = ({ onValueChange, value: _value }: Props): JSX.Element =>
     return (
         <View>
             <SettingWithSelect
+                style={tw`mt-4`}
                 onValueChange={(value: number | string) => {
                     setValue(value);
                     onValueChange(value);

@@ -75,11 +75,11 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
 
     return (
         <View style={{
-            ...tw`pb-0.5`,
+            ...tw`pb-0.5 pt-1`,
             backgroundColor: it % 2 === 1 ? style.beige : "",
         }}>
             <Text
-                style={tw`font-medium text-base px-1 pt-0.5 pb-0 m-0 flex flex-wrap`}
+                style={tw`font-normal text-base px-1 pt-0.5 pb-0 m-0 flex flex-wrap text-lg`}
                 onPress={animate}
             >
                 {handleHighlights(cleanString(item.title))}
@@ -96,7 +96,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
                 }}>
                 <Text
                     style={{
-                        ...tw`font-medium text-base m-0 p-0 px-1 underline`,
+                        ...tw`font-medium text-base m-0 p-0 px-1 underline text-lg`,
                         backgroundColor: "rgba(0, 0, 0, 0.03)",
                     }}
                     onLayout={e => descH.current = e.nativeEvent.layout.height}
@@ -105,7 +105,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
                 </Text>
             </Animated.View>
             {categories !== "" &&
-                <Text style={tw`font-medium text-gray-400 m-0 px-1`}>
+                <Text style={tw`font-normal text-purple-600 m-0 px-1`}>
                     #{categories}
                 </Text>
             }

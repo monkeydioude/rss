@@ -20,13 +20,13 @@ const SettingWithSwitch = ({ label, onValueChange, checked, style }: Props): JSX
             }}>
             <Text style={{
                 ...SettingCSS.textLabel,
-                ...tw`text-left text-lg`
+                ...tw`text-left text-xl`
             }}>{label}</Text>
             <View style={SettingCSS.item}>
                 <Switch
                     style={{
-                        width: "85%",
-                        ...{ transform: [{ scale: 1.5 }] },
+                        width: "80%",
+                        ...{ transform: [{ scale: 1.75 }] },
                     }}
                     value={checked}
                     thumbColor={customeStyle.primaryColorDark}

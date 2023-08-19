@@ -6,6 +6,7 @@ export interface ConfigProps {
     readonly displayChannelTitle: ChannelTitleMode;
     readonly maxItemPerFeed: number;
     readonly displayCategories: boolean;
+    readonly maxAmntCategories: number;
 }
 
 export class Config {
@@ -13,6 +14,7 @@ export class Config {
         displayChannelTitle: appConfig.displayChannelTitle,
         maxItemPerFeed: appConfig.maxItemPerFeed,
         displayCategories: appConfig.displayCategories,
+        maxAmntCategories: appConfig.maxAmntCategories,
     }
 
     storage = new JSONStorage<ConfigProps>(appConfig.storageKeys.global_config);
@@ -22,6 +24,7 @@ export class Config {
             displayChannelTitle: conf.displayChannelTitle !== undefined ? conf.displayChannelTitle : this.props.displayChannelTitle,
             maxItemPerFeed: +(conf.maxItemPerFeed !== undefined ? conf.maxItemPerFeed : this.props.maxItemPerFeed),
             displayCategories: conf.displayCategories || this.props.displayCategories,
+            maxAmntCategories: conf.maxAmntCategories || this.props.maxAmntCategories,
         }
         return this;
     }

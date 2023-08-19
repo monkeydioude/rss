@@ -38,6 +38,7 @@ const FeedItemsFilters = (): JSX.Element => {
     return (
         <View>
             <TextInput
+                inputStyle={tw`text-lg`}
                 onSubmitEditing={async () => {
                     if (filterRemover) {
                         filterRemover();
@@ -51,9 +52,13 @@ const FeedItemsFilters = (): JSX.Element => {
                     setText(_text);
                 }}
                 value={text}
-                leading={<Icon style={tw`text-lg`} name="magnify" />}
+                leading={<Icon style={{
+                    ...tw`text-3xl`,
+                    marginTop: -7,
+                    marginLeft: -2
+                }} name="magnify" />}
                 trailing={text != "" && (
-                    <View>
+                    <View style={tw`flex items-center`}>
                         <Pressable onPress={async () => {
                             setText("");
                             if (filterRemover) {
@@ -61,7 +66,11 @@ const FeedItemsFilters = (): JSX.Element => {
                             }
                             setFilterRemover(null);
                         }}>
-                            <Icon style={tw`text-lg`} name="close" />
+                            <Icon style={{
+                                ...tw`text-3xl`,
+                                marginTop: -7,
+                                marginLeft: -2
+                            }} name="close" />
                         </Pressable>
                     </View>
                 )}

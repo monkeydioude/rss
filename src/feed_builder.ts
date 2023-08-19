@@ -72,6 +72,7 @@ export const addFeed = async (
     //   return;
     // }
 
+    console.log(rssColl);
     if (rssColl.get(url)) {
       return
     }

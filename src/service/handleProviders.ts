@@ -27,11 +27,18 @@ export const providersChangeSub = async (providerName: string, subscribed: boole
 
 export const providersChangeURL = async (urlBefore: string, urlNow: string) => {
     try {
+        if (urlBefore === urlNow) {
+            return;
+        }
         const plist = await newProviderDataCollection().update();
         const provider = plist.get(urlBefore);
-        provider.url = urlNow;
-        provider.id = urlNow;
-        plist.set(urlNow, provider);
+        const newProvider: Provider = {
+            id: urlNow,
+            url: urlNow,
+            subscribed: provider.subscribed,
+            name: provider.name,
+        }
+        plist.set(urlNow, newProvider);
         plist.delete(urlBefore);
 
         await plist.write();

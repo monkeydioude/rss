@@ -3,15 +3,15 @@ export enum ChannelTitleMode {
     NewLine,
 }
 
-const isDev = (): boolean => (
+export const isDev = (): boolean => (
     process.env && process.env.NODE_ENV && process.env.NODE_ENV === "development"
 )
 
 const getLogchestAPIURL = (): string => (
-    isDev() ? "http://192.168.1.12:8081/logchest" : "http://4thehoard.com/logchest"
+    isDev() ? "http://192.168.1.12:8081/logchest" : "https://4thehoard.com/logchest"
 )
 const getBypassServerAddr = (): string => (
-    isDev() ? "http://192.168.1.12:8080/bypasscors" : "http://4thehoard.com/bypasscors"
+    isDev() ? "http://192.168.1.12:8080/bypasscors" : "https://4thehoard.com/bypasscors"
 )
 
 export const events = {
@@ -21,6 +21,14 @@ export const events = {
 };
 
 const appConfig = {
+    emojis: {
+        "error": [
+            "(•᷄- •᷅ ;)", "(ᗒᗣᗕ)՞", "щ(ﾟДﾟщ)", "(ס_ס;;)", "┣¨キ(*ﾟДﾟ*)┣¨キ"
+        ],
+        "not_found": [
+            "૮₍˶Ó﹏Ò ⑅₎ა", "¯\\_(ツ)_/¯", "(つ﹏⊂)", "(´･ω･`)?", "(눈‸눈)"
+        ]
+    },
     logchestAPIURL: getLogchestAPIURL(),
     fetchRequestTimeout: 4 * 1000, // in millisecond
     bootFetchRequestTimeout: 8 * 1000,
@@ -53,6 +61,7 @@ const appConfig = {
     swipCancelPressDist: 2,
     displayChannelTitle: ChannelTitleMode.NewLine,
     displayCategories: true,
+    maxAmntCategories: 4,
     appVersion: "v0.0.3"
 }
 

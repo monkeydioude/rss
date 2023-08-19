@@ -50,6 +50,7 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
             elevation: -1
         }}>
             <CheckButton
+                textStyle={tw`text-lg`}
                 title={sub.name}
                 checked={checked}
                 trailing={<Icon name={`menu-${settingOpen ? "up" : "down"}`}
@@ -77,7 +78,8 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                             await onCheckButtonPress(sub.url, value, setFeeds);
                         }} />
                     <SettingWithEditInput
-                        label="URL"
+                        textStyle={tw`text-lg`}
+                        inputStyle={tw`py-1`}
                         onSubmitEditing={async (urlNow: string) => changeProvidersURL(sub.url, urlNow)}
                         text={sub.url} />
                 </View>
@@ -92,11 +94,12 @@ type ChannelsSubscriptionsProps = {
 }
 
 const ChannelsSubscriptions = ({ subscriptions, setFeeds }: ChannelsSubscriptionsProps): JSX.Element => {
+    console.log(subscriptions)
     return (
         <View style={{
             ...tw`justify-center`,
         }}>
-            <MenuSectionTitle label='Feeds Subscription' />
+            <MenuSectionTitle label='Feeds Subscription' textStyle={tw`text-2xl underline`} iconStyle={tw`text-xl`} />
             {subscriptions.map((sub: Provider, idx: number) => (
                 <ChannelSub key={idx} setFeeds={setFeeds} sub={sub} idx={idx} />
             ))}

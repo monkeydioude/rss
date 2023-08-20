@@ -24,7 +24,7 @@ const CheckButton = ({
     onLongPress,
     trailing
 }: Props): JSX.Element => {
-    const maxLen = 40;
+    const maxLen = 30;
     title = title.substring(0, maxLen) + (title.length > maxLen ? "..." : "");
     return (
         <View style={tw`relative`}>

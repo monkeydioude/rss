@@ -55,8 +55,8 @@ const fetchAndUpdateCollection = async (
     rssColl.set(url, newFeeds.rss);
   } catch (e) {
     // @todo: warning/error msg in app
-    log("Could not fetch feeds from source URL: "+ e);
-    console.error("Could not fetch feeds from source URL:", e);
+    log(`Could not fetch feeds from source URL (${url}): ${e}`);
+    console.error(`Could not fetch feeds from source URL (${url}): ${e}`);
   }
 }
 
@@ -72,7 +72,6 @@ export const addFeed = async (
     //   return;
     // }
 
-    console.log(rssColl);
     if (rssColl.get(url)) {
       return
     }

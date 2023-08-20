@@ -40,8 +40,9 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
     const [settingOpen, setSettingOpen] = useState<boolean>(false);
 
     const changeProvidersURL = async (urlBefore: string, urlNow: string) => {
-        await providersChangeURL(urlBefore, urlNow);
-        reloadFeeds(setFeeds);
+        if (await providersChangeURL(urlBefore, urlNow)) {
+            reloadFeeds(setFeeds);
+        }
     }
     return (
         <View style={{
@@ -94,7 +95,6 @@ type ChannelsSubscriptionsProps = {
 }
 
 const ChannelsSubscriptions = ({ subscriptions, setFeeds }: ChannelsSubscriptionsProps): JSX.Element => {
-    console.log(subscriptions)
     return (
         <View style={{
             ...tw`justify-center`,

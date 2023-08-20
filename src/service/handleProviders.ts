@@ -25,10 +25,10 @@ export const providersChangeSub = async (providerName: string, subscribed: boole
     }
 }
 
-export const providersChangeURL = async (urlBefore: string, urlNow: string) => {
+export const providersChangeURL = async (urlBefore: string, urlNow: string): Promise<boolean> => {
     try {
         if (urlBefore === urlNow) {
-            return;
+            return false;
         }
         const plist = await newProviderDataCollection().update();
         const provider = plist.get(urlBefore);
@@ -46,5 +46,7 @@ export const providersChangeURL = async (urlBefore: string, urlNow: string) => {
         // @todo: warning/error msg in app
         log("providersChangeURL() " + e);
         console.error("providersChangeURL() " + e);
+        return false;
     }
+    return true;
 }

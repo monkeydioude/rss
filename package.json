@@ -3,7 +3,8 @@
   "version": "0.0.3",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "make start && expo start",
+    "start": "make docker-start && npm run expo:start",
+    "expo:start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",

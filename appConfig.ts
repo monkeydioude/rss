@@ -62,7 +62,7 @@ const appConfig = {
     displayChannelTitle: ChannelTitleMode.NewLine,
     displayCategories: true,
     maxAmntCategories: 4,
-    appVersion: "v0.0.3"
+    appVersion: "v0.0.5"
 }
 
 export default appConfig;

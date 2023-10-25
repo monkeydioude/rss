@@ -5,7 +5,7 @@ import tw from 'twrnc';
 import { ConfigContext } from "../context/configContext";
 import { cleanString } from "../service/string";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import appConfig, { ChannelTitleMode } from "../../appConfig";
+import appConfig, { ChannelTitleMode } from "../appConfig";
 import config, { Config } from "../service/config";
 import style from "../style/style";
 import { normalizePubDate } from "../service/date";

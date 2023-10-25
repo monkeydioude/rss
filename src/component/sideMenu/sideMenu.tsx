@@ -2,7 +2,7 @@ import { Button } from '@react-native-material/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StatusBar, View } from 'react-native';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import config, { isDev } from '../../../appConfig';
+import config, { isDev } from '../../appConfig';
 import { FeedsContext } from '../../context/feedsContext';
 import AddFeedInput from '../addFeedInput';
 import { Provider, newProviderDataCollection } from '../../data_struct';
@@ -17,13 +17,13 @@ import DoomsDayButton from './doomsDayButton';
 const getSubscriptions = async (): Promise<Provider[]> => {
     try {
         const res = Array.from((await newProviderDataCollection().update()).getStack().values());
-        console.log("Res", res)
         return res;
     } catch (e) {
         // @todo: warning/error msg in app
         log("" + e);
         console.error(e);
     }
+    return [];
 }
 
 type Props = {
@@ -36,7 +36,7 @@ export default ({ closeMenu }: Props): JSX.Element => {
     const [subscriptions, setSubscriptions] = useState<Provider[]>([]);
     const reloadSub = async () => setSubscriptions(await getSubscriptions());
     let { height } = Dimensions.get("window");
-    height += StatusBar.currentHeight;
+    height += StatusBar.currentHeight || 0;
 
     useEffect(() => {
         const [unsub] = onEvent(
@@ -58,7 +58,7 @@ export default ({ closeMenu }: Props): JSX.Element => {
                 color={style.primaryColorDark}
                 onPress={closeMenu}
                 leading={props => <Icon name="close" {...props} />} />
-            <AddFeedInput setFeeds={setFeeds} />
+            <AddFeedInput />
             <View style={{ flex: 1, margin: 0, padding: 0 }}>
                 <ScrollView
                     style={{ ...tw`flex flex-col m-0 p-0 bg-purple-600 shrink-1` }}

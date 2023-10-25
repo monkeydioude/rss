@@ -7,7 +7,7 @@ import { ConfigContext } from "../../context/configContext";
 import { reloadFeeds } from "../../feed_builder";
 import config from "../../service/config";
 import tw from 'twrnc';
-import appConfig from "../../../appConfig";
+import appConfig from "../../appConfig";
 import DisplayCategories from "../settings/displayCategories";
 import { Text, View } from "react-native";
 

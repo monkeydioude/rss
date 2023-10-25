@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import appConfig from "../appConfig";
+import appConfig from "./appConfig";
 import { RSSData, DataCollection, RSSItem, XMLData, Provider } from "./data_struct";
 import config from "./service/config";
 import { log } from "./service/logchest";
@@ -9,10 +9,10 @@ const getURL = (url: string): string => {
 }
 
 // fetchXMLData retrieves a provider's feed
-export const fetchXMLData = async (url: string, timeOut: number): Promise<XMLData> => {
+export const fetchXMLData = async (url: string, timeOut: number): Promise<XMLData | null> => {
   const ctrl = new AbortController();
 
-  let parsed: XMLData = null;
+  let parsed: XMLData | null = null;
   setTimeout(() => ctrl.abort(), timeOut);
 
   try {
@@ -196,31 +196,32 @@ export enum Order {
 }
 
 // bubbleSortNews use the bubble sort algorith to sort feed items
-export const bubbleSortNews = (news: RSSItem[], idx: number, swap: number, order: Order): RSSItem[] => {
-  if (idx >= news.length - 1) {
-    if (swap == 0) {
-      return news;
+export const bubbleSortNews = (news: RSSItem[], order: Order): RSSItem[] => {
+  let swap = 0;
+
+  for (let idx = 0; idx < news.length - 1; idx++) {
+    if (!news[idx] || !news[idx + 1]) {
+      continue
     }
-    return bubbleSortNews(news, 0, 0, order);
+
+    const currentIdxStamp = +new Date(news[idx].pubDate);
+    const nextIdxStamp = +new Date(news[idx + 1].pubDate);
+
+    if (
+      (order == Order.DESC && nextIdxStamp > currentIdxStamp)
+      || (order == Order.ASC && currentIdxStamp > nextIdxStamp)) {
+      const tmp = news[idx];
+      news[idx] = news[idx + 1];
+      news[idx + 1] = tmp;
+      swap++;
+    }
   }
 
-  if (!news[idx].pubDate || news[idx].pubDate === "") {
-    return bubbleSortNews(news, idx + 1, swap, order);
+  if (swap > 0) {
+    bubbleSortNews(news, order);
   }
 
-  const currentIdxStamp = +new Date(news[idx].pubDate);
-  const nextIdxStamp = +new Date(news[idx + 1].pubDate);
-
-  if (
-    (order == Order.DESC && nextIdxStamp > currentIdxStamp)
-    || (order == Order.ASC && currentIdxStamp > nextIdxStamp)) {
-    const tmp = news[idx];
-    news[idx] = news[idx + 1];
-    news[idx + 1] = tmp;
-    swap++;
-  }
-
-  return bubbleSortNews(news, idx + 1, swap, order);
+  return news;
 }
 
 // trimfeeds takes a map of RSSData as parameter and output a
@@ -233,7 +234,7 @@ export const trimFeeds = (feeds: Map<string, RSSData>): RSSItem[] => {
       ));
 
     // reverse array if order is set to ASC
-    return bubbleSortNews(rssItems, 0, 0, Order.DESC);
+    return bubbleSortNews(rssItems, Order.DESC);
   } catch (e) {
     // @todo: warning/error msg in app
     log("" + e);

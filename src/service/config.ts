@@ -1,4 +1,4 @@
-import appConfig, { ChannelTitleMode } from "../../appConfig";
+import appConfig, { ChannelTitleMode } from "../appConfig";
 import { JSONStorage } from "./data_storage";
 import { log } from "./logchest";
 

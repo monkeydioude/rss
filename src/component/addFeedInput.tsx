@@ -1,16 +1,14 @@
 import { TextInput } from "@react-native-material/core";
-import React, { useRef, useState } from "react"
+import React, { useContext, useRef, useState } from "react"
 import { Keyboard, NativeSyntheticEvent, Pressable, TextInputSubmitEditingEventData, View } from "react-native";
 import { RSSItem } from "../data_struct";
 import { addFeed } from "../feed_builder";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import tw from 'twrnc';
+import { FeedsContext } from "src/context/feedsContext";
 
-type Props = {
-  setFeeds: (f: React.SetStateAction<RSSItem[]>) => void,
-}
-
-const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
+const AddFeedInput = (): JSX.Element => {
+  const { setFeeds } = useContext(FeedsContext);
   const [text, setText] = useState<string>("");
 
   const trailing = useRef(<View>
@@ -46,8 +44,8 @@ const AddFeedInput = ({ setFeeds }: Props): JSX.Element => {
         trailing={text != "" && trailing.current}
         nativeID='add_feed'
         placeholder='ADD NEW FEED SOURCE (https://)'
-        style={tw`grow`}
-        className="border-gray-900" />
+        style={tw`grow border-gray-900`}
+        />
     </View>
   )
 }

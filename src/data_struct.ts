@@ -1,4 +1,4 @@
-import appConfig from "../appConfig";
+import appConfig from "./appConfig";
 import { Storage } from "./service/data_storage";
 
 export type RSSItem = {

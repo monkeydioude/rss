@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SettingWithSelect from "./settingWithSelect";
-import appConfig from "../../../appConfig";
+import appConfig from "../../appConfig";
 import { View } from "react-native";
 import tw from "twrnc";
 

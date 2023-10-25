@@ -1,4 +1,4 @@
-import appConfig from "../../appConfig";
+import appConfig from "../appConfig";
 
 export interface Log {
     msg: string;

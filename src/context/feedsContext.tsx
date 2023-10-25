@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { RSSItem } from "../data_struct";
 import React from "react";
-import config from "../../appConfig";
+import config from "../appConfig";
 import { EventsContext } from "./eventsContext";
 import { reloadFeeds as _reloadFeeds } from "../feed_builder";
 import { log } from "../service/logchest";
@@ -42,7 +42,7 @@ type Props = {
 const FeedsProvider = ({ children }: Props): JSX.Element => {
     const [feeds, setFeeds] = useState<RSSItem[]>([]);
     const { trigger } = useContext(EventsContext);
-    const filters = useRef([]);
+    const filters = useRef<FeedItemFilterContainer[]>([]);
 
     const setFeedsProvider = (f: RSSItem[]) => {
         const ff = f.filter((item: RSSItem) => {
@@ -80,7 +80,7 @@ const FeedsProvider = ({ children }: Props): JSX.Element => {
     }
 
     const removeFilter = (symbol: Symbol) => {
-        let _filters = [];
+        let _filters: FeedItemFilterContainer[] = [];
         filters.current.forEach((f: FeedItemFilterContainer) => {
             if (f.symbol === symbol) {
                 return;

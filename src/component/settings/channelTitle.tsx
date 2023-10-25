@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { ConfigContext } from "../../context/configContext";
 import SettingWithSwitch from "./settingWithSwitch";
 import config from "../../service/config";
-import { ChannelTitleMode } from "../../../appConfig";
+import { ChannelTitleMode } from "../../appConfig";
 
 const ChannelTitle = (): JSX.Element => {
     const { setConfig } = useContext(ConfigContext);

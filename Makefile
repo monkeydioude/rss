@@ -1,5 +1,8 @@
 docker-all: docker-update docker-restart
 
+dev: docker-start
+	npm run expo:start --clear
+
 docker-start:
 	docker compose up -d
 	@sudo chown 1000:1000 .tmp

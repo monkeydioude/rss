@@ -3,15 +3,21 @@ export enum ChannelTitleMode {
     NewLine,
 }
 
+
 export const isDev = (): boolean => (
-    process.env && process.env.NODE_ENV && process.env.NODE_ENV === "development"
+    !!process.env && !!process.env.NODE_ENV && process.env.NODE_ENV === "development"
 )
 
 const getLogchestAPIURL = (): string => (
-    isDev() ? "http://192.168.1.12:8081/logchest" : "https://4thehoard.com/logchest"
+    isDev() ?
+        (process.env && process.env.EXPO_PUBLIC_LOGCHEST_ENDPOINT ? `http://${process.env.EXPO_PUBLIC_LOGCHEST_ENDPOINT}/logchest` : "http://0.0.0.0:8081/logchest") :
+    "https://4thehoard.com/logchest"
 )
+
 const getBypassServerAddr = (): string => (
-    isDev() ? "http://192.168.1.12:8080/bypasscors" : "https://4thehoard.com/bypasscors"
+    isDev() ? 
+        (process.env && process.env.EXPO_PUBLIC_BYPASSCORS_ENDPOINT ? `http://${process.env.EXPO_PUBLIC_BYPASSCORS_ENDPOINT}/bypasscors` : "http://0.0.0.0:8080/bypasscors") :
+    "https://4thehoard.com/bypasscors"
 )
 
 export const events = {

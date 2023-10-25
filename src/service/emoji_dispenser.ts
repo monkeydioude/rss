@@ -1,4 +1,4 @@
-import appConfig from "../../appConfig"
+import appConfig from "../appConfig"
 import { getRandomInt } from "./math";
 
 export const emojiDispenser = (kind: "error" | "not_found"): string => {

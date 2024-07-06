@@ -28,8 +28,6 @@ const Main = (): JSX.Element => {
             }}
             // onTouchStart={() => Keyboard.dismiss()}
             >
-            <StatusBar style="auto" />
-            <TitleBar label={appConfig.appTitle} />
             <ScrollView
                 contentOffset={{
                     x: width,

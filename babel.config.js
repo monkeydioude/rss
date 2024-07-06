@@ -12,7 +12,8 @@ module.exports = function(api) {
             assets: './assets'
           },
         },
-      ]
+      ],
+      ['expo-router/babel'],
     ],
   };
 };

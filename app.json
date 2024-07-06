@@ -2,9 +2,11 @@
   "expo": {
     "name": "rss",
     "slug": "rss",
+    "scheme": "rss",
     "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./assets/rsscookie.png",
+    "owner": "jduris",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -32,7 +34,10 @@
         "projectId": "21655601-8863-4f99-9865-bdf2644b3ff9"
       }
     },
-    "sdkVersion": "51.0.0"
+    "sdkVersion": "51.0.0",
+    "plugins": [
+      "expo-router"
+    ]
   },
   "name": "rss"
 }

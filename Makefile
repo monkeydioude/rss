@@ -1,7 +1,7 @@
 docker-all: docker-update docker-restart
 
 dev: docker-start
-	npm run expo:start --clear
+	npm run expo:start --clear -- --port 8082
 
 docker-start:
 	docker compose up -d

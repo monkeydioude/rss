@@ -5,7 +5,6 @@ dev: docker-start
 
 docker-start:
 	docker compose up -d
-	@sudo chown 1000:1000 .tmp
 
 docker-stop:
 	docker compose stop

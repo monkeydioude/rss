@@ -1,9 +1,11 @@
 services:
-  bypasscors:
-    image: drannoc/bypasscors
-    ports: 
-    - 8080:8080
-  
+  wamock:
+    image: drannoc/wamock
+    ports:
+    - 8088:8088
+    volumes:
+      - ./test/wamock.config.json:/app/wamock.config.json
+    command: /app/wamock.config.json -x 10
   logchest:
     image: drannoc/logchest
     volumes:

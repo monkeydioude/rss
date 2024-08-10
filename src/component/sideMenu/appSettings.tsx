@@ -4,7 +4,7 @@ import { MenuSettingsTitle } from "../menuSectionTitle";
 import ChannelTitle from "../settings/channelTitle";
 import MaxItemPerFeed from "../settings/maxItemPerFeed";
 import { ConfigContext } from "../../context/configContext";
-import { reloadFeeds } from "../../feed_builder";
+// import { reloadFeeds } from "../../feed_builder";
 import config from "../../service/config";
 import tw from 'twrnc';
 import appConfig from "../../appConfig";
@@ -28,7 +28,7 @@ const AppSettings = ({ setFeeds }: Props): JSX.Element => {
                     value={config.props.maxItemPerFeed}
                     onValueChange={(maxItemPerFeed: number) => {
                         setConfig({ maxItemPerFeed });
-                        reloadFeeds(setFeeds);
+                        // reloadFeeds(setFeeds);
                     }} />
             </View>
             <View style={tw`flex flex-row justify-end pr-2 w-93`}>

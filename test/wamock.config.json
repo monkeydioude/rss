@@ -1,0 +1,102 @@
+{
+    "POST/panya/channel": {
+        "response": {
+            "channel_name": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1,
+            "source_type": "bakery"
+        }
+    },
+    "GET/panya/feed": {
+        "response": [
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/em2024080911475/em2024080911475.html",
+            "img": "/news/easy/em2024080911475/YJ9HFoRCThSa13LvarqoknHmm5FaaTLwlMq2soIf.jpg",
+            "title": null,
+            "description": "宮崎県みやざきけんで大おおきい地震じしん 「南海なんかいトラフ」の大おおきい地震じしんに気きをつけて8月9日 16時15分",
+            "pubDate": 1723187783,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/em2024080912317/em2024080912317.html",
+            "img": "/news/easy/em2024080912317/6VDR4D7XriUXEQ8poq2UlGy8JVFku0ddTJMf4F0G.jpg",
+            "title": null,
+            "description": "長崎ながさきに原爆げんばくが落おとされた日ひ 「世界せかいから核兵器かくへいきをなくそう」8月9日 16時10分",
+            "pubDate": 1723187703,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/k10014541261000/k10014541261000.html",
+            "img": "https://www3.nhk.or.jp/news/html/20240808/K10014541261_2408072225_0808064029_02_01.jpg",
+            "title": null,
+            "description": "家いえで使つかう電気でんき 少すくなくするとポイントをもらうことができる8月9日 12時00分",
+            "pubDate": 1723172489,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/k10014541071000/k10014541071000.html",
+            "img": "https://www3.nhk.or.jp/news/html/20240807/K10014541071_2408072050_0807205145_02_01.jpg",
+            "title": null,
+            "description": "沖縄おきなわの水族館すいぞくかん 珍めずらしいブラックマンタの赤あかちゃんが生うまれる8月9日 11時55分",
+            "pubDate": 1723172162,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/k10014540801000/k10014540801000.html",
+            "img": "https://www3.nhk.or.jp/news/html/20240808/K10014540801_2408080332_0808033332_02_01.jpg",
+            "title": null,
+            "description": "レスリングのグレコローマン 日本にっぽんの選手せんしゅ2人ふたりが金きんメダル8月8日 16時45分",
+            "pubDate": 1723109150,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/em2024080816340/em2024080816340.html",
+            "img": "/news/easy/em2024080816340/v07xuuTPLGhoAlhsvF1VOCzb7aC4zhUhPDyCyNNM.jpg",
+            "title": null,
+            "description": "レスリングのグレコローマン 日本にっぽんの選手せんしゅ2人ふたりが金きんメダル8月8日 16時40分",
+            "pubDate": 1723103285,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/k10014540001000/k10014540001000.html",
+            "img": "https://www3.nhk.or.jp/news/html/20240807/K10014540001_2408071147_0807115034_02_01.jpg",
+            "title": null,
+            "description": "東大寺とうだいじの大仏だいぶつ 「お身み拭ぬぐい」をしてきれいにする8月8日 16時20分",
+            "pubDate": 1723101887,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/k10014538671000/k10014538671000.html",
+            "img": "https://www3.nhk.or.jp/news/html/20240806/K10014538671_2408061158_0806124653_02_01.jpg",
+            "title": null,
+            "description": "沖縄おきなわのさんごが白しろくなっている「水みずの温度おんどが高たかくて死しぬ危険きけん」8月8日 12時00分",
+            "pubDate": 1723086106,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/k10014538571000/k10014538571000.html",
+            "img": "/news/easy/k10014538571000/vfI9l832UgBRSibhMv4jWrL1RgrParM314GnNL55.jpg",
+            "title": null,
+            "description": "広島ひろしま 8月がつ6日むいかに小学校しょうがっこうで原爆げんばくや平和へいわについて考かんがえる8月7日 16時00分",
+            "pubDate": 1723014101,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        },
+        {
+            "link": "https://www3.nhk.or.jp/news/easy/k10014539331000/k10014539331000.html",
+            "img": "https://www3.nhk.or.jp/news/html/20240807/K10014539331_2408062144_0806214512_02_01.jpg",
+            "title": null,
+            "description": "原付げんつきバイク 日本にっぽんでの生産せいさんが終おわることになりそう8月7日 15時55分",
+            "pubDate": 1723013854,
+            "channelTitle": "www3.nhk.or.jp/news/easy",
+            "channel_id": 1
+        }
+    ]}
+}

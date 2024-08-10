@@ -4,7 +4,7 @@ import { MenuSectionTitle } from "../menuSectionTitle";
 import { Provider, RSSItem } from "../../data_struct";
 import CheckButton from "../checkButton";
 import { providersChangeSub, providersChangeURL } from "../../service/handleProviders";
-import { addFeed, reloadFeeds } from "../../feed_builder";
+// import { addFeed, reloadFeeds } from "../../feed_builder";
 import tw from 'twrnc';
 import SettingWithSwitch from "../settings/settingWithSwitch";
 import SettingWithEditInput from "../settings/settingWithInput";
@@ -19,9 +19,9 @@ const onCheckButtonPress = async (
     try {
         await providersChangeSub(url, isChecked);
         if (isChecked === true) {
-            await addFeed(url, setFeeds);
+            // await addFeed(url, setFeeds);
         }
-        await reloadFeeds(setFeeds)
+        // await reloadFeeds(setFeeds)
     } catch (e) {
         // @todo: warning/error msg in app
         log("" + e);
@@ -41,7 +41,7 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
 
     const changeProvidersURL = async (urlBefore: string, urlNow: string) => {
         if (await providersChangeURL(urlBefore, urlNow)) {
-            reloadFeeds(setFeeds);
+            // reloadFeeds(setFeeds);
         }
     }
     return (

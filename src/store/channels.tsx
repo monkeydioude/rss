@@ -1,21 +1,22 @@
 import { createContext, useContext, useReducer } from "react";
-import { Item } from "src/entity/item";
+import appConfig from "src/appConfig";
+import { Storage } from "src/service/data_storage";
 
 type State = {
-  feed: Item[],
+  ids: number[],
 }
 
 const initialState: State = {
-  feed: [],
+  ids: [],
 }
 
 export const Context = createContext<[State, React.Dispatch<Action>]>([initialState, () => {console.error("too soon to call dispatch")}])
 
 /***********************   SELECTORS   ***********************/
 
-export const useFeed = (): any => {
-  const [{ feed }] = useContext(Context)
-  return feed
+export const useChannelIDs = (): number[] => {
+  const [{ ids }] = useContext(Context)
+  return ids
 }
 
 
@@ -28,31 +29,36 @@ export type Action = {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "SET_FEED":
+    case "ADD_CHANNEL":
+      const channel_id = action.payload as number;
+      if (state.ids.indexOf(channel_id) > -1) {
+        return state;
+      }
+      state.ids.push(action.payload as number);
+      (new Storage(appConfig.storageKeys.channel_ids)).insert(JSON.stringify(state.ids))
+      return { ...state }
+      case "SET_CHANNELS":
         return {
           ...state,
-          feed: action.payload,
+          ids: action.payload as number[],
         }
   }
   return state
 }
 const actions = {
-  setFeed: (payload: any) => ({
-    type: "SET_FEED",
+  addChannel: (payload: number) => ({
+    type: "ADD_CHANNEL",
     payload,
   }),
+  setChannels: (payload: number) => ({
+    type: "SET_CHANNELS",
+    payload,
+  })
 }
-
-// const _actions: Record<keyof State, Record<string, ((payload: any, state: State) => any)|boolean>> = {
-//   feed: {
-//     setFeed: (payload: any) => payload,
-//   },
-// }
-
 
 /***********************   CONTEXT   ***********************/
 
-const FeedProvider = ({ children }: { children: React.ReactNode }) => {
+const ChannelsProvider = ({ children }: { children: React.ReactNode}) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   return (
@@ -67,8 +73,9 @@ export const useDispatch = (): React.Dispatch<Action> => {
   return dispatch
 }
 
-export default FeedProvider
+export default ChannelsProvider
 
 export const {
-  setFeed,
+  addChannel,
+  setChannels,
 } = actions

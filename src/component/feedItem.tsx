@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Keyboard, Linking, Text, View } from "react-native";
-import { RSSItem } from "../data_struct";
 import tw from 'twrnc';
 import { ConfigContext } from "../context/configContext";
 import { cleanString } from "../service/string";
@@ -11,14 +10,16 @@ import style from "../style/style";
 import { normalizePubDate } from "../service/date";
 import { normalizeItemCategory } from "../service/item_ops";
 import { handleHighlights } from "../text_op";
+import { Item } from "src/entity/item";
 
 type Props = {
-    item: RSSItem;
+    item: Item;
     it: number;
 }
 
-const getDateText = (pubDate: string): string => {
-    pubDate = normalizePubDate(pubDate)
+const getDateText = (pubDate?: number): string => {
+    if (!pubDate)
+        return "";
     const d = new Date(pubDate);
 
     if (!(+d)) {
@@ -35,7 +36,6 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
     const [displayCategories, setDisplayCategories] = useState<boolean>(config.props.displayCategories);
     const descH = useRef(0);
     const formatedPubDate = getDateText(item.pubDate);
-
     useEffect(() => {
         const [leaveEventConfig] = onConfigChange((config: Config) => {
             setChannelDisplay(config.props.displayChannelTitle);
@@ -82,10 +82,10 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
                 style={tw`font-normal text-base px-1 pt-0.5 pb-0 m-0 flex flex-wrap text-lg`}
                 onPress={animate}
             >
-                {handleHighlights(cleanString(item.title))}
+                {handleHighlights(cleanString(item.title || item.description))}
                 
-                {item.channelTitle  &&
-                    <Text style={tw`text-neutral-500 text-sm m-0 p-0 mx-1`}>{preTagChar}@{item.channelTitle} {formatedPubDate}</Text>
+                {(item.channelTitle || item.description) &&
+                    <Text style={tw`text-neutral-500 text-sm m-0 p-0 mx-1`}>{preTagChar}@{item.channelTitle || item.description} {formatedPubDate}</Text>
                 }
             </Text>
             <Animated.View

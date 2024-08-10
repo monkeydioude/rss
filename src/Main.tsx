@@ -1,8 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useRef } from 'react';
 import { View, Dimensions, StatusBar as NativeStatusBar, ScrollView, Text } from 'react-native';
-import appConfig from 'src/appConfig';
-import TitleBar from 'src/component/titleBar';
 import FeedsView from 'src/component/feedsView';
 import { Button } from '@react-native-material/core';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
@@ -15,7 +12,7 @@ import Cookie from './component/loading/cookie';
 
 const Main = (): JSX.Element => {
     const bootDone = useBoot();
-    const { feeds } = useContext(FeedsContext);
+    // const { feeds } = useContext(FeedsContext);
     const scroll = useRef<ScrollView>(null);
 
     let { height, width } = Dimensions.get("window");
@@ -54,7 +51,7 @@ const Main = (): JSX.Element => {
                         />
                     <FeedItemsFilters />
                     {bootDone ? 
-                        <FeedsView feeds={feeds}/> :
+                        <FeedsView/> :
                         <Cookie />
                     }
                 </View>

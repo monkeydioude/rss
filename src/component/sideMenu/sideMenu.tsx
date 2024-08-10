@@ -13,6 +13,7 @@ import AppSettings from './appSettings';
 import { log } from '../../service/logchest';
 import style from '../../style/style';
 import DoomsDayButton from './doomsDayButton';
+import LocalDataView from './localDataView';
 
 const getSubscriptions = async (): Promise<Provider[]> => {
     try {
@@ -70,8 +71,10 @@ export default ({ closeMenu }: Props): JSX.Element => {
                         <ChannelsSubscriptions subscriptions={subscriptions} setFeeds={setFeeds} />
                         {/* <RecommendedFeeds setFeeds={setFeeds} /> */}
                         <AppSettings setFeeds={setFeeds} />
-                       {isDev() && 
-                        <DoomsDayButton />
+                        {isDev() && <>
+                            <LocalDataView />
+                            <DoomsDayButton />
+                        </>
                        }
                     </View>
                 </ScrollView>

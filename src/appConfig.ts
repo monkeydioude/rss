@@ -20,6 +20,12 @@ const getBypassServerAddr = (): string => (
     "https://4thehoard.com/bypasscors"
 )
 
+const getPanyaServerAddr = (): string => (
+    isDev() ? 
+        (process.env && process.env.EXPO_PUBLIC_PANYA_ENDPOINT ? `http://${process.env.EXPO_PUBLIC_PANYA_ENDPOINT}/panya` : "http://0.0.0.0:8083/panya") :
+    "https://4thehoard.com/panya"
+)
+
 export const events = {
     set_feeds: "set_feeds",
     update_global_config: "update_global_config",
@@ -35,6 +41,7 @@ const appConfig = {
             "૮₍˶Ó﹏Ò ⑅₎ა", "¯\\_(ツ)_/¯", "(つ﹏⊂)", "(´･ω･`)?", "(눈‸눈)"
         ]
     },
+    panyaAPIURL: getPanyaServerAddr(),
     logchestAPIURL: getLogchestAPIURL(),
     fetchRequestTimeout: 4 * 1000, // in millisecond
     bootFetchRequestTimeout: 8 * 1000,
@@ -54,6 +61,7 @@ const appConfig = {
         rss: "rss",
         providers_list: "providers_list",
         global_config: "global_config",
+        channel_ids: "channel_ids",
     },
     events: events,
     maxHeightFeedDescAnimation: 500,
@@ -68,7 +76,8 @@ const appConfig = {
     displayChannelTitle: ChannelTitleMode.NewLine,
     displayCategories: true,
     maxAmntCategories: 4,
-    appVersion: "v0.0.5"
+    appVersion: "v0.0.5",
+    requestTimeout: 5000,
 }
 
 export default appConfig;

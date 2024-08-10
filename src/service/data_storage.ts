@@ -16,6 +16,7 @@ export const isLocked = (): boolean => {
   return locked;
 }
 
+// Locker acts as a really poor man's blocking mutex
 export class Locker {
   readonly checkThreshold = 100;
   readonly checkRetry = 3;
@@ -46,6 +47,7 @@ export interface DBStorage {
   delete(): Promise<void>;
 }
 
+// Storage is used to store any kind of local data
 export class Storage implements DBStorage {
   readonly key: string;
 
@@ -67,7 +69,7 @@ export class Storage implements DBStorage {
 
   async select(): Promise<string> {
     try {
-      let res: string = "";
+      let res: string | null = "";
       await new Locker().onUnlock(async () => {
         res = await AsyncStorage.getItem(this.key)
       })
@@ -100,7 +102,9 @@ export const getAllData = async (): Promise<Map<string, string>> => {
   const data: Map<string, string> = new Map();
   try {
     for (const key of await AsyncStorage.getAllKeys()) {
-      data.set(key, await AsyncStorage.getItem(key));
+      const res = await AsyncStorage.getItem(key);
+      if (res)
+        data.set(key, res);
     };
   } catch (e) {
     log("Storage.getAllData() " + e);
@@ -111,7 +115,7 @@ export const getAllData = async (): Promise<Map<string, string>> => {
 
 export interface Entity<T> {
   update(entity: T): Promise<void>;
-  retrieve(): Promise<T>;
+  retrieve(): Promise<T | null>;
 }
 
 export class JSONStorage<T> implements Entity<T> {
@@ -131,7 +135,7 @@ export class JSONStorage<T> implements Entity<T> {
     }
   }
 
-  async retrieve(): Promise<T> {
+  async retrieve(): Promise<T | null> {
     try {
       const res = await this.storage.select();
       return JSON.parse(res);
@@ -140,5 +144,6 @@ export class JSONStorage<T> implements Entity<T> {
       log("JSONStorage.retrieve() " + e);
       console.error("JSONStorage.retrieve() " + e);
     }
+    return null;
   }
 }

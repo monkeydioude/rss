@@ -1,7 +1,5 @@
-import { Item } from "./entity/item";
-import { log } from "./service/logchest";
-import { add_channel } from "./service/request/panya";
-import { addChannel, useDispatch } from "./store/channels";
+import { log } from "./services/logchest";
+import { add_channel } from "./services/request/panya";
 
 export const add_feed_source = async (url: string): Promise<number | null> => {
     try {

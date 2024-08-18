@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from 'react';
-// import FeedsProvider from 'src/context/feedsContext';
-import EventsProvider from 'src/context/eventsContext';
-import ConfigProvider from 'src/context/configContext';
-import { Stack } from "expo-router/stack";
-import TitleBar from 'src/component/titleBar'
-import appConfig from 'src/appConfig';
-import { StatusBar } from 'expo-status-bar';
-import FeedProvider from 'src/store/feed';
-import ChannelsProvider from 'src/store/channels';
-import { Storage } from 'src/service/data_storage';
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React from 'react';
+import { Image } from "react-native";
+import 'react-native-gesture-handler';
+import 'react-native-reanimated';
+import Contexts from "src/context";
+import Stores from "src/stores";
+import style from "src/style/style";
 
-const RootNavigator = () => {
-  return (
-    <Stack
-      screenOptions={{
-        header: () => (<TitleBar label={appConfig.appTitle} />)
-      }}
-      >
-      <Stack.Screen name="(app)" />  
-    </Stack>
-  )
-}
+const RootNavigator = (): JSX.Element => (
+  <Stack
+    screenOptions={{
+    headerShadowVisible: false,
+    headerTitleAlign: "center",
+    headerStyle: {
+      backgroundColor: style.primaryColor,
+      },
+    headerShown: false,
+  }}>
+    <Stack.Screen
+      name="(tabs)"
+      options={{
+        headerShown: true,
+        headerTitle: () => <Image source={require("assets/rsscookie_transparent.png")} style={{ width: 50, height: 50 }} />,
+      }} />
+  </Stack>
+)
 
-const App = (): JSX.Element => {
+// Main App Component
+const App = () => {
   return (
-    <FeedProvider>
-      <ChannelsProvider>
-        <EventsProvider>
-          <ConfigProvider>
-            {/* <FeedsProvider> */}
-              <>
-              <StatusBar style="light" />
-              <RootNavigator />
-              </>
-            {/* </FeedsProvider> */}
-          </ConfigProvider>
-        </EventsProvider>
-      </ChannelsProvider>
-    </FeedProvider>
-  )
-}
+    <Stores>
+      <Contexts>
+        <>
+          <StatusBar style="light" />
+          <RootNavigator />
+        </>
+      </Contexts>
+    </Stores>
+  );
+};
 
 export default App;

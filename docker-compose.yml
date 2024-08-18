@@ -6,10 +6,10 @@ services:
     volumes:
       - ./test/wamock.config.json:/app/wamock.config.json
     command: /app/wamock.config.json -x 10
-  logchest:
-    image: drannoc/logchest
-    volumes:
-      - .tmp/:/usr/src/logchest
-    user: "1000:1000"
-    ports:
-    - 8081:8081
+  # logchest:
+  #   image: drannoc/logchest
+  #   volumes:
+  #     - .tmp/:/usr/src/logchest
+  #   user: "1000:1000"
+  #   ports:
+  #   - 8081:8081

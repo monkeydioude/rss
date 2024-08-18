@@ -1,14 +1,14 @@
-import { useContext, useEffect, useState } from "react";
-import { FeedsContext } from "../context/feedsContext";
+import { useEffect, useState } from "react";
 // import { loadAndUpdateFeeds } from "../feed_builder";
 // import { RSSItem } from "../data_struct";
+import { Storage } from "src/services/data_storage";
+import { get_feed } from "src/services/request/panya";
+import { setChannels, useDispatch as useChannelsDispatch } from "src/stores/channels";
+import { setFeed, useDispatch as useFeedDispatch } from "src/stores/feed";
 import appConfig from "../appConfig";
-import config from "../service/config";
-import { log } from "../service/logchest";
-import { Storage } from "src/service/data_storage";
-import { setChannels, useChannelIDs, useDispatch as useChannelsDispatch} from "src/store/channels";
-import { setFeed, useDispatch as useFeedDispatch} from "src/store/feed";
-import { get_feed } from "src/service/request/panya";
+import config from "../services/config";
+import { log } from "../services/logchest";
+
 const useBoot = (onBootFinish?: () => void): boolean => {
     const [bootFinished, setBootFinished] = useState<boolean>(false);
     const channelsDispatch = useChannelsDispatch();
@@ -26,25 +26,26 @@ const useBoot = (onBootFinish?: () => void): boolean => {
 
     // loadLocalChannels try to fetch channels ids from local storage
     // and hydrate our channels store with them
-    const loadLocalChannels = async (): Promise<number[]> => {
+    const loadLocalChannels = async (): Promise<Map<number, string>> => {
         try {
             console.log(">> Loading channels STARTING")
             const raw = await (new Storage(appConfig.storageKeys.channel_ids)).select();
-            const channelIDs = JSON.parse(raw)
-            channelsDispatch(setChannels(channelIDs || []));
+            const res = JSON.parse(raw);
+            const channelIDs = new Map<number, string>(res);
+            channelsDispatch(setChannels(channelIDs));
             console.log("<< Loading channels DONE")
             return channelIDs;
         } catch (err) {
-            console.error("Boot: could not load local channels");
+            console.error("Boot: could not load local channels", err);
             log(`Boot: could not load local channels: ${err}`);
         }
-        return [];
+        return new Map();
     }
 
-    const loadFeed = async (channelIDs: number[]) => {
+    const loadFeed = async (channelIDs: Map<number, string>) => {
         try {
             console.log(">> Loading feed STARTING")
-            feedDispatch(setFeed(await get_feed(channelIDs)));
+            feedDispatch(setFeed(await get_feed(Array.from(channelIDs.keys()))));
             console.log("<< Loading feed DONE")
         } catch (err) {
             console.error("Boot: could not load feed");
@@ -55,7 +56,6 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     useEffect(() => {
         (async () => {
             try {
-                // await sleep(1000000);
                 // start app boot routine.
                 console.log("!!! Boot STARTING !!!")
                 await config.load();

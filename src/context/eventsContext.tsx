@@ -1,5 +1,5 @@
-import React, { useRef, createContext } from 'react';
-import { log } from '../service/logchest';
+import React, { createContext, useRef } from 'react';
+import { log } from '../services/logchest';
 
 type CB = (value: any) => void;
 export type Unsubber = () => void;

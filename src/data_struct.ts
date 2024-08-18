@@ -1,5 +1,5 @@
 import appConfig from "./appConfig";
-import { Storage } from "./service/data_storage";
+import { Storage } from "./services/data_storage";
 
 // export type RSSItem = {
 //     category: string[]|string;

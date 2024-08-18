@@ -1,10 +1,9 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { RSSItem } from "../data_struct";
-import React from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 import config from "../appConfig";
-import { EventsContext } from "./eventsContext";
+import { RSSItem } from "../data_struct";
 import { reloadFeeds as _reloadFeeds } from "../feed_builder";
-import { log } from "../service/logchest";
+import { log } from "../services/logchest";
+import { EventsContext } from "./eventsContext";
 
 export type SetFeedsCB = (f: RSSItem[]) => void;
 export interface FeedItemFilterRemover {

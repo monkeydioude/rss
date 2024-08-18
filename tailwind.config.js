@@ -1,12 +1,15 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./App.tsx", "./component/**/*.tsx"],
+  content: [
+    "./src/component/**/*.{js,jsx,ts,tsx}", // Include any additional source files if necessary
+    "./app/**/*.{js,jsx,ts,tsx}", // This includes all files in the app directory used by Expo Router
+  ],
   theme: {
     extend: {
       colors: {
-        'rss-purple': "#6200EE"
+        'primaryColor': "#9333ea"
       }
     },
   },
   plugins: [],
-  // corePlugins: require('tailwind-rn/unsupported-core-plugins'),
 }

@@ -1,8 +1,8 @@
 import React, { createContext, useContext } from "react";
 import { events } from "../appConfig";
+import config, { Config, ConfigProps } from "../services/config";
+import { log } from "../services/logchest";
 import { EventsContext, Unsubber } from "./eventsContext";
-import config, { Config, ConfigProps } from "../service/config";
-import { log } from "../service/logchest";
 
 /**
  * Only for setting config and listening to config change.

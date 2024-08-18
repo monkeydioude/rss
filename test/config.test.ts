@@ -1,6 +1,6 @@
-import { describe } from "mocha";
-import { Config } from "../src/service/config";
 import { assert } from "chai";
+import { describe } from "mocha";
+import { Config } from "../src/services/config";
 
 describe("config operations", () => {
     it("should be able to save config", () => {

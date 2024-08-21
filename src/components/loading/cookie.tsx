@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Image, View } from "react-native"
+import { Image, View } from "react-native";
 
-const Cookie = (): JSX.Element => {
+const Cookie = (): React.ReactNode => {
     const [rotation, setRotation] = useState<number>(0)
     const rotationRaise = 5
     const animationRefreshTimer = 5
@@ -47,7 +47,7 @@ const Cookie = (): JSX.Element => {
                     alignItems: "center",
                     position: "absolute",
                 }}
-                source={require('../../../assets/rsscookie_transparent.png')}
+                source={require('../../../assets/cookie_transparent.png')}
             />
             <Image
                 style={{
@@ -55,7 +55,7 @@ const Cookie = (): JSX.Element => {
                     alignItems: "center",
                     tintColor: `rgba(${stronzo.current.rgb.join(",")}, 0.40)`,
                 }}
-                source={require('../../../assets/rsscookie_transparent.png')}
+                source={require('../../../assets/cookie_transparent.png')}
             />
         </View>
     )

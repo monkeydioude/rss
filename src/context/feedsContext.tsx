@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useRef, useState } from "react";
 import config from "../appConfig";
 import { RSSItem } from "../data_struct";
-import { reloadFeeds as _reloadFeeds } from "../feed_builder";
-import { log } from "../services/logchest";
+import { reloadFeeds as _reloadFeeds } from "../services/feed_builder";
+import { log } from "../services/request/logchest";
 import { EventsContext } from "./eventsContext";
 
 export type SetFeedsCB = (f: RSSItem[]) => void;

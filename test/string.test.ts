@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { describe } from "mocha";
-import { cleanString, stripHTMLTags } from "../src/services/string";
+import { cleanString, stripHTMLTags } from "../src/services/normalization/string";
 
 describe("stripHTMLTags", () => {
     it("should strip html tags from string", () => {

@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { events } from "../appConfig";
 import config, { Config, ConfigProps } from "../services/config";
-import { log } from "../services/logchest";
+import { log } from "../services/request/logchest";
 import { EventsContext, Unsubber } from "./eventsContext";
 
 /**

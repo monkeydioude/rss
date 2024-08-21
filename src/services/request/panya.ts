@@ -2,12 +2,14 @@
 import { Channel } from "src/entity/channel";
 import { Item } from "src/entity/item";
 import appConfig from "../../appConfig";
-import { log } from "../logchest";
+import { getRandomInt } from "../math";
+import { log } from "./logchest";
 
 export const get_feed = async (ids: number[]): Promise<Item[]> => {
     const ctrl = new AbortController();
     const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
     try {
+        console.log(`${appConfig.panyaAPIURL}/feed?ids=${ids.join(",")}`)
         const res = (await fetch(`${appConfig.panyaAPIURL}/feed?ids=${ids.join(",")}`, {
             method: "GET",
             headers: {
@@ -19,7 +21,7 @@ export const get_feed = async (ids: number[]): Promise<Item[]> => {
         return res;
     } catch (err) {
         log(`Could not get feed channel: ${err}`);
-        console.error("Could not get feed channel");
+        console.error("Could not get feed channel", err);
     } finally {
         clearTimeout(timeoutId);
     }
@@ -30,7 +32,7 @@ export const add_channel = async (url: string): Promise<Channel | null> => {
     const ctrl = new AbortController();
     const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
     try {
-        const res = (await fetch(`${appConfig.panyaAPIURL}/channel`, {
+        const res: Channel = await (await fetch(`${appConfig.panyaAPIURL}/channel`, {
             body: JSON.stringify({
                 'channel_name': url,
             }),
@@ -41,6 +43,7 @@ export const add_channel = async (url: string): Promise<Channel | null> => {
             },
             signal: ctrl.signal,
         })).json();
+        res.channel_id = getRandomInt(200);
         return res;
     } catch (err) {
         log(`Could not add channel: ${err}`);

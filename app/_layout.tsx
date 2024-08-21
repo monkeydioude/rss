@@ -5,7 +5,7 @@ import { Image } from "react-native";
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import Contexts from "src/context";
-import Stores from "src/stores";
+import Stores from "src/states";
 import style from "src/style/style";
 
 const RootNavigator = (): JSX.Element => (
@@ -22,7 +22,7 @@ const RootNavigator = (): JSX.Element => (
       name="(tabs)"
       options={{
         headerShown: true,
-        headerTitle: () => <Image source={require("assets/rsscookie_transparent.png")} style={{ width: 50, height: 50 }} />,
+        headerTitle: () => <Image source={require("assets/cookie_transparent.png")} style={{ width: 50, height: 50 }} />,
       }} />
   </Stack>
 )
@@ -30,14 +30,14 @@ const RootNavigator = (): JSX.Element => (
 // Main App Component
 const App = () => {
   return (
-    <Stores>
-      <Contexts>
+    <Contexts>
+      <Stores>
         <>
           <StatusBar style="light" />
           <RootNavigator />
         </>
-      </Contexts>
-    </Stores>
+      </Stores>
+    </Contexts>
   );
 };
 

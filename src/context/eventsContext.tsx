@@ -1,7 +1,7 @@
 import React, { createContext, useRef } from 'react';
-import { log } from '../services/logchest';
+import { log } from '../services/request/logchest';
 
-type CB = (value: any) => void;
+export type CB = (value: any) => void;
 export type Unsubber = () => void;
 
 type CBContainer = {
@@ -18,16 +18,20 @@ interface EventsContext {
 
 export const EventsContext = createContext<EventsContext>({
     newChannel: () => {},
-    onEvent: (id: string) => {
+    onEvent: (id: string, _: CB): [Unsubber, Symbol] => {
         log("too early to setup any event "+ id);
         console.error("too early to setup any event", id);
-        return null;
+        return [() => {}, Symbol()];
     },
     trigger: () => {},
     leaveEvent: () => {return true},
 })
 
-const EventsProvider = ({ children }): JSX.Element => {
+interface Props {
+    children: React.ReactNode | React.ReactNode[]
+}
+
+const EventsProvider = ({ children }: Props): React.ReactNode => {
     const channels = useRef<Map<string, CBContainer[]>>(new Map());
 
     const newChannel = (id: string) => {
@@ -43,11 +47,11 @@ const EventsProvider = ({ children }): JSX.Element => {
         }
         const c = channels.current.get(id);
         const symbol = Symbol();
-        c.push({
+        c?.push({
             cb,
             symbol,
         });
-        channels.current.set(id, c);
+        channels.current.set(id, c || []);
         return [() => leaveEvent(id, symbol), symbol];
     };
 

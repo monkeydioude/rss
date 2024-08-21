@@ -1,5 +1,5 @@
-import { newProviderDataCollection, Provider } from "../data_struct"
-import { log } from "./logchest";
+import { newProviderDataCollection, Provider } from "../data_struct";
+import { log } from "./request/logchest";
 
 export const providersUnsub = async (providerName: string): Promise<void> => {
     await providersChangeSub(providerName, false);

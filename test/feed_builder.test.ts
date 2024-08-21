@@ -1,6 +1,6 @@
-import { describe } from "mocha";
-import { bubbleSortNews, Order } from "../src/feed_builder";
 import { assert } from "chai";
+import { describe } from "mocha";
+import { bubbleSortNews, Order } from "../src/services/feed_builder";
 
 describe("bubble sort tests", () => {
     it("should sort a RSSItem[] by descending date", () => {

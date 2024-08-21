@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "rss",
-    "slug": "rss",
-    "scheme": "rss",
+    "name": "cookie",
+    "slug": "cookie",
+    "scheme": "cookie",
     "version": "0.0.3",
     "orientation": "portrait",
-    "icon": "./assets/rsscookie.png",
+    "icon": "./assets/cookie.png",
     "owner": "jduris",
     "userInterfaceStyle": "light",
     "splash": {
@@ -17,14 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.calq.cookie"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.monkeydioude.rss"
+      "package": "com.calq.cookie"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,5 +39,5 @@
       "expo-router"
     ]
   },
-  "name": "rss"
+  "name": "cookie"
 }

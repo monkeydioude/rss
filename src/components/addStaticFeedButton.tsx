@@ -2,7 +2,7 @@
 import React from "react"
 import { Button, View } from "react-native"
 import { RSSItem } from "../data_struct"
-import { addFeed } from "../feed_builder"
+import { addFeed } from "../services/feed_builder"
 
 type Props = {
   setFeeds: (f: React.SetStateAction<RSSItem[]>) => void,

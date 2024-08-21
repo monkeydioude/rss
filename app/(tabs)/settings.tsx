@@ -2,15 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StatusBar, View } from 'react-native';
 // import tw from 'twrnc';
 import config, { isDev } from 'src/appConfig';
-import AddFeedInput from 'src/components/addFeedInput';
-import AppSettings from 'src/components/sideMenu/appSettings';
-import ChannelsSubscriptions from 'src/components/sideMenu/channelsSubscriptions';
-import DoomsDayButton from 'src/components/sideMenu/doomsDayButton';
-import LocalDataView from 'src/components/sideMenu/localDataView';
+import { AddFeedInput, AppSettings, ChannelsSubscriptions, DoomsDayButton, LocalDataView } from 'src/components/blocks/settings';
 import { EventsContext } from 'src/context/eventsContext';
 import { FeedsContext } from 'src/context/feedsContext';
 import { Provider, newProviderDataCollection } from 'src/data_struct';
-import { log } from 'src/services/logchest';
+import { log } from 'src/services/request/logchest';
 import tw from 'src/style/twrnc';
 
 const getSubscriptions = async (): Promise<Provider[]> => {

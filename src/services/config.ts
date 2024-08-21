@@ -1,6 +1,6 @@
 import appConfig, { ChannelTitleMode } from "../appConfig";
-import { JSONStorage } from "./data_storage";
-import { log } from "./logchest";
+import { JSONStorage } from "../storage";
+import { log } from "./request/logchest";
 
 export interface ConfigProps {
     readonly displayChannelTitle: ChannelTitleMode;

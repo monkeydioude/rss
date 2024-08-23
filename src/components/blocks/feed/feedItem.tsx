@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Animated, Keyboard, Linking, Text, View } from "react-native";
 import appConfig, { ChannelTitleMode } from "src/appConfig";
 import { Item } from "src/entity/item";
@@ -34,8 +34,8 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
     const isOpened = useRef(false);
     // const { onConfigChange } = useContext(ConfigContext);
     const slideValue = new Animated.Value(0);
-    const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.displayChannelTitle);
-    const [displayCategories, setDisplayCategories] = useState<boolean>(config.displayCategories);
+    // const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.displayChannelTitle);
+    // const [displayCategories, setDisplayCategories] = useState<boolean>(config.displayCategories);
     const descH = useRef(0);
     const formatedPubDate = getDateText(item.pubDate);
     // useEffect(() => {
@@ -73,10 +73,9 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
             Linking.openURL(item.link);
         }
     };
-
-    const preTagChar = channelDisplay === ChannelTitleMode.Inline ? " " : "\n";
+    const preTagChar = config.displayChannelTitle === ChannelTitleMode.Inline ? " " : "\n";
     let toValue = appConfig.maxHeightFeedDescAnimation;
-    const categories = displayCategories ? normalizeItemCategory(item.category) : "";
+    const categories = config.displayCategories ? normalizeItemCategory(item.category) : "";
 
     return (
         <View style={{

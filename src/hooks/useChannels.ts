@@ -1,21 +1,22 @@
 import { Channel } from "src/entity/channel";
-import { addChannel, setChannels, useDispatch as useChannelsDispatch, useGetChannels } from "src/global_states/channels";
-import { add_feed_source } from "src/services/feed_builder";
+import { addChannel, setChannels, useDispatch as useChannelsDispatch, useChannelsList } from "src/global_states/channels";
 import { clean_url } from "src/services/normalization/url";
+import { add_feed_source } from "src/services/request/panya";
 import { ChannelStorage } from "src/storages/custom";
-import useFeed from "./useFeed";
 
 export const useChannels = () => {
-    const channels = useGetChannels();
+    const channels = useChannelsList();
     const channelsDispatch = useChannelsDispatch();
-    const { reload } = useFeed();
 
+    // push adds a new channel to the list and update the local storage.
     const push = (channel: [number, Channel]) => {
-        channelsDispatch(addChannel(channel));
-        ChannelStorage.push(channel[0], channel[1]);
-        reload();
+        ChannelStorage
+            .push(channel[0], channel[1])
+            .then(() => channelsDispatch(addChannel(channel)));
     };
 
+    // setSub modifies the subscription to a channel, meaning should we request
+    // the API for this channel's content. Modifies the local storage.
     const setSub = (channel_id: number, isSub: boolean) => {
         const channel = channels.get(channel_id);
         if (!channel) {
@@ -23,13 +24,14 @@ export const useChannels = () => {
         }
         channel.is_sub = isSub;
         channels.set(channel_id, channel);
-        ChannelStorage.update(channels);
-        channelsDispatch(setChannels(channels));
-        reload();
+        ChannelStorage
+            .update(channels)
+            .then(() => channelsDispatch(setChannels(channels)));
     }
 
     // setUrl changes the url of an already subscribed channel.
-    // But really, it deletes the old channel, and then tries to add a new one
+    // But really, it deletes the old channel, and then tries to add a new one.
+    // Modifies the local storage.
     const setUrl = async (channel_id: number, url: string) => {
         const channel = channels.get(channel_id);
         url = clean_url(url);
@@ -43,7 +45,9 @@ export const useChannels = () => {
         }
         new_channel.is_sub = channel.is_sub;
         channels.set(new_channel.channel_id, new_channel);
-        channelsDispatch(setChannels(channels));
+        ChannelStorage
+            .update(channels)
+            .then(() => channelsDispatch(setChannels(channels)));
     }
 
     return {

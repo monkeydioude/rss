@@ -1,29 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 import appConfig from "src/appConfig";
 import { Channel } from "src/entity/channel";
-import { setChannels, useGetChannels, useDispatch as useGetChannelsDispatch } from "src/global_states/channels";
-import { initConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
-import { setFeed, useDispatch as useFeedDispatch } from "src/global_states/feed";
+import { setChannels, useDispatch as useChannelsDispatch, useChannelsList } from "src/global_states/channels";
+import { initConfig, useConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
+import { setFeed, useDispatch as useFeedDispatch, useReloadFeed } from "src/global_states/feed";
 import logger from "src/services/log";
 import { Mapp } from 'src/services/map/mapp';
 import { log } from "src/services/request/logchest";
 import { get_feed } from "src/services/request/panya";
 import { ChannelStorage, ConfigStorage } from "src/storages/custom";
-import useFeed from "./useFeed";
 
 // useBoot is a hook handling the app boot sequence configuration.
 // Should (and will) be called only once.
 const useBoot = (onBootFinish?: () => void): boolean => {
     const [bootFinished, setBootFinished] = useState<boolean>(false);
-    const channelsDispatch = useGetChannelsDispatch();
-    const feedDispatch = useFeedDispatch();
+    const channelsDispatch = useChannelsDispatch();
     const configDispatch = useConfigDispatch();
-    const channelsList = useGetChannels();
-    const { reload: feedLoader }  = useFeed();
+    const feedDispatch = useFeedDispatch();
+    const channelsList = useChannelsList();
+    const witness = useReloadFeed();
     // using an array of seeds, because multiple trigger, especially in dev mode
     // could erase refreshIntervalSeed
     let refreshIntervalSeed = useRef([] as NodeJS.Timeout[]);
     let lastReload = useRef(0);
+    const config = useConfig();
 
     // reloadAndSetInterval handles the auto refresh of the feed
     const reloadAndSetInterval = async (channels: Mapp<number, Channel>) => {
@@ -31,12 +31,13 @@ const useBoot = (onBootFinish?: () => void): boolean => {
         // cleaning intervals first, to make sure we dont run several async setIntervals at a same time.
         clearIntervals(refreshIntervalSeed.current);
         refreshIntervalSeed.current.push(setInterval(async () => {
-            if (lastReload.current + appConfig.feedsRefreshTimer > +new Date()) {
-                return;
-            }
             try {
+                // poor people's protection. Should actually put a lock here.
+                if (lastReload.current + appConfig.feedsRefreshTimer > +new Date()) {
+                    return;
+                }
                 lastReload.current = +new Date();
-                feedLoader();
+                feedDispatch(setFeed(await get_feed(channelsList, config)));
             } catch (err) {
                 console.error("💀 could not refresh the feed", err);
             }
@@ -49,12 +50,14 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     }
 
     useEffect(() => {
-        if (!bootFinished) {
-            return;
-        }
-        feedLoader();
-        reloadAndSetInterval(channelsList);
-    }, [channelsList, bootFinished]);
+        (async () => {
+            if (!bootFinished) {
+                return;
+            }
+            feedDispatch(setFeed(await get_feed(channelsList, config)));
+            reloadAndSetInterval(channelsList);
+        })();
+    }, [channelsList, bootFinished, config, witness]);
 
     // bootLocalChannels try to fetch channels ids from local storage
     // and hydrate our channels global state with them
@@ -79,7 +82,7 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     const bootFeed = async (channels: Mapp<number, Channel>) => {
         try {
             logger.info(">> 📰 Feed loader STARTING")
-            feedDispatch(setFeed(await get_feed(channels.keys_slice())));
+            feedDispatch(setFeed(await get_feed(channelsList, config)));
             reloadAndSetInterval(channels);
             logger.info("<< 📰 Feed loader DONE")
         } catch (err) {

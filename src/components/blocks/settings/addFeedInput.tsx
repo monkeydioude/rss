@@ -2,16 +2,16 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { TextInput } from "@react-native-material/core";
 import React, { useRef, useState } from "react";
 import { Keyboard, NativeSyntheticEvent, Pressable, TextInputSubmitEditingEventData, View } from "react-native";
-import { useGetChannels } from "src/global_states/channels";
+import { useChannelsList } from "src/global_states/channels";
 import { useChannels } from "src/hooks/useChannels";
-import { add_feed_source } from "src/services/feed_builder";
 import { clean_url } from "src/services/normalization/url";
+import { add_feed_source } from "src/services/request/panya";
 import tw from 'twrnc';
 
 const AddFeedInput = (): JSX.Element => {
     const [text, setText] = useState<string>("");
     // const dispatch = useDispatch();
-    const channels = useGetChannels();
+    const channels = useChannelsList();
     const { push: pushChannel } = useChannels();
     
     const trailing = useRef(<View>

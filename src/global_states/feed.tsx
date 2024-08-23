@@ -2,11 +2,13 @@ import { createContext, useContext, useReducer } from "react";
 import { Item } from "src/entity/item";
 
 type FeedState = {
-	feed: Item[],
+    feed: Item[],
+    witness: Symbol,
 }
 
 const initialState: FeedState = {
-	feed: [],
+    feed: [],
+    witness: Symbol(),
 }
 
 export const Context = createContext<[FeedState, React.Dispatch<Action>]>([initialState, () => {console.error("too soon to call feed dispatch")}])
@@ -15,7 +17,12 @@ export const Context = createContext<[FeedState, React.Dispatch<Action>]>([initi
 
 export const useGetFeed = (): any => {
 	const [{ feed }] = useContext(Context)
-	return feed
+    return feed;
+}
+
+export const useReloadFeed = (): any => {
+	const [{ witness }] = useContext(Context)
+    return witness;
 }
 
 /***********************   REDUCERS   ***********************/
@@ -25,6 +32,13 @@ const _set_feed = (state: FeedState, feed: Item[]): FeedState => {
 		...state,
 		feed: [...feed],
 	}
+}
+
+const _reload_feed = (state: FeedState): FeedState => {
+    return {
+        ...state,
+        witness: Symbol(),
+    }
 }
 
 export type Action = {
@@ -47,7 +61,11 @@ const actions = {
 	setFeed: (payload: any) => ({
 		payload,
 		func: _set_feed,
-	}),
+    }),
+    reloadFeed: () => ({
+        payload: null,
+        func: _reload_feed,
+    })
 }
 
 /***********************   CONTEXT   ***********************/
@@ -70,5 +88,6 @@ export const useDispatch = (): React.Dispatch<Action> => {
 export default FeedProvider
 
 export const {
-	setFeed,
+    setFeed,
+    reloadFeed
 } = actions

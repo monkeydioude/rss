@@ -1,21 +1,17 @@
+import appConfig from "src/appConfig";
 import { Channel } from "src/entity/channel";
-import { log } from "./request/logchest";
-import { add_channel } from "./request/panya";
+import { ConfigState } from "src/global_states/config";
+import { Mapp } from "./map/mapp";
 
-export const add_feed_source = async (url: string): Promise<Channel | null> => {
-    try {
-        const channel = await add_channel(url);
-        if (!channel) {
-            throw "no channel in response";
-        }
-        if (!channel.channel_id) {
-            throw "missing channel_id";
-        }
-        channel.is_sub = true;
-        return channel;
-    } catch (err) {
-        log(`add_feed_source: Could not add feed source ${url}: ${err}`);
-        console.error(`Could not add feed source ${url}`, err);
-    }
-    return null;
+export const make_feed_url = (
+    channels: Mapp<number, Channel>,
+    config?: ConfigState
+): string => {
+    const ids: number[] = [];
+    const limits: string[] = [];
+    channels.forEach((channel: Channel) => {
+        ids.push(channel.channel_id);
+        limits.push(`limits[${channel.channel_id}]=${channel.limit || config?.maxItemPerFeed || appConfig.maxItemPerFeed}`);
+    });
+    return `${appConfig.panyaAPIURL}/feed?ids=${ids.join(",")}&${limits.join("&")}`
 }

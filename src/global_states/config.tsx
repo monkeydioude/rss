@@ -1,12 +1,12 @@
 import { createContext, useContext, useReducer } from "react";
 import appConfig, { ChannelTitleMode } from "src/appConfig";
-import { ConfigStorage } from "src/storages/custom/config_storage";
+import { ConfigStorage } from "src/storages/custom";
 
 export type ConfigState = {
-        displayChannelTitle: ChannelTitleMode,
-        maxItemPerFeed: number,
-        displayCategories: boolean,
-        maxAmntCategories: number,
+    displayChannelTitle: ChannelTitleMode,
+    maxItemPerFeed: number,
+    displayCategories: boolean,
+    maxAmntCategories: number,
 }   
 
 const initialState: ConfigState = {
@@ -21,7 +21,7 @@ export const Context = createContext<[ConfigState, React.Dispatch<Action>]>([ini
 /***********************   SELECTORS   ***********************/
 
 export const useConfig = (): ConfigState => {
-    const [state] = useContext(Context);
+    const [ state ] = useContext(Context);
     return state;
 }
 
@@ -94,4 +94,5 @@ export default ConfigProvider
 
 export const {
     initConfig,
+    updateConfig
 } = actions

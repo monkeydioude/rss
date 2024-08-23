@@ -69,7 +69,7 @@ const appConfig = {
     displayChannelTitle: ChannelTitleMode.NewLine,
     displayCategories: true,
     maxAmntCategories: 4,
-    appVersion: "v0.0.5",
+    appVersion: "v0.1.0",
     requestTimeout: 5000,
 }
 

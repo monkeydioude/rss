@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-import { useGetChannels } from "src/global_states/channels";
+import { Channel } from "src/entity/channel";
+import { ConfigState } from "src/global_states/config";
+import { Mapp } from "src/services/map/mapp";
+import { ChannelStorage, ConfigStorage } from "src/storages/custom";
 import tw from "src/style/twrnc";
 
 const Page = (): React.ReactNode => {
-    const channels = useGetChannels();
+    const [ channels, setChannels ] = useState<Mapp<number, Channel>>(new Mapp());
+    const [ config, setConfig ] = useState<ConfigState | null>(null);
 
+    useEffect(() => {
+        (async () => {
+            setChannels(await ChannelStorage.retrieveOrNew());
+            setConfig(await ConfigStorage.retrieve());
+        })();
+    }, []);
     return (
         <ScrollView style={tw`h-full bg-orange-100`}
             nestedScrollEnabled={true}
@@ -22,6 +32,8 @@ const Page = (): React.ReactNode => {
                     </View>
                 )
             })}
+            <Text>Config</Text>
+            <Text>{JSON.stringify(config)}</Text>
         </ScrollView>
     )
 };

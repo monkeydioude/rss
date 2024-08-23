@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useConfig } from "src/global_states/config";
+import { updateConfig, useConfig, useDispatch } from "src/global_states/config";
 import tw from 'twrnc';
 import SettingWithEditInput from "../../ui/settings/settingWithInput";
 import SettingWithSwitch from "../../ui/settings/settingWithSwitch";
 
 const DisplayCategories = (): JSX.Element => {
     const config = useConfig();
+    const dispatch = useDispatch();
     const [checked, setChecked] = useState<boolean>(config.displayCategories);
 
     return (
@@ -15,9 +16,7 @@ const DisplayCategories = (): JSX.Element => {
                 label="Display categories"
                 checked={checked}
                 onValueChange={() => {
-                    // setConfig({
-                    //     displayCategories: !checked,
-                    // });
+                    dispatch(updateConfig({ displayCategories: !checked }));
                     setChecked(!checked);
                 }}
             />
@@ -25,10 +24,14 @@ const DisplayCategories = (): JSX.Element => {
             style={tw`mt-4`}
                 label={"Categories amount: "}
                 preventUnderline={true}
-                onSubmitEditing={(value: string) => {
-                    // setConfig({
-                    //     maxAmntCategories: Number.parseInt(value),
-                    // });
+                onSubmitEditing={(value: string): string => {
+                    const maxAmntCategories = Number.parseInt(value);
+                    if (isNaN(maxAmntCategories)) {
+                        return value;
+                    }
+                    console.log("maxAmntCategories", maxAmntCategories);
+                    dispatch(updateConfig({ maxAmntCategories }));
+                    return maxAmntCategories.toString();
             } } text={""+config.maxAmntCategories} />
         </>
     )

@@ -9,7 +9,7 @@ import SettingCSS from "./settings.css";
 type Props = {
     label?: string;
     preventUnderline?: boolean
-    onSubmitEditing: (value: string) => void
+    onSubmitEditing: (value: string) => string
     text: string;
     style?: ViewStyle;
     textStyle?: ViewStyle;
@@ -68,9 +68,9 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, i
                     }}
                     autoFocus={true}
                     onSubmitEditing={async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-                        const t = event.nativeEvent.text.toLocaleLowerCase();
+                        let t = event.nativeEvent.text.toLocaleLowerCase();
                         event.persist();
-                        onSubmitEditing(t);
+                        t = onSubmitEditing(t) || t;
                         Keyboard.dismiss();
                         setInputText(t);
                         setText(t);

@@ -1,14 +1,16 @@
-import { useSubbedChannelIDs } from "src/global_states/channels";
-import { setFeed, useDispatch as useFeedDispatch } from "src/global_states/feed";
-import { get_feed } from "src/services/request/panya";
+import { useCallback } from "react";
+import { useChannelsList } from "src/global_states/channels";
+import { useConfig } from "src/global_states/config";
+import { reloadFeed, useDispatch as useFeedDispatch } from "src/global_states/feed";
 
 const useFeed = () => {
     const feedDispatch = useFeedDispatch();
-    const channelIDs = useSubbedChannelIDs();
+    const channelsList = useChannelsList();
+    const config = useConfig();
 
-    const reload = async () => {
-        feedDispatch(setFeed(await get_feed(channelIDs)));
-    }
+    const reload = useCallback(async () => {
+        feedDispatch(reloadFeed());
+    }, [config, channelsList]);
 
     return { reload };
 };

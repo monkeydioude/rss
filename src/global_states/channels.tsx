@@ -14,18 +14,18 @@ export const Context = createContext<[State, React.Dispatch<Action>]>([initialSt
 
 /***********************   SELECTORS   ***********************/
 
-export const useGetChannels = (): Mapp<number, Channel> => {
+export const useChannelsList = (): Mapp<number, Channel> => {
     const [{ channels }] = useContext(Context);
     return channels;
 }
 
 export const useChannelIDs = (): number[] => {
-    const channels = useGetChannels();
+    const channels = useChannelsList();
     return Array.from(channels.keys());
 }
 
 export const useSubbedChannelIDs = (): number[] => {
-    const channels = useGetChannels();
+    const channels = useChannelsList();
     return channels
         .filter(({ value }): boolean => value.is_sub)
         .map(([channel_id]) => channel_id);

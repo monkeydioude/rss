@@ -7,7 +7,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import SettingWithEditInput from "src/components/ui/settings/settingWithInput";
 import SettingWithSwitch from "src/components/ui/settings/settingWithSwitch";
 import { Channel } from "src/entity/channel";
-import { useGetChannels } from "src/global_states/channels";
+import { useChannelsList } from "src/global_states/channels";
 import { useChannels } from "src/hooks/useChannels";
 import { log } from "src/services/request/logchest";
 import tw from 'twrnc';
@@ -84,7 +84,7 @@ const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
 }
 
 const ChannelsSubscriptions = (): React.ReactNode => {
-    const channels = useGetChannels();
+    const channels = useChannelsList();
 
     return (
         <View style={{

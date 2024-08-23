@@ -7,13 +7,13 @@ import FeedItem from 'src/components/blocks/feed/feedItem';
 import FeedItemsFilters from 'src/components/blocks/feed/feedItemsFilters';
 import Cookie from 'src/components/loading/cookie';
 import { BackToTop, BackToTopButtonHandle } from 'src/components/ui/animations/buttons/BackToTop';
-import { useIsBooted } from 'src/states/boot';
-import { useFeed } from 'src/states/feed';
+import { useIsBooted } from 'src/global_states/boot';
+import { useGetFeed } from 'src/global_states/feed';
 import tw from 'src/style/twrnc';
 
 const FeedsView = (): JSX.Element => {
     const [ refreshing, setRefreshing ] = useState<boolean>(false);
-    const feeds = useFeed();
+    const feeds = useGetFeed();
     const flatListRef = useAnimatedRef<Animated.FlatList<any>>();
     // const scrollHandler = useScrollViewOffset(scrollRef);
 

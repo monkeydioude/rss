@@ -1,21 +1,15 @@
-import React, { useContext } from "react";
+import React from "react";
 import { MenuSettingsTitle } from "src/components/ui/menuSectionTitle";
-import { ConfigContext } from "src/context/configContext";
-import { SetFeedsCB } from "src/context/feedsContext";
 // import { reloadFeeds } from "../../feed_builder";
 import { Text, View } from "react-native";
 import appConfig from "src/appConfig";
 import { ChannelTitle, DisplayCategories, MaxItemPerFeed } from "src/components/ui/settings";
-import config from "src/services/config";
+import { useConfig } from "src/global_states/config";
 import tw from 'twrnc';
 
-type Props = {
-    setFeeds: SetFeedsCB,
-}
 
-const AppSettings = ({ setFeeds }: Props): JSX.Element => {
-    const { setConfig } = useContext(ConfigContext);
-
+const AppSettings = (): JSX.Element => {
+    const config = useConfig();
     return (
         <>
             <View style={tw`flex justify-center pb-1`}>
@@ -23,9 +17,9 @@ const AppSettings = ({ setFeeds }: Props): JSX.Element => {
                 <ChannelTitle />
                 <DisplayCategories />
                 <MaxItemPerFeed
-                    value={config.props.maxItemPerFeed}
+                    value={config.maxItemPerFeed}
                     onValueChange={(maxItemPerFeed: number) => {
-                        setConfig({ maxItemPerFeed });
+                        // setConfig({ maxItemPerFeed });
                         // reloadFeeds(setFeeds);
                     }} />
             </View>

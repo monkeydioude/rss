@@ -22,15 +22,9 @@ const getBypassServerAddr = (): string => (
 
 const getPanyaServerAddr = (): string => (
     isDev() ? 
-        (process.env && process.env.EXPO_PUBLIC_PANYA_ENDPOINT ? `http://${process.env.EXPO_PUBLIC_PANYA_ENDPOINT}/panya` : "http://0.0.0.0:8083/panya") :
+        (process.env && process.env.EXPO_PUBLIC_PANYA_ENDPOINT ? `${process.env.EXPO_PUBLIC_PANYA_ENDPOINT}/panya` : "http://0.0.0.0:8083/panya") :
     "https://4thehoard.com/panya"
 )
-
-export const events = {
-    set_feeds: "set_feeds",
-    update_global_config: "update_global_config",
-    feed_desc_open: "feed_desc_open",
-};
 
 const appConfig = {
     emojis: {
@@ -63,7 +57,6 @@ const appConfig = {
         global_config: "global_config",
         channel_ids: "channel_ids",
     },
-    events: events,
     maxHeightFeedDescAnimation: 500,
     openSpeedDescAnimation: 500,
     maxItemPerFeed: 10,

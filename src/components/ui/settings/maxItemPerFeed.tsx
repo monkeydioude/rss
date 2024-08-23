@@ -5,7 +5,7 @@ import tw from "twrnc";
 import SettingWithSelect from "./settingWithSelect";
 
 interface Props {
-    onValueChange: (value: string | number) => void;
+    onValueChange: (value: number) => void;
     value: number;
 }
 
@@ -18,7 +18,7 @@ const MaxItemPerFeed = ({ onValueChange, value: _value }: Props): JSX.Element =>
                 style={tw`mt-4`}
                 onValueChange={(value: number | string) => {
                     setValue(value);
-                    onValueChange(value);
+                    onValueChange(value as number);
                 }}
                 label="Max items per channel"
                 value={value}

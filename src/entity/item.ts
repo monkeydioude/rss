@@ -6,6 +6,7 @@ export type Item = {
     pubDate: number;
     channelTitle?: string;
     category?: string[] | string;
+    channel_id: number;
     // 'content:encoded': string;
     // guid: string;
 }

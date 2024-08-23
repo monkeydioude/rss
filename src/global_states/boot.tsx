@@ -1,21 +1,21 @@
-import { createContext, useContext, useReducer } from "react";
-import { Item } from "src/entity/item";
+import { createContext, useContext, useEffect, useReducer } from "react";
+import useBoot from "src/hooks/useBoot";
 
 type State = {
-  feed: Item[],
+  isBooted: boolean,
 }
 
 const initialState: State = {
-  feed: [],
+  isBooted: false,
 }
 
-export const Context = createContext<[State, React.Dispatch<Action>]>([initialState, () => {console.error("too soon to call feed dispatch")}])
+export const Context = createContext<[State, React.Dispatch<Action>]>([initialState, () => {console.error("too soon to call boot dispatch")}])
 
 /***********************   SELECTORS   ***********************/
 
-export const useFeed = (): any => {
-  const [{ feed }] = useContext(Context)
-  return feed
+export const useIsBooted = (): boolean => {
+  const [{ isBooted }] = useContext(Context)
+  return isBooted
 }
 
 
@@ -28,32 +28,30 @@ export type Action = {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "SET_FEED":
+    case "SET_IS_BOOTED":
         return {
           ...state,
-          feed: action.payload,
+          isBooted: action.payload,
         }
   }
   return state
 }
 const actions = {
-  setFeed: (payload: any) => ({
-    type: "SET_FEED",
+  setIsBooted: (payload: any) => ({
+    type: "SET_IS_BOOTED",
     payload,
   }),
 }
 
-// const _actions: Record<keyof State, Record<string, ((payload: any, state: State) => any)|boolean>> = {
-//   feed: {
-//     setFeed: (payload: any) => payload,
-//   },
-// }
-
-
 /***********************   CONTEXT   ***********************/
 
-const FeedProvider = ({ children }: { children: React.ReactNode }) => {
+const BootProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const bootDone = useBoot();
+
+    useEffect(() => {
+        dispatch(setIsBooted(bootDone))
+  }, [bootDone])
 
   return (
     <Context.Provider value={[state, dispatch]}>
@@ -67,8 +65,8 @@ export const useDispatch = (): React.Dispatch<Action> => {
   return dispatch
 }
 
-export default FeedProvider
+export default BootProvider
 
 export const {
-  setFeed,
+  setIsBooted,
 } = actions

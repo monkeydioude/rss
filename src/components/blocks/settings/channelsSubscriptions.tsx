@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import CheckButton from "src/components/ui/checkButton";
 import { MenuSectionTitle } from "src/components/ui/menuSectionTitle";
-import { Provider } from "src/data_struct";
-import { providersChangeSub, providersChangeURL } from "src/services/handleProviders";
 // import { addFeed, reloadFeeds } from "../../feed_builder";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import SettingWithEditInput from "src/components/ui/settings/settingWithInput";
 import SettingWithSwitch from "src/components/ui/settings/settingWithSwitch";
+import { Channel } from "src/entity/channel";
+import { useChannels } from "src/global_states/channels";
 import { log } from "src/services/request/logchest";
 import tw from 'twrnc';
 
@@ -16,7 +16,6 @@ const onCheckButtonPress = async (
     isChecked: boolean,
 ) => {
     try {
-        await providersChangeSub(url, isChecked);
         if (isChecked === true) {
             // await addFeed(url, setFeeds);
         }
@@ -29,19 +28,15 @@ const onCheckButtonPress = async (
 }
 
 type ChannelSubProps = {
-    setFeeds: (f: RSSItem[]) => void,
-    sub: Provider,
-    idx: number,
+    channel: Channel,
+    channel_id: number,
 }
 
-const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
-    const [checked, setChecked] = useState<boolean>(sub.subscribed);
+const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
+    // const [checked, setChecked] = useState<boolean>(sub.subscribed);
+    const [checked, setChecked] = useState<boolean>(channel.is_sub);
     const [settingOpen, setSettingOpen] = useState<boolean>(false);
-
     const changeProvidersURL = async (urlBefore: string, urlNow: string) => {
-        if (await providersChangeURL(urlBefore, urlNow)) {
-            // reloadFeeds(setFeeds);
-        }
     }
     return (
         <View style={{
@@ -51,14 +46,14 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
         }}>
             <CheckButton
                 textStyle={tw`text-lg`}
-                title={sub.name}
+                title={channel.channel_name}
                 checked={checked}
                 trailing={<Icon name={`menu-${settingOpen ? "up" : "down"}`}
                     style={tw`text-3xl text-white`} />}
                 onLongPress={async () => {
                     try {
                         setChecked(!checked);
-                        await onCheckButtonPress(sub.url, !checked, setFeeds);
+                        // await onCheckButtonPress(sub.url, !checked, setFeeds);
                     } catch (err) {
                         log("" + err);
                         console.error(err);
@@ -75,32 +70,33 @@ const ChannelSub = ({ setFeeds, sub }: ChannelSubProps): JSX.Element => {
                         checked={checked}
                         onValueChange={async (value: boolean) => {
                             setChecked(value);
-                            await onCheckButtonPress(sub.url, value, setFeeds);
+                            // await onCheckButtonPress(sub.url, value, setFeeds);
                         }} />
                     <SettingWithEditInput
                         textStyle={tw`text-lg`}
                         inputStyle={tw`py-1`}
-                        onSubmitEditing={async (urlNow: string) => changeProvidersURL(sub.url, urlNow)}
-                        text={sub.url} />
+                        onSubmitEditing={async (urlNow: string) => changeProvidersURL(channel.channel_name, urlNow)}
+                        text={channel.channel_name} />
                 </View>
             }
         </View>
     )
 }
 
-type ChannelsSubscriptionsProps = {
-    subscriptions: Provider[],
-}
+const ChannelsSubscriptions = (): React.ReactNode => {
+    const channels = useChannels();
 
-const ChannelsSubscriptions = ({ subscriptions, setFeeds }: ChannelsSubscriptionsProps): JSX.Element => {
     return (
         <View style={{
             ...tw`justify-center`,
         }}>
             <MenuSectionTitle label='Feeds Subscription' textStyle={tw`text-2xl underline`} iconStyle={tw`text-xl`} />
-            {subscriptions.map((sub: Provider, idx: number) => (
-                <ChannelSub key={idx} setFeeds={setFeeds} sub={sub} idx={idx} />
-            ))}
+            {channels.map(([channel_id, channel]) => {
+                console.log(channel_id, channel)
+                return (
+                    <ChannelSub key={channel_id} channel={channel} channel_id={channel_id} />
+                )
+            })}
         </View>
     )
 }

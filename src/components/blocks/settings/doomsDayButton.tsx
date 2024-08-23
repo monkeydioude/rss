@@ -1,10 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Alert, Button } from 'react-native';
-import { FeedsContext } from 'src/context/feedsContext';
-import { clearAllData } from 'src/storage/storage';
+import { setChannels, useDispatch as useChannelsDispatch } from 'src/global_states/channels';
+import { setFeed, useDispatch as useFeedDispatch } from 'src/global_states/feed';
+import { Mapp } from 'src/storages';
+import { clearAllData } from 'src/storages/storage';
 
 const DoomsDayButton = (): JSX.Element => {
-    const { setFeeds } = useContext(FeedsContext);
+    const feedDispatch = useFeedDispatch();
+    const channelsDispatch = useChannelsDispatch();
+
     return (
         <Button
         title="Erase All Local Data"
@@ -14,7 +18,8 @@ const DoomsDayButton = (): JSX.Element => {
                     text: "Ok",
                     onPress: async () => {
                         await clearAllData();
-                        setFeeds([]);
+                        channelsDispatch(setChannels(new Mapp()));
+                        feedDispatch(setFeed([]));
                     },
                     style: "destructive"
                 },

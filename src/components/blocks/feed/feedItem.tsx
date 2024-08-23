@@ -1,10 +1,9 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Animated, Keyboard, Linking, Text, View } from "react-native";
 import appConfig, { ChannelTitleMode } from "src/appConfig";
-import { ConfigContext } from "src/context/configContext";
 import { Item } from "src/entity/item";
-import config, { Config } from "src/services/config";
+import { useConfig } from 'src/global_states/config';
 import { normalizeItemCategory } from "src/services/normalization/item_ops";
 import { cleanString } from "src/services/normalization/string";
 import style from "src/style/style";
@@ -31,25 +30,26 @@ const getDateText = (pubDate?: number): string => {
 }
 
 const FeedItem = ({ it, item }: Props): JSX.Element => {
+    const config = useConfig();
     const isOpened = useRef(false);
-    const { onConfigChange } = useContext(ConfigContext);
+    // const { onConfigChange } = useContext(ConfigContext);
     const slideValue = new Animated.Value(0);
-    const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.props.displayChannelTitle);
-    const [displayCategories, setDisplayCategories] = useState<boolean>(config.props.displayCategories);
+    const [channelDisplay, setChannelDisplay] = useState<ChannelTitleMode>(config.displayChannelTitle);
+    const [displayCategories, setDisplayCategories] = useState<boolean>(config.displayCategories);
     const descH = useRef(0);
     const formatedPubDate = getDateText(item.pubDate);
-    useEffect(() => {
-        const [leaveEventConfig] = onConfigChange((config?: Config) => {
-            if (!config) {
-                return;
-            }
-            setChannelDisplay(config.props.displayChannelTitle);
-            setDisplayCategories(config.props.displayCategories);
-        });
-        return () => {
-            leaveEventConfig();
-        }
-    }, []);
+    // useEffect(() => {
+    //     const [leaveEventConfig] = onConfigChange((config?: Config) => {
+    //         if (!config) {
+    //             return;
+    //         }
+    //         setChannelDisplay(config.props.displayChannelTitle);
+    //         setDisplayCategories(config.props.displayCategories);
+    //     });
+    //     return () => {
+    //         leaveEventConfig();
+    //     }
+    // }, []);
 
     const animate = () => {
         Keyboard.dismiss();

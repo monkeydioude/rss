@@ -1,5 +1,5 @@
-import ChannelTitle from "./channelTitle";
-import DisplayCategories from "./displayCategories";
+import ChannelTitle from "../../blocks/settings/channelTitle";
+import DisplayCategories from "../../blocks/settings/displayCategories";
 import MaxItemPerFeed from "./maxItemPerFeed";
 import SettingBlock from "./settingBlock";
 import SettingWithEditInput from "./settingWithInput";

@@ -4,8 +4,7 @@ import React from 'react';
 import { Image } from "react-native";
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
-import Contexts from "src/context";
-import Stores from "src/states";
+import Stores from "src/global_states";
 import style from "src/style/style";
 
 const RootNavigator = (): JSX.Element => (
@@ -15,7 +14,7 @@ const RootNavigator = (): JSX.Element => (
     headerTitleAlign: "center",
     headerStyle: {
       backgroundColor: style.primaryColor,
-      },
+    },
     headerShown: false,
   }}>
     <Stack.Screen
@@ -30,14 +29,12 @@ const RootNavigator = (): JSX.Element => (
 // Main App Component
 const App = () => {
   return (
-    <Contexts>
       <Stores>
         <>
           <StatusBar style="light" />
           <RootNavigator />
         </>
       </Stores>
-    </Contexts>
   );
 };
 

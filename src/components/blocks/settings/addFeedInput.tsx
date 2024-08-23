@@ -2,13 +2,17 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { TextInput } from "@react-native-material/core";
 import React, { useRef, useState } from "react";
 import { Keyboard, NativeSyntheticEvent, Pressable, TextInputSubmitEditingEventData, View } from "react-native";
-import { addChannel, useDispatch } from "src/global_states/channels";
+import { useGetChannels } from "src/global_states/channels";
+import { useChannels } from "src/hooks/useChannels";
 import { add_feed_source } from "src/services/feed_builder";
+import { clean_url } from "src/services/normalization/url";
 import tw from 'twrnc';
 
 const AddFeedInput = (): JSX.Element => {
     const [text, setText] = useState<string>("");
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch();
+    const channels = useGetChannels();
+    const { push: pushChannel } = useChannels();
     
     const trailing = useRef(<View>
         <Pressable onPress={() => {
@@ -21,19 +25,30 @@ const AddFeedInput = (): JSX.Element => {
         }} name="close" />
         </Pressable>
     </View>);
-        
+    
+    const onSubmit = async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+        try {
+            event.persist();
+            const url = clean_url(event.nativeEvent.text);
+            if (channels.any(({ value: channel }): boolean => channel.channel_name == url)) {
+                return;
+            }
+            const channel = await add_feed_source(url);
+            if (channel !== null) {
+                pushChannel([channel.channel_id, channel]);
+            }
+        } catch (err) {
+            console.error("AddFeedInput: onSubmit:", err);
+        } finally {
+            setText("");
+            Keyboard.dismiss();
+        }
+    };
+
     return (
         <View>
             <TextInput
-                onSubmitEditing={async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-                    event.persist();
-                    const channel = await add_feed_source(event.nativeEvent.text);
-                    if (channel!== null) {
-                        dispatch(addChannel([channel.channel_id, channel]));
-                    }
-                    setText("");
-                    Keyboard.dismiss();
-                }}
+                onSubmitEditing={onSubmit}
                 onChangeText={(text) => {
                     setText(text);
                 }}
@@ -47,7 +62,7 @@ const AddFeedInput = (): JSX.Element => {
                 trailing={text != "" && trailing.current}
                 nativeID='add_feed'
                 placeholder='ADD A NEW FEED URL (https://)'
-                style={tw`grow border-gray-900`}
+                style={tw`grow border-gray-900 `}
             />
         </View>
     );

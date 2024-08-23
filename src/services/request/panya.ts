@@ -40,7 +40,6 @@ export const add_channel = async (url: string): Promise<Channel | null> => {
             },
             signal: ctrl.signal,
         })).json();
-        console.log(res);
         return res;
     } catch (err) {
         log(`Could not add channel: ${err}`);

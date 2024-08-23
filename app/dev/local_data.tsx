@@ -1,14 +1,10 @@
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
-import { useChannels } from "src/global_states/channels";
+import { useGetChannels } from "src/global_states/channels";
 import tw from "src/style/twrnc";
 
-type Props = {
-    children?: React.ReactNode | React.ReactNode[],
-}
-
-const Page = (props: Props): React.ReactNode => {
-    const channels = useChannels();
+const Page = (): React.ReactNode => {
+    const channels = useGetChannels();
 
     return (
         <ScrollView style={tw`h-full bg-orange-100`}

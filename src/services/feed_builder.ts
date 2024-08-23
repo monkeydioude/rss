@@ -11,6 +11,7 @@ export const add_feed_source = async (url: string): Promise<Channel | null> => {
         if (!channel.channel_id) {
             throw "missing channel_id";
         }
+        channel.is_sub = true;
         return channel;
     } catch (err) {
         log(`add_feed_source: Could not add feed source ${url}: ${err}`);

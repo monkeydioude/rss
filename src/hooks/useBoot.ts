@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import appConfig from "src/appConfig";
 import { Channel } from "src/entity/channel";
-import { setChannels, useChannels, useDispatch as useChannelsDispatch } from "src/global_states/channels";
+import { setChannels, useGetChannels, useDispatch as useGetChannelsDispatch } from "src/global_states/channels";
 import { initConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
 import { setFeed, useDispatch as useFeedDispatch } from "src/global_states/feed";
 import logger from "src/services/log";
+import { Mapp } from 'src/services/map/mapp';
 import { log } from "src/services/request/logchest";
 import { get_feed } from "src/services/request/panya";
-import { Mapp } from "src/storages";
 import { ChannelStorage, ConfigStorage } from "src/storages/custom";
 import useFeed from "./useFeed";
 
@@ -15,11 +15,11 @@ import useFeed from "./useFeed";
 // Should (and will) be called only once.
 const useBoot = (onBootFinish?: () => void): boolean => {
     const [bootFinished, setBootFinished] = useState<boolean>(false);
-    const channelsDispatch = useChannelsDispatch();
+    const channelsDispatch = useGetChannelsDispatch();
     const feedDispatch = useFeedDispatch();
     const configDispatch = useConfigDispatch();
-    const channelsList = useChannels();
-    const [feedLoader] = useFeed();
+    const channelsList = useGetChannels();
+    const { reload: feedLoader }  = useFeed();
     // using an array of seeds, because multiple trigger, especially in dev mode
     // could erase refreshIntervalSeed
     let refreshIntervalSeed = useRef([] as NodeJS.Timeout[]);

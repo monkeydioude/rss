@@ -7,25 +7,10 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import SettingWithEditInput from "src/components/ui/settings/settingWithInput";
 import SettingWithSwitch from "src/components/ui/settings/settingWithSwitch";
 import { Channel } from "src/entity/channel";
-import { useChannels } from "src/global_states/channels";
+import { useGetChannels } from "src/global_states/channels";
+import { useChannels } from "src/hooks/useChannels";
 import { log } from "src/services/request/logchest";
 import tw from 'twrnc';
-
-const onCheckButtonPress = async (
-    url: string,
-    isChecked: boolean,
-) => {
-    try {
-        if (isChecked === true) {
-            // await addFeed(url, setFeeds);
-        }
-        // await reloadFeeds(setFeeds)
-    } catch (e) {
-        // @todo: warning/error msg in app
-        log("" + e);
-        console.error(e);
-    }
-}
 
 type ChannelSubProps = {
     channel: Channel,
@@ -36,8 +21,23 @@ const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
     // const [checked, setChecked] = useState<boolean>(sub.subscribed);
     const [checked, setChecked] = useState<boolean>(channel.is_sub);
     const [settingOpen, setSettingOpen] = useState<boolean>(false);
-    const changeProvidersURL = async (urlBefore: string, urlNow: string) => {
+    const { setSub, setUrl } = useChannels();
+
+    const onCheckButtonPress = (
+        channel_id: number,
+        isChecked: boolean,
+    ) => {
+        try {
+            setSub(channel_id, isChecked);
+        } catch (e) {
+            // @todo: warning/error msg in app
+            log("" + e);
+            console.error(e);
+        }
     }
+
+    const changeProvidersURL = async (channel_id: number, urlNow: string) => await setUrl(channel_id, urlNow);
+
     return (
         <View style={{
             ...tw`flex flex-col pb-0.5 border-b border-purple-700`,
@@ -50,10 +50,10 @@ const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
                 checked={checked}
                 trailing={<Icon name={`menu-${settingOpen ? "up" : "down"}`}
                     style={tw`text-3xl text-white`} />}
-                onLongPress={async () => {
+                onLongPress={() => {
                     try {
                         setChecked(!checked);
-                        // await onCheckButtonPress(sub.url, !checked, setFeeds);
+                        onCheckButtonPress(channel.channel_id, !checked);
                     } catch (err) {
                         log("" + err);
                         console.error(err);
@@ -68,14 +68,14 @@ const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
                     <SettingWithSwitch
                         label="Sub"
                         checked={checked}
-                        onValueChange={async (value: boolean) => {
+                        onValueChange={(value: boolean) => {
                             setChecked(value);
-                            // await onCheckButtonPress(sub.url, value, setFeeds);
+                            onCheckButtonPress(channel.channel_id, value);
                         }} />
                     <SettingWithEditInput
                         textStyle={tw`text-lg`}
                         inputStyle={tw`py-1`}
-                        onSubmitEditing={async (urlNow: string) => changeProvidersURL(channel.channel_name, urlNow)}
+                        onSubmitEditing={async (urlNow: string) => changeProvidersURL(channel.channel_id, urlNow)}
                         text={channel.channel_name} />
                 </View>
             }
@@ -84,7 +84,7 @@ const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
 }
 
 const ChannelsSubscriptions = (): React.ReactNode => {
-    const channels = useChannels();
+    const channels = useGetChannels();
 
     return (
         <View style={{
@@ -92,7 +92,6 @@ const ChannelsSubscriptions = (): React.ReactNode => {
         }}>
             <MenuSectionTitle label='Feeds Subscription' textStyle={tw`text-2xl underline`} iconStyle={tw`text-xl`} />
             {channels.map(([channel_id, channel]) => {
-                console.log(channel_id, channel)
                 return (
                     <ChannelSub key={channel_id} channel={channel} channel_id={channel_id} />
                 )

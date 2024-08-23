@@ -1,14 +1,6 @@
+import { Mapp } from "src/services/map/mapp";
 import { JSONStorage } from "./json_storage";
 import { Entity } from "./storage";
-
-export class Mapp<KT, VT> extends Map<KT, VT> {
-    map<T>(cb: (param: [KT, VT]) => T): T[] {
-        return Array.from(this).map(cb)
-    }
-    keys_slice(): KT[] {
-        return Array.from(this.keys());
-    }
-}
 
 export class MapStorage<KT, VT> implements Entity<Mapp<KT, VT>> {
     readonly storage: JSONStorage<[KT, VT][]>;

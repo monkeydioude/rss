@@ -1,7 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
 import { Channel } from "src/entity/channel";
-import { ChannelStorage } from "src/storages/custom";
-import { Mapp } from "src/storages/map_storage";
+import { Mapp } from 'src/services/map/mapp';
 
 type State = {
     channels: Mapp<number, Channel>,
@@ -15,14 +14,21 @@ export const Context = createContext<[State, React.Dispatch<Action>]>([initialSt
 
 /***********************   SELECTORS   ***********************/
 
-export const useChannels = (): Mapp<number, Channel> => {
+export const useGetChannels = (): Mapp<number, Channel> => {
     const [{ channels }] = useContext(Context);
     return channels;
 }
 
 export const useChannelIDs = (): number[] => {
-    const channels = useChannels();
+    const channels = useGetChannels();
     return Array.from(channels.keys());
+}
+
+export const useSubbedChannelIDs = (): number[] => {
+    const channels = useGetChannels();
+    return channels
+        .filter(({ value }): boolean => value.is_sub)
+        .map(([channel_id]) => channel_id);
 }
 
 
@@ -47,7 +53,6 @@ const _add_channel = (state: State, channel: [number, Channel]): State => {
     if (!channel || state.channels?.has(channel[0])) {
         return state;
     }
-    ChannelStorage.push(channel[0], channel[1]);
     state.channels.set(channel[0], channel[1]);
     return {
         ...state,

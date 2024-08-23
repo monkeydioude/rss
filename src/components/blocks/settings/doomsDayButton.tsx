@@ -1,13 +1,13 @@
 import React from 'react';
 import { Alert, Button } from 'react-native';
-import { setChannels, useDispatch as useChannelsDispatch } from 'src/global_states/channels';
+import { setChannels, useDispatch as useGetChannelsDispatch } from 'src/global_states/channels';
 import { setFeed, useDispatch as useFeedDispatch } from 'src/global_states/feed';
-import { Mapp } from 'src/storages';
+import { Mapp } from 'src/services/map/mapp';
 import { clearAllData } from 'src/storages/storage';
 
 const DoomsDayButton = (): JSX.Element => {
     const feedDispatch = useFeedDispatch();
-    const channelsDispatch = useChannelsDispatch();
+    const channelsDispatch = useGetChannelsDispatch();
 
     return (
         <Button

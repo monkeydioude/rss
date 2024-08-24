@@ -1,29 +1,68 @@
 import { createContext, useContext, useReducer } from "react";
 import { Item } from "src/entity/item";
+import { log } from "src/services/request/logchest";
+
+export interface FeedItemFilter {
+    (item: Item): boolean;
+}
+
+interface FeedItemFilterContainer {
+    symbol: Symbol;
+    filter: FeedItemFilter;
+}
 
 type FeedState = {
     feed: Item[],
     witness: Symbol,
+    filters: FeedItemFilterContainer[],
 }
 
 const initialState: FeedState = {
     feed: [],
     witness: Symbol(),
+    filters: [],
 }
 
 export const Context = createContext<[FeedState, React.Dispatch<Action>]>([initialState, () => {console.error("too soon to call feed dispatch")}])
 
 /***********************   SELECTORS   ***********************/
 
-export const useGetFeed = (): any => {
+export const useGetFeed = (): Item[] => {
 	const [{ feed }] = useContext(Context)
     return feed;
 }
 
-export const useReloadFeed = (): any => {
+export const useReloadFeed = (): Symbol => {
 	const [{ witness }] = useContext(Context)
     return witness;
 }
+
+const applyFilters = (filters: FeedItemFilterContainer[], item: Item): boolean => {
+    try {
+        if (filters.length === 0) {
+            return true;
+        }
+
+        return filters.every((fc: FeedItemFilterContainer) => {
+            try {
+                return fc.filter(item);
+            }
+            catch (err) {
+                log("filters.current.every: err with filter "+ fc + ": "+ err)
+                console.error("filters.current.every: err with filter "+ fc + ": "+ err)
+            }
+        })
+    }
+    catch (err) {
+        log("applyFilters: error: "+ err)
+        console.error("applyFilters: error:"+ err)
+        return false
+    }
+}
+
+// export const useFilteredFeed = (): Item[] => {
+//     return useGetFeed().filter((item: Item))
+// }
 
 /***********************   REDUCERS   ***********************/
 
@@ -38,6 +77,48 @@ const _reload_feed = (state: FeedState): FeedState => {
     return {
         ...state,
         witness: Symbol(),
+    }
+}
+
+const _remove_filter = (state: FeedState, symbol: Symbol): FeedState => {
+    let _filters: FeedItemFilterContainer[] = [];
+    state.filters.forEach((f: FeedItemFilterContainer) => {
+        if (f.symbol === symbol) {
+            return;
+        }
+        _filters.push(f);
+    });
+    state.filters = _filters;
+    return {
+        ...state,
+        filters: state.filters,
+    }
+}
+
+const _push_filter = (state: FeedState, filter: FeedItemFilter, _symbol?: Symbol): FeedState => {
+    let symbol = _symbol || Symbol();
+
+    if (_symbol !== undefined) {
+        _remove_filter(state, _symbol);
+    }
+
+    const fc: FeedItemFilterContainer = {
+        symbol,
+        filter: filter,
+    };
+
+    state.filters.push(fc);
+
+    return {
+        ...state,
+        filters: state.filters,
+    }
+}
+
+const _reset_filters = (state: FeedState): FeedState => {
+    return {
+        ...state,
+        filters: [],
     }
 }
 
@@ -65,6 +146,14 @@ const actions = {
     reloadFeed: () => ({
         payload: null,
         func: _reload_feed,
+    }),
+    addFilter: (payload: any) => ({
+        payload,
+        func: _push_filter,
+    }),
+    resetFilters: () => ({
+        payload: null,
+        func: _reset_filters,
     })
 }
 

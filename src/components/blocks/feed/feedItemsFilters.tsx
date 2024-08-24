@@ -11,16 +11,15 @@ const FeedItemsFilters = (): JSX.Element => {
     const [filterRemover, setFilterRemover] = useState<FeedItemFilterRemover|null>(null);
     const [text, setText] = useState<string>("");
 
-
     useEffect(() => {
     }, [filterRemover]);
 
     const textFilter: FeedItemFilter = (item: Item) => {
         let textL = text.toLowerCase();
         const res = 
-            (item.category && isString(item.category) && !!(item.category as string).toLowerCase().match(textL)) || 
-            (item.description && !!item.description.toLowerCase().match(textL)) ||
-            (item.title && !!item.title.toLowerCase().match(textL));
+            (!!item.category && isString(item.category) && !!(item.category as string).toLowerCase().match(textL)) || 
+            (!!item.description && !!item.description.toLowerCase().match(textL)) ||
+            (!!item.title && !!item.title.toLowerCase().match(textL));
         
         const reg = new RegExp(`(${textL})`, "gi");
 
@@ -41,6 +40,7 @@ const FeedItemsFilters = (): JSX.Element => {
                     if (filterRemover) {
                         filterRemover();
                     }
+                    // add pushFilter in Feed's global state?
                     const rmer = pushFilter(textFilter);
                     setFilterRemover(() => rmer);
 

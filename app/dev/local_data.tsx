@@ -32,7 +32,7 @@ const Page = (): React.ReactNode => {
                     </View>
                 )
             })}
-            <Text>Config</Text>
+            <Text style={tw`text-lg underline font-bold`}>Config</Text>
             <Text>{JSON.stringify(config)}</Text>
         </ScrollView>
     )

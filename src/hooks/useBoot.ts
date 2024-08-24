@@ -37,7 +37,8 @@ const useBoot = (onBootFinish?: () => void): boolean => {
                     return;
                 }
                 lastReload.current = +new Date();
-                feedDispatch(setFeed(await get_feed(channelsList, config)));
+                const feed = await get_feed(channelsList, config);
+                feedDispatch(setFeed(feed));
             } catch (err) {
                 console.error("💀 could not refresh the feed", err);
             }

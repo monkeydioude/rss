@@ -3,7 +3,8 @@ module.exports = function(api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      "nativewind/babel",
+      'react-native-reanimated/plugin',
+      "@babel/plugin-proposal-export-namespace-from",
       [
         'module-resolver',
         {
@@ -12,7 +13,8 @@ module.exports = function(api) {
             assets: './assets'
           },
         },
-      ]
+      ],
+      // ['expo-router/babel'],
     ],
   };
 };

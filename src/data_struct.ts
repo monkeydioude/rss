@@ -1,44 +1,44 @@
 import appConfig from "./appConfig";
-import { Storage } from "./service/data_storage";
+import { Storage } from "./storages/storage";
 
-export type RSSItem = {
-    category: string[]|string;
-    description: string;
-    link: string;
-    pubDate: string;
-    title: string;
-    'content:encoded': string;
-    guid: string;
-    channelTitle?: string;
-}
+// export type RSSItem = {
+//     category: string[]|string;
+//     description: string;
+//     link: string;
+//     pubDate: string;
+//     title: string;
+//     'content:encoded': string;
+//     guid: string;
+//     channelTitle?: string;
+// }
 
-export type RSSChannel = {
-    copyright?: string;
-    description: string;
-    docs: string;
-    generator?: string;
-    image: {
-        link: string;
-        title: string;
-        url: string;
-    }
-    language: string;
-    lastBuildDate: string;
-    link: string;
-    pubDate: string;
-    title: string;
-    item: RSSItem[];
-}
+// export type RSSChannel = {
+//     copyright?: string;
+//     description: string;
+//     docs: string;
+//     generator?: string;
+//     image: {
+//         link: string;
+//         title: string;
+//         url: string;
+//     }
+//     language: string;
+//     lastBuildDate: string;
+//     link: string;
+//     pubDate: string;
+//     title: string;
+//     item: RSSItem[];
+// }
   
-export type RSSData = {
-    channel: RSSChannel;
-    url: string;
-    lastFetchDate: number;
-}
+// export type RSSData = {
+//     channel: RSSChannel;
+//     url: string;
+//     lastFetchDate: number;
+// }
   
-export type XMLData = {
-    rss: RSSData;
-}
+// export type XMLData = {
+//     rss: RSSData;
+// }
 
 export type Provider = {
     id: string;
@@ -65,12 +65,12 @@ export class DataCollection<T> {
 
     unmarshal(data: string): Map<string, T> {
         if (!data) {
-            return
+            return new Map()
         }
         return new Map(Object.entries(JSON.parse(data)));
     }
 
-    get(k: string): T {
+    get(k: string): T | undefined {
         return this.stack.get(k);
     }
     
@@ -88,7 +88,7 @@ export class DataCollection<T> {
 
     // select retrieves a specific key, from the "rss" entry, in DB.
     // This does not overwrite the local this.stack
-    async select(k: string): Promise<T> {
+    async select(k: string): Promise<T | undefined> {
         const stack = await this.select_all();
         return stack.get(k);
     }
@@ -138,5 +138,5 @@ export class DataCollection<T> {
     }
 }
 
-export const newRSSDataCollection = (): DataCollection<RSSData> => new DataCollection<RSSData>(appConfig.storageKeys.rss);
+// export const newRSSDataCollection = (): DataCollection<RSSData> => new DataCollection<RSSData>(appConfig.storageKeys.rss);
 export const newProviderDataCollection = (): DataCollection<Provider> => new DataCollection<Provider>(appConfig.storageKeys.providers_list);

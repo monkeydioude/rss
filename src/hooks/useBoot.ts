@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import appConfig from "src/appConfig";
 import { Channel } from "src/entity/channel";
 import { setChannels, useDispatch as useChannelsDispatch, useChannelsList } from "src/global_states/channels";
-import { initConfig, useConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
+import { ConfigState, initConfig, useConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
 import { setFeed, useDispatch as useFeedDispatch, useReloadFeed } from "src/global_states/feed";
 import logger from "src/services/log";
 import { Mapp } from 'src/services/map/mapp';
 import { log } from "src/services/request/logchest";
 import { get_feed } from "src/services/request/panya";
+import sleep from "src/services/sleep";
 import { ChannelStorage, ConfigStorage } from "src/storages/custom";
 
 // useBoot is a hook handling the app boot sequence configuration.
@@ -26,24 +27,34 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     const config = useConfig();
 
     // reloadAndSetInterval handles the auto refresh of the feed
-    const reloadAndSetInterval = async (channels: Mapp<number, Channel>) => {
+    const reloadAndSetInterval = async (
+        channels: Mapp<number, Channel>,
+        conf: ConfigState
+    ) => {
         logger.info(`!! 📰 Feed refresh set to ${appConfig.feedsRefreshTimer / 1000}s`);
         // cleaning intervals first, to make sure we dont run several async setIntervals at a same time.
         clearIntervals(refreshIntervalSeed.current);
+        if (lastReload.current + appConfig.feedsRefreshTimer > +new Date()) {
+            logger.info(`sleeping for ${lastReload.current + appConfig.feedsRefreshTimer - +new Date()}`);
+            await sleep(lastReload.current + appConfig.feedsRefreshTimer - +new Date());
+        }
         refreshIntervalSeed.current.push(setInterval(async () => {
             try {
+                logger.info("trying interval refresh");
                 // poor people's protection. Should actually put a lock here.
                 if (lastReload.current + appConfig.feedsRefreshTimer > +new Date()) {
+                    logger.info(`could not refresh: ${lastReload.current} + ${appConfig.feedsRefreshTimer} > ${+new Date()}`);
                     return;
                 }
                 lastReload.current = +new Date();
-                const feed = await get_feed(channels, config);
+                logger.info("refreshed through refresh");
+                const feed = await get_feed(channels, conf);
                 feedDispatch(setFeed(feed));
             } catch (err) {
                 console.error("💀 could not refresh the feed", err);
             }
         }, appConfig.feedsRefreshTimer));
-    }
+    };
     
     const clearIntervals = (seeds: NodeJS.Timeout[]) => {
         seeds.forEach(seed => clearInterval(seed));
@@ -52,12 +63,15 @@ const useBoot = (onBootFinish?: () => void): boolean => {
 
     useEffect(() => {
         (async () => {
-            if (!bootFinished || lastReload.current + appConfig.feedsRefreshTimer > +new Date()) {
+            if (!bootFinished) {
                 return;
             }
-            feedDispatch(setFeed(await get_feed(channelsList, config)));
+            reloadAndSetInterval(channelsList, config);
+            if (lastReload.current + appConfig.feedsRefreshTimer > +new Date()) {
+                return;
+            }
             lastReload.current = +new Date();
-            reloadAndSetInterval(channelsList);
+            feedDispatch(setFeed(await get_feed(channelsList, config)));
         })();
     }, [channelsList, bootFinished, config, witness]);
 
@@ -84,8 +98,9 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     const bootFeed = async (channels: Mapp<number, Channel>) => {
         try {
             logger.info(">> 📰 Feed loader STARTING")
-            feedDispatch(setFeed(await get_feed(channelsList, config)));
-            reloadAndSetInterval(channels);
+            feedDispatch(setFeed(await get_feed(channels, config)));
+            reloadAndSetInterval(channels, config);
+            lastReload.current = +new Date();
             logger.info("<< 📰 Feed loader DONE")
         } catch (err) {
             console.error("💀 could not load feed");

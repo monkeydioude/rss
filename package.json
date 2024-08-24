@@ -45,6 +45,7 @@
     "react-native-select-dropdown": "4.0.1",
     "react-native-svg": "15.2.0",
     "react-native-tab-view": "^3.5.2",
+    "react-native-toast-message": "^2.2.0",
     "react-native-web": "~0.19.10",
     "twrnc": "^3.6.5"
   },
@@ -58,12 +59,12 @@
     "babel-plugin-module-resolver": "^5.0.0",
     "chai": "^4.3.10",
     "concurrently": "^8.2.2",
+    "expo-dev-client": "~4.0.23",
     "mocha": "^10.2.0",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.5",
     "ts-node": "^10.9.1",
-    "typescript": "~5.3.3",
-    "expo-dev-client": "~4.0.23"
+    "typescript": "~5.3.3"
   },
   "private": true
 }

@@ -6,7 +6,7 @@
     "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./assets/cookie.png",
-    "owner": "jduris",
+    "owner": "monkeydioude",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -32,7 +32,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "21655601-8863-4f99-9865-bdf2644b3ff9"
+        "projectId": "e4fef8ce-34dd-4d3b-b6c2-26fcd0b2b05f"
+      },
+      "router": {
+        "origin": false
       }
     },
     "plugins": [

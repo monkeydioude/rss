@@ -4,6 +4,7 @@ import React from 'react';
 import { Image } from "react-native";
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
+import Toast from "react-native-toast-message";
 import Stores from "src/global_states";
 import style from "src/style/style";
 
@@ -32,7 +33,8 @@ const App = () => {
       <Stores>
         <>
           <StatusBar style="light" />
-          <RootNavigator />
+              <RootNavigator />
+              <Toast />
         </>
       </Stores>
   );

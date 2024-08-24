@@ -37,7 +37,7 @@ const useBoot = (onBootFinish?: () => void): boolean => {
                     return;
                 }
                 lastReload.current = +new Date();
-                const feed = await get_feed(channelsList, config);
+                const feed = await get_feed(channels, config);
                 feedDispatch(setFeed(feed));
             } catch (err) {
                 console.error("💀 could not refresh the feed", err);
@@ -52,10 +52,11 @@ const useBoot = (onBootFinish?: () => void): boolean => {
 
     useEffect(() => {
         (async () => {
-            if (!bootFinished) {
+            if (!bootFinished || lastReload.current + appConfig.feedsRefreshTimer > +new Date()) {
                 return;
             }
             feedDispatch(setFeed(await get_feed(channelsList, config)));
+            lastReload.current = +new Date();
             reloadAndSetInterval(channelsList);
         })();
     }, [channelsList, bootFinished, config, witness]);

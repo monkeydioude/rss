@@ -29,7 +29,6 @@ const DisplayCategories = (): JSX.Element => {
                     if (isNaN(maxAmntCategories)) {
                         return value;
                     }
-                    console.log("maxAmntCategories", maxAmntCategories);
                     dispatch(updateConfig({ maxAmntCategories }));
                     return maxAmntCategories.toString();
             } } text={""+config.maxAmntCategories} />

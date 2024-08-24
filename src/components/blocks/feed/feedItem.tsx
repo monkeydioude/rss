@@ -26,7 +26,7 @@ const getDateText = (pubDate?: number): string => {
     if (!(+d)) {
         return ""
     }
-    return "~" + d.toLocaleDateString();
+    return `~${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
 }
 
 const FeedItem = ({ it, item }: Props): JSX.Element => {
@@ -35,7 +35,6 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
     const slideValue = new Animated.Value(0);
     const descH = useRef(0);
     const formatedPubDate = getDateText(item.pubDate);
-
     const animate = () => {
         Keyboard.dismiss();
         if (!isOpened.current) {

@@ -56,6 +56,7 @@ const appConfig = {
         providers_list: "providers_list",
         global_config: "global_config",
         channel_ids: "channel_ids",
+        feed_items: "feed_items"
     },
     maxHeightFeedDescAnimation: 500,
     openSpeedDescAnimation: 500,

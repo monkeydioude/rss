@@ -6,8 +6,7 @@ import { setFeed, useDispatch as useFeedDispatch, useReloadFeed } from "src/glob
 import logger from "src/services/logger";
 import { Mapp } from 'src/services/map/mapp';
 import { log } from "src/services/request/logchest";
-import { get_feed } from "src/services/request/panya";
-import { ChannelStorage, ConfigStorage } from "src/storages/custom";
+import { ChannelStorage, ConfigStorage, FeedStorage } from "src/storages/custom";
 import { useFeedRefresh } from "./useFeedRefresh";
 
 // useBoot is a hook handling the app boot sequence configuration.
@@ -50,10 +49,11 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     // bootFeed starts the feed loading and feed refresh routines.
     // Feed loading implies a call to the API using locally stored
     // channel ids.
-    const bootFeed = async (channels: Mapp<number, Channel>) => {
+    const bootFeed = async () => {
         try {
             logger.info(">> 📰 Feed loader STARTING")
-            feedDispatch(setFeed(await get_feed(channels, config)));
+            const feed = await FeedStorage.retrieve();
+            feedDispatch(setFeed(feed || []));
             logger.info("<< 📰 Feed loader DONE")
         } catch (err) {
             console.error("💀 could not load feed");
@@ -92,9 +92,9 @@ const useBoot = (onBootFinish?: () => void): boolean => {
                 logger.info("!!! 🏁 Boot STARTING !!!")
                 await bootLocalUserConfig();
                 // hydrate channels store with localStorage data
-                const channels = await bootLocalChannels();
+                await bootLocalChannels();
                 // load latest feed items
-                // await bootFeed(channels);
+                await bootFeed();
                 if (onBootFinish) {
                     onBootFinish();
                 }

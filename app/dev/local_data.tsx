@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { Channel } from "src/entity/channel";
+import { Item } from "src/entity/item";
 import { ConfigState } from "src/global_states/config";
 import { Mapp } from "src/services/map/mapp";
-import { ChannelStorage, ConfigStorage } from "src/storages/custom";
+import { ChannelStorage, ConfigStorage, FeedStorage } from "src/storages/custom";
 import tw from "src/style/twrnc";
 
 const Page = (): React.ReactNode => {
     const [ channels, setChannels ] = useState<Mapp<number, Channel>>(new Mapp());
     const [ config, setConfig ] = useState<ConfigState | null>(null);
+    const [ feed, setFeed ] = useState<Item[] | null>(null);
+    
 
     useEffect(() => {
         (async () => {
             setChannels(await ChannelStorage.retrieveOrNew());
             setConfig(await ConfigStorage.retrieve());
+            setFeed(await FeedStorage.retrieve());
         })();
     }, []);
     return (
@@ -34,6 +38,8 @@ const Page = (): React.ReactNode => {
             })}
             <Text style={tw`text-lg underline font-bold`}>Config</Text>
             <Text>{JSON.stringify(config)}</Text>
+            <Text style={tw`text-lg underline font-bold`}>Feed</Text>
+            <Text>{JSON.stringify(feed, null, 2)}</Text>
         </ScrollView>
     )
 };

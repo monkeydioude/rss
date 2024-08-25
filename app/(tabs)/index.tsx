@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RefreshControl, Text, View } from 'react-native';
 import Animated, {
     useAnimatedRef
@@ -8,6 +8,8 @@ import FeedItemsFilters from 'src/components/blocks/feed/feedItemsFilters';
 import Cookie from 'src/components/loading/cookie';
 import { BackToTop, BackToTopButtonHandle } from 'src/components/ui/animations/buttons/BackToTop';
 import { useIsBooted } from 'src/global_states/boot';
+import { useSubbedChannelIDs } from 'src/global_states/channels';
+import { useConfig } from 'src/global_states/config';
 import { reloadFeed, useDispatch, useFilteredFeed } from 'src/global_states/feed';
 import { emojiDispenser } from 'src/services/emoji_dispenser';
 import tw from 'src/style/twrnc';
@@ -18,11 +20,17 @@ const FeedsView = (): JSX.Element => {
     const dispatch = useDispatch();
     const flatListRef = useAnimatedRef<Animated.FlatList<any>>();
     const bttRef = useRef<BackToTopButtonHandle>(null)
+    const subbedChannels = useSubbedChannelIDs();
+    const config = useConfig();
 
-    const handleScroll = (event: any) => {
+    const onScroll = (event: any) => {
         const scrollPosition = event.nativeEvent.contentOffset.y;
         bttRef.current?.handleScroll(scrollPosition);
     };
+
+    useEffect(() => {
+        flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }, [subbedChannels, config]);
 
     return (
         <View style={tw`flex-1 m-0 p-0`}>
@@ -33,7 +41,7 @@ const FeedsView = (): JSX.Element => {
                 keyboardDismissMode='on-drag'
                 canCancelContentTouches={false}
                 scrollEnabled={true}
-                onScroll={handleScroll}
+                onScroll={onScroll}
                 scrollEventThrottle={16}
                 refreshControl={
                     <RefreshControl
@@ -49,7 +57,12 @@ const FeedsView = (): JSX.Element => {
                 }
                 renderItem={({ item, index }): JSX.Element => (
                     <View key={item.title} style={tw`m-0 p-0`}>
-                        <FeedItem item={item} it={index} />
+                        <FeedItem
+                            item={item}
+                            it={index}
+                            displayCategories={config.displayCategories}
+                            displayChannelTitle={config.displayChannelTitle}
+                        />
                     </View>
                 )}
                 ListEmptyComponent={<>

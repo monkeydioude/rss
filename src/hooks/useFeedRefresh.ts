@@ -2,19 +2,18 @@ import { useCallback, useEffect, useRef } from "react";
 import appConfig from "src/appConfig";
 import { Channel } from "src/entity/channel";
 import { ConfigState } from "src/global_states/config";
-import { setFeed, useDispatch } from "src/global_states/feed";
 import { shouldReload } from "src/services/feed/refresh";
 import logger from "src/services/logger";
 import { Mapp } from "src/services/map/mapp";
-import { get_feed } from "src/services/request/panya";
 import sleep from "src/services/sleep";
+import useFeed from "./useFeed";
 
 export const useFeedRefresh = () => {
     const lastReloadRef = useRef(0);
     // using an array of seeds, because multiple trigger, especially in dev mode
     // could erase refreshIntervalSeed
     let refreshIntervalSeed = useRef([] as NodeJS.Timeout[]);
-    const feedDispatch = useDispatch();
+    const { fetchStoreAndSetFeed } = useFeed();
 
     const clearIntervals = (seeds: NodeJS.Timeout[]) => {
         seeds.forEach(seed => clearInterval(seed));
@@ -59,7 +58,7 @@ export const useFeedRefresh = () => {
             return ;
         }
         lastReloadRef.current = +new Date();
-        feedDispatch(setFeed(await get_feed(channelsList, config)));
+        await fetchStoreAndSetFeed(channelsList, config);
     }, []);
 
     useEffect(() => {

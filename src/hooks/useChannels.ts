@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { Channel } from "src/entity/channel";
 import { addChannel, setChannels, useDispatch as useChannelsDispatch, useChannelsList } from "src/global_states/channels";
 import { clean_url } from "src/services/normalization/url";
@@ -17,7 +18,7 @@ export const useChannels = () => {
 
     // setSub modifies the subscription to a channel, meaning should we request
     // the API for this channel's content. Modifies the local storage.
-    const setSub = (channel_id: number, isSub: boolean) => {
+    const setSub = useCallback((channel_id: number, isSub: boolean) => {
         const channel = channels.get(channel_id);
         if (!channel) {
             return;
@@ -27,7 +28,7 @@ export const useChannels = () => {
         ChannelStorage
             .update(channels)
             .then(() => channelsDispatch(setChannels(channels)));
-    }
+    }, [channels]);
 
     // setUrl changes the url of an already subscribed channel.
     // But really, it deletes the old channel, and then tries to add a new one.

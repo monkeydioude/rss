@@ -57,7 +57,7 @@ const FeedItem = ({ it, item }: Props): JSX.Element => {
             Linking.openURL(item.link);
         }
     };
-    const preTagChar = config.displayChannelTitle === ChannelTitleMode.Inline ? " " : "\n";
+    const preTagChar = config.displayChannelTitle === ChannelTitleMode.Inline ? "" : "\n";
     let toValue = appConfig.maxHeightFeedDescAnimation;
     const categories = config.displayCategories ? normalizeItemCategory(item.category) : "";
 

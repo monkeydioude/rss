@@ -36,7 +36,10 @@ const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
         }
     }
 
-    const changeProvidersURL = async (channel_id: number, urlNow: string) => await setUrl(channel_id, urlNow);
+    const changeProvidersURL = async (channel_id: number, urlNow: string) => {
+        await setUrl(channel_id, urlNow);
+        return urlNow;
+    }
 
     return (
         <View style={{

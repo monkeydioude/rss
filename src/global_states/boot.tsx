@@ -1,5 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
-import useBoot from "src/hooks/useBoot";
+import { createContext, useContext, useReducer } from "react";
 
 type State = {
   isBooted: boolean,
@@ -28,10 +27,10 @@ export type Action = {
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "SET_IS_BOOTED":
+      case "SET_IS_BOOTED":
+          state.isBooted = action.payload;
         return {
           ...state,
-          isBooted: action.payload,
         }
   }
   return state
@@ -47,11 +46,6 @@ const actions = {
 
 const BootProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const bootDone = useBoot();
-
-    useEffect(() => {
-        dispatch(setIsBooted(bootDone))
-  }, [bootDone])
 
   return (
     <Context.Provider value={[state, dispatch]}>

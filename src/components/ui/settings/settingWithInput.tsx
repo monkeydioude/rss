@@ -9,7 +9,7 @@ import SettingCSS from "./settings.css";
 type Props = {
     label?: string;
     preventUnderline?: boolean
-    onSubmitEditing: (value: string) => string
+    onSubmitEditing: (value: string) => Promise<string>
     text: string;
     style?: ViewStyle;
     textStyle?: ViewStyle;
@@ -47,7 +47,7 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, i
                     ...tw`text-left text-xl shrink-1 text-white m-0 p-0 ${preventUnderline ? "" : "underline"} w-85`,
                     ...textStyle,
                     }}>
-                    {label || ""}{text.replace(/https?\:\/\//, "")}
+                    {label || ""}{text?.replace(/https?\:\/\//, "")}
                 </Text>
                 <Ionicons
                     name="pencil"
@@ -70,7 +70,7 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, i
                     onSubmitEditing={async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
                         let t = event.nativeEvent.text.toLocaleLowerCase();
                         event.persist();
-                        t = onSubmitEditing(t) || t;
+                        t = await onSubmitEditing(t) || t;
                         Keyboard.dismiss();
                         setInputText(t);
                         setText(t);

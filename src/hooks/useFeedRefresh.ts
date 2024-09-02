@@ -57,9 +57,12 @@ export const useFeedRefresh = () => {
             logger.info(`could not directly refresh: ${err.toString()}`);
             return ;
         }
-        lastReloadRef.current = +new Date();
-        await fetchStoreAndSetFeed(channelsList, config);
-    }, []);
+        const tmpDate = +new Date();
+        if (!await fetchStoreAndSetFeed(channelsList, config)) {
+            return;
+        }
+        lastReloadRef.current = tmpDate;
+    }, [lastReloadRef.current]);
 
     useEffect(() => {
         return () => clearIntervals(refreshIntervalSeed.current);

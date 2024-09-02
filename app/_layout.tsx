@@ -1,8 +1,10 @@
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from 'react';
 import { Image } from "react-native";
 import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import 'react-native-reanimated';
 import Toast from "react-native-toast-message";
 import Stores from "src/global_states";
@@ -40,14 +42,18 @@ const RootNavigator = (): JSX.Element => {
 
 // Main App Component
 const App = () => {
-  return (
-      <Stores>
-        <>
-          <StatusBar style="light" />
-              <RootNavigator />
-              <Toast />
-        </>
-      </Stores>
+    return (
+        <GestureHandlerRootView>
+            <BottomSheetModalProvider>
+                <Stores>
+                    <>
+                    <StatusBar style="light" />
+                        <RootNavigator />
+                        <Toast />
+                    </>
+                </Stores>
+            </BottomSheetModalProvider>
+        </GestureHandlerRootView>
   );
 };
 

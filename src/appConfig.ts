@@ -1,8 +1,9 @@
+import { ChannelsErrorEnum } from "./entity/channel"
+
 export enum ChannelTitleMode {
     Inline,
     NewLine,
 }
-
 
 export const isDev = (): boolean => (
     !!process.env && !!process.env.NODE_ENV && process.env.NODE_ENV === "development"
@@ -70,8 +71,12 @@ const appConfig = {
     displayChannelTitle: ChannelTitleMode.NewLine,
     displayCategories: true,
     maxAmntCategories: 4,
-    appVersion: "v0.1.0",
+    appVersion: "v0.1.1",
     requestTimeout: 5000,
+    channelsErrorEnum: {
+        [ChannelsErrorEnum.AlreadyExists]: "This source already exists.",
+        [ChannelsErrorEnum.URLIssue]: "Maybe an invalid URL?"
+    },
 }
 
 export default appConfig;

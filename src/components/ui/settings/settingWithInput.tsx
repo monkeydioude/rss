@@ -24,12 +24,17 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, i
     useEffect(() => {
         const kbh = Keyboard.addListener("keyboardDidHide", e => {
             setInputVisible(false);
-        })
+        });
 
         return () => {
             kbh.remove();
         }
     }, []);
+
+    useEffect(() => {
+        setText(_text);
+    }, [_text])
+
     return (
         <View
             style={{
@@ -53,7 +58,7 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, i
                     name="pencil"
                     style={{
                     ...tw`text-3xl grow-1 text-white m-0 p-0`,
-                    color: customeStyle.thirdColor,
+                    color: customeStyle.primaryColor,
                 }} />
             </Pressable>
             {inputVisible && 

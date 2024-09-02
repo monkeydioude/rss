@@ -94,7 +94,7 @@ const useBoot = (onBootFinish?: () => void): boolean => {
                 // hydrate channels store with localStorage data
                 await bootLocalChannels();
                 // load latest feed items
-                await bootFeed();
+                // await bootFeed();
                 if (onBootFinish) {
                     onBootFinish();
                 }

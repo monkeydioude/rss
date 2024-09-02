@@ -1,8 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {
-  createMaterialTopTabNavigator,
-  MaterialTopTabNavigationEventMap,
-  MaterialTopTabNavigationOptions,
+    createMaterialTopTabNavigator,
+    MaterialTopTabNavigationEventMap,
+    MaterialTopTabNavigationOptions,
 } from "@react-navigation/material-top-tabs";
 import { ParamListBase, TabNavigationState } from "@react-navigation/native";
 import { withLayoutContext } from "expo-router";
@@ -41,9 +41,8 @@ const TabsLayout = () => {
           textTransform: "capitalize",
           fontSize: 15
         },
-        // tabBarIconStyle
       }}
-    >
+      >
       <MaterialTopTabs.Screen
         name="index"
         options={{

@@ -28,3 +28,7 @@ export const clean_url = (url: string): string => {
         remove_trailing_slashes,
     ], url).trim();
 }
+
+export const add_scheme = (url: string): string => {
+    return !url.startsWith("http") ? `https://${url}` : url;
+}

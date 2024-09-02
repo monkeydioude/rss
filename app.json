@@ -3,7 +3,7 @@
     "name": "cookie",
     "slug": "cookie",
     "scheme": "cookie",
-    "version": "0.0.3",
+    "version": "0.1.1",
     "orientation": "portrait",
     "icon": "./assets/cookie.png",
     "owner": "monkeydioude",

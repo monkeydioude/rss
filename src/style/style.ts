@@ -5,7 +5,8 @@ const style = {
     primaryColor: "#9333ea",
     primaryColorDark: "#6d28d9",
     secondaryColor: "#72371f",
-    thirdColor: "#ffc85e"
+    thirdColorLight: "#ffc85e",
+    thirdColor: "#ffc85e",
 }
 
 export default style

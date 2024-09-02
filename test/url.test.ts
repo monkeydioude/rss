@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { describe } from "mocha";
-import { clean_url, remove_schemes, remove_trailing_slashes } from "../src/services/normalization/url";
+import { add_scheme, clean_url, remove_schemes, remove_trailing_slashes } from "../src/services/normalization/url";
 
 describe("remove_schemes", () => {
     it("should remove the leading scheme (or schemes in case of mistype/bug) from an url", () => {
@@ -28,5 +28,15 @@ describe("clean_url", () => {
             ["test", "test"],
             ["https://http://https://test/a/b/c/////", "test/a/b/c"],
         ].forEach(([trial, goal]) => assert.equal(clean_url(trial), goal))
+    })
+})
+
+describe("add_scheme", () => {
+    it("should add scheme if none provided", () => {
+        [
+            ["www3.nhk.or.jp/news/easy", "https://www3.nhk.or.jp/news/easy"],
+            ["http://test", "http://test"],
+            ["https://test/a/b/c/////", "https://test/a/b/c/////"],
+        ].forEach(([trial, goal]) => assert.equal(add_scheme(trial), goal))
     })
 })

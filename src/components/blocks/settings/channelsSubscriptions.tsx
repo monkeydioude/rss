@@ -1,45 +1,40 @@
-import React, { useState } from "react";
+import React, { RefObject, useCallback } from "react";
 import { View } from "react-native";
 import CheckButton from "src/components/ui/checkButton";
 import { MenuSectionTitle } from "src/components/ui/menuSectionTitle";
+
 // import { addFeed, reloadFeeds } from "../../feed_builder";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import SettingWithEditInput from "src/components/ui/settings/settingWithInput";
-import SettingWithSwitch from "src/components/ui/settings/settingWithSwitch";
+import { SettingModalHandle } from "src/components/modals/SettingModal";
 import { Channel } from "src/entity/channel";
 import { useChannelsList } from "src/global_states/channels";
 import { useChannels } from "src/hooks/useChannels";
 import { log } from "src/services/request/logchest";
 import tw from 'twrnc';
 
-type ChannelSubProps = {
+interface ChannelSubscriptionsProps {
+    modalRef: RefObject<SettingModalHandle>,
+    channelUpdater: (channel: Channel) => void,
+}
+
+interface ChannelSubProps extends ChannelSubscriptionsProps {
     channel: Channel,
     channel_id: number,
 }
 
-const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
-    // const [checked, setChecked] = useState<boolean>(sub.subscribed);
-    const [checked, setChecked] = useState<boolean>(channel.is_sub);
-    const [settingOpen, setSettingOpen] = useState<boolean>(false);
-    const { setSub, setUrl } = useChannels();
+const ChannelSub = ({ channel, modalRef, channelUpdater }: ChannelSubProps): JSX.Element => {
+    const { setSub } = useChannels();
 
-    const onCheckButtonPress = (
-        channel_id: number,
-        isChecked: boolean,
-    ) => {
+    const onCheckButtonPress = useCallback(() => {
         try {
-            setSub(channel_id, isChecked);
+            channelUpdater(channel)
+            modalRef?.current?.present();
         } catch (e) {
             // @todo: warning/error msg in app
             log("" + e);
             console.error(e);
         }
-    }
-
-    const changeProvidersURL = async (channel_id: number, urlNow: string) => {
-        await setUrl(channel_id, urlNow);
-        return urlNow;
-    }
+    }, [channel, modalRef.current]);
 
     return (
         <View style={{
@@ -50,43 +45,26 @@ const ChannelSub = ({ channel }: ChannelSubProps): JSX.Element => {
             <CheckButton
                 textStyle={tw`text-lg`}
                 title={channel.channel_name}
-                checked={checked}
-                trailing={<Icon name={`menu-${settingOpen ? "up" : "down"}`}
+                checked={channel.is_sub}
+                trailing={<Icon name={`chevron-right`}
                     style={tw`text-3xl text-white`} />}
                 onLongPress={() => {
                     try {
-                        setChecked(!checked);
-                        onCheckButtonPress(channel.channel_id, !checked);
+                        channel.is_sub = !channel.is_sub;
+                        setSub(channel.channel_id, channel.is_sub);
+                        channelUpdater({...channel})
                     } catch (err) {
                         log("" + err);
                         console.error(err);
                     }
                 }}
-                onPress={() => {
-                    setSettingOpen(!settingOpen);
-                }}
+                onPress={() => onCheckButtonPress()}
             />
-            {settingOpen &&
-                <View>
-                    <SettingWithSwitch
-                        label="Sub"
-                        checked={checked}
-                        onValueChange={(value: boolean) => {
-                            setChecked(value);
-                            onCheckButtonPress(channel.channel_id, value);
-                        }} />
-                    <SettingWithEditInput
-                        textStyle={tw`text-lg`}
-                        inputStyle={tw`py-1`}
-                        onSubmitEditing={async (urlNow: string) => changeProvidersURL(channel.channel_id, urlNow)}
-                        text={channel.channel_name} />
-                </View>
-            }
         </View>
     )
 }
 
-const ChannelsSubscriptions = (): React.ReactNode => {
+const ChannelsSubscriptions = ({ modalRef, channelUpdater }: ChannelSubscriptionsProps): React.ReactNode => {
     const channels = useChannelsList();
 
     return (
@@ -96,7 +74,7 @@ const ChannelsSubscriptions = (): React.ReactNode => {
             <MenuSectionTitle label='Feeds Subscription' textStyle={tw`text-2xl underline`} iconStyle={tw`text-xl`} />
             {channels.map(([channel_id, channel]) => {
                 return (
-                    <ChannelSub key={channel_id} channel={channel} channel_id={channel_id} />
+                    <ChannelSub channelUpdater={channelUpdater} key={channel_id} channel={channel} channel_id={channel_id} modalRef={modalRef} />
                 )
             })}
         </View>

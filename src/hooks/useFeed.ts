@@ -17,21 +17,29 @@ const useFeed = () => {
         feedDispatch(reloadFeed());
     }, [config, channelsList]);
 
+    // fetchStoreAndSetFeed tries to fetch the user's feed
+    // from remote, or if it fails for network reason,
+    // displays the cached feed
     const fetchStoreAndSetFeed = async (
         channels: Mapp<number, Channel>,
         config: ConfigState,
-    ) => {
-        let feed = await get_feed(channels, config);
-        if (feed.length === 0) {
+    ): Promise<boolean> => {
+        let [feed, err] = await get_feed(channels, config);
+        let res = true;
+        if (feed.length === 0 && !!err) {
             feed = await FeedStorage.retrieve() || [];
             if (feed.length === 0) {
-                return;
+                return false;
             }
+            res = false;
         }
 
         await storeAndSetFeed(feed);
+        return res;
     }
 
+    // storeAndSetFeed updates the local storage and 
+    // update the global state
     const storeAndSetFeed = async(
         feed: Item[]
     ) => {

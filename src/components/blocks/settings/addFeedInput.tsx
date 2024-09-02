@@ -13,7 +13,6 @@ const AddFeedInput = (): JSX.Element => {
     // const dispatch = useDispatch();
     const channels = useChannelsList();
     const { push: pushChannel } = useChannels();
-    
     const trailing = useRef(<View>
         <Pressable onPress={() => {
             setText("");

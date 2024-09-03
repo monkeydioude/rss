@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { RefreshControl, Text, View } from 'react-native';
 import Animated, {
     useAnimatedRef
@@ -8,7 +8,6 @@ import FeedItemsFilters from 'src/components/blocks/feed/feedItemsFilters';
 import Cookie from 'src/components/loading/cookie';
 import { BackToTop, BackToTopButtonHandle } from 'src/components/ui/animations/buttons/BackToTop';
 import { useIsBooted } from 'src/global_states/boot';
-import { useSubbedChannelIDs } from 'src/global_states/channels';
 import { useConfig } from 'src/global_states/config';
 import { reloadFeed, useDispatch, useFilteredFeed } from 'src/global_states/feed';
 import { emojiDispenser } from 'src/services/emoji_dispenser';
@@ -20,17 +19,22 @@ const FeedsView = (): JSX.Element => {
     const dispatch = useDispatch();
     const flatListRef = useAnimatedRef<Animated.FlatList<any>>();
     const bttRef = useRef<BackToTopButtonHandle>(null)
-    const subbedChannels = useSubbedChannelIDs();
     const config = useConfig();
+    // const memoEarliestItemUrl = useRef(feeds[0]?.link || "");
 
-    const onScroll = (event: any) => {
+    const onScroll = useCallback((event: any) => {
         const scrollPosition = event.nativeEvent.contentOffset.y;
         bttRef.current?.handleScroll(scrollPosition);
-    };
+    }, [bttRef.current]);
 
-    useEffect(() => {
-        flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
-    }, [subbedChannels, config]);
+    // useEffect(() => {
+    //     const earliestFeed = feeds[0]?.link || "";
+    //     if (memoEarliestItemUrl.current === earliestFeed) {
+    //         return;
+    //     }
+    //     memoEarliestItemUrl.current = earliestFeed;
+    //     flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+    // }, [feeds, config]);
 
     return (
         <View style={tw`flex-1 m-0 p-0`}>

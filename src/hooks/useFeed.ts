@@ -4,14 +4,16 @@ import { Item } from "src/entity/item";
 import { useChannelsList } from "src/global_states/channels";
 import { ConfigState, useConfig } from "src/global_states/config";
 import { reloadFeed, setFeed, useDispatch as useFeedDispatch } from "src/global_states/feed";
+import useAuth from "src/services/identity/useAuth";
 import { Mapp } from "src/services/map/mapp";
-import { get_feed } from "src/services/request/panya";
+import { get_feed, TypeErrorEnum } from "src/services/request/panya";
 import { FeedStorage } from "src/storages/custom";
 
 const useFeed = () => {
     const feedDispatch = useFeedDispatch();
     const channelsList = useChannelsList();
     const config = useConfig();
+    const { signout } = useAuth();
 
     const reload = useCallback(async () => {
         feedDispatch(reloadFeed());
@@ -26,21 +28,24 @@ const useFeed = () => {
     ): Promise<boolean> => {
         let [feed, err] = await get_feed(channels, config);
         let res = true;
-        if (feed.length === 0 && !!err) {
+        if (err && err.getCode() === 401 && err.getReason() === TypeErrorEnum.Unauthorized) {
+            signout();
+            return false;
+        }
+        if (!feed || (feed.length === 0 && !!err)) {
             feed = await FeedStorage.retrieve() || [];
             if (feed.length === 0) {
                 return false;
             }
             res = false;
         }
-
         await storeAndSetFeed(feed);
         return res;
     }
 
     // storeAndSetFeed updates the local storage and 
     // update the global state
-    const storeAndSetFeed = async(
+    const storeAndSetFeed = async (
         feed: Item[]
     ) => {
         FeedStorage.update(feed);

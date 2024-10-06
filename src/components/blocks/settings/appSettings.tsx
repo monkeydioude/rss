@@ -1,11 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
-import appConfig from "src/appConfig";
-import { MenuSettingsTitle } from "src/components/ui/menuSectionTitle";
+import appConfig, { isDev } from "src/appConfig";
 import { ChannelTitle, DisplayCategories, MaxItemPerFeed } from "src/components/ui/settings";
 import { updateConfig, useConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
 import { ConfigStorage } from "src/storages/custom";
 import tw from 'twrnc';
+import DoomsDayButtons from "./doomsDayButton";
+import LocalDataView from "./localDataView";
 
 const AppSettings = (): JSX.Element => {
     const config = useConfig();
@@ -14,7 +15,6 @@ const AppSettings = (): JSX.Element => {
     return (
         <>
             <View style={tw`flex justify-center pb-1`}>
-                <MenuSettingsTitle label='App Settings' textStyle={tw`text-2xl underline`} iconStyle={tw`text-xl`}/>
                 <ChannelTitle />
                 <DisplayCategories />
                 <MaxItemPerFeed
@@ -23,9 +23,15 @@ const AppSettings = (): JSX.Element => {
                         configDispatch(updateConfig({ maxItemPerFeed }));
                         ConfigStorage.update({
                             ...config,
-                           maxItemPerFeed
+                            maxItemPerFeed
                         });
                     }} />
+                {isDev() && (
+                    <>
+                        <LocalDataView />
+                        <DoomsDayButtons />
+                    </>
+                )}
             </View>
             <View style={tw`flex flex-row justify-end pr-2 w-93`}>
                 <Text style={tw`text-lg text-white`}>{appConfig.appVersion}</Text>

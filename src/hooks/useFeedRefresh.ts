@@ -35,7 +35,7 @@ export const useFeedRefresh = () => {
         }
         refreshIntervalSeed.current.push(setInterval(async () => {
             try {
-                const [ res, err ] = shouldReload(lastReloadRef.current);
+                const [res, err] = shouldReload(lastReloadRef.current);
                 // poor people's protection. Should actually put a lock here.
                 if (!res) {
                     logger.info(`could not refresh through coroutine: ${err.toString()}`);
@@ -52,10 +52,10 @@ export const useFeedRefresh = () => {
     const managedFeedRefresh = useCallback(async (
         channelsList: Mapp<number, Channel>,
         config: ConfigState) => {
-        const [ res, err ] = shouldReload(lastReloadRef.current, 3000);
+        const [res, err] = shouldReload(lastReloadRef.current, appConfig.feedsManualRefreshTimer);
         if (!res) {
             logger.info(`could not directly refresh: ${err.toString()}`);
-            return ;
+            return;
         }
         const tmpDate = +new Date();
         if (!await fetchStoreAndSetFeed(channelsList, config)) {

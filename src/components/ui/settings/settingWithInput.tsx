@@ -14,9 +14,10 @@ type Props = {
     style?: ViewStyle;
     textStyle?: ViewStyle;
     inputStyle?: ViewStyle;
+    autoCapitalize?: "none" | "sentences" | "words" | "characters" | undefined;
 }
 
-const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, inputStyle, label, preventUnderline }: Props): JSX.Element => {
+const SettingWithEditInput = ({ onSubmitEditing, text: _text, style, textStyle, inputStyle, label, preventUnderline, autoCapitalize }: Props): JSX.Element => {
     const [text, setText] = useState<string>(_text);
     const [inputVisible, setInputVisible] = useState<boolean>(false);
     const [inputText, setInputText] = useState<string>(_text);
@@ -51,17 +52,17 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, i
                 <Text style={{
                     ...tw`text-left text-xl shrink-1 text-white m-0 p-0 ${preventUnderline ? "" : "underline"} w-85`,
                     ...textStyle,
-                    }}>
+                }}>
                     {label || ""}{text?.replace(/https?\:\/\//, "")}
                 </Text>
                 <Ionicons
                     name="pencil"
                     style={{
-                    ...tw`text-3xl grow-1 text-white m-0 p-0`,
-                    color: customeStyle.primaryColor,
-                }} />
+                        ...tw`text-3xl grow-1 text-white m-0 p-0`,
+                        color: customeStyle.primaryColor,
+                    }} />
             </Pressable>
-            {inputVisible && 
+            {inputVisible &&
                 <TextInput
                     style={{
                         ...SettingCSS.textInput,
@@ -72,6 +73,7 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, i
                         ...inputStyle,
                     }}
                     autoFocus={true}
+                    autoCapitalize={autoCapitalize}
                     onSubmitEditing={async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
                         let t = event.nativeEvent.text.toLocaleLowerCase();
                         event.persist();
@@ -84,7 +86,7 @@ const SettingWithEditInput = ({ onSubmitEditing, text:_text, style, textStyle, i
                     onChangeText={(t: string) => {
                         setInputText(t);
                     }}
-                    value={inputText}/>
+                    value={inputText} />
             }
         </View>
     )

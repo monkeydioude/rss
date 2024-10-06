@@ -1,3 +1,4 @@
+import IdentityProvider from "src/services/identity/state";
 import BootProvider from "./boot";
 import ChannelsProvider from "./channels";
 import ConfigProvider from "./config";
@@ -10,13 +11,15 @@ type Props = {
 const StateStores = ({ children }: Props): JSX.Element => {
     return (
         <ConfigProvider>
-            <FeedProvider>
-                <ChannelsProvider>
-                    <BootProvider>
-                        {children}
-                    </BootProvider>
-                </ChannelsProvider>
-            </FeedProvider>
+            <IdentityProvider>
+                <FeedProvider>
+                    <ChannelsProvider>
+                        <BootProvider>
+                            {children}
+                        </BootProvider>
+                    </ChannelsProvider>
+                </FeedProvider>
+            </IdentityProvider>
         </ConfigProvider>
     );
 }

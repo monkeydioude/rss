@@ -20,21 +20,11 @@ const FeedsView = (): JSX.Element => {
     const flatListRef = useAnimatedRef<Animated.FlatList<any>>();
     const bttRef = useRef<BackToTopButtonHandle>(null)
     const config = useConfig();
-    // const memoEarliestItemUrl = useRef(feeds[0]?.link || "");
 
     const onScroll = useCallback((event: any) => {
         const scrollPosition = event.nativeEvent.contentOffset.y;
         bttRef.current?.handleScroll(scrollPosition);
     }, [bttRef.current]);
-
-    // useEffect(() => {
-    //     const earliestFeed = feeds[0]?.link || "";
-    //     if (memoEarliestItemUrl.current === earliestFeed) {
-    //         return;
-    //     }
-    //     memoEarliestItemUrl.current = earliestFeed;
-    //     flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
-    // }, [feeds, config]);
 
     return (
         <View style={tw`flex-1 m-0 p-0`}>
@@ -69,9 +59,7 @@ const FeedsView = (): JSX.Element => {
                         />
                     </View>
                 )}
-                ListEmptyComponent={<>
-                    <Text style={tw`text-xl mx-auto`}>{emojiDispenser("not_found")}</Text>
-                </>}
+                ListEmptyComponent={<Text style={tw`text-xl mx-auto`}>{emojiDispenser("not_found")}</Text>}
             />
             <BackToTop ref={bttRef} linkRef={flatListRef} />
         </View>
@@ -79,13 +67,13 @@ const FeedsView = (): JSX.Element => {
 }
 
 const Feed = (): JSX.Element => {
-  const isBooted = useIsBooted();
+    const isBooted = useIsBooted();
 
     return (
-      <View style={{ ...tw`flex-1` }}>
+        <View style={{ ...tw`flex-1` }}>
             <FeedItemsFilters />
-            {isBooted ? 
-                <FeedsView/> :
+            {isBooted ?
+                <FeedsView /> :
                 <Cookie />
             }
         </View>

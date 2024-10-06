@@ -16,23 +16,23 @@ const initialState: FeedState = {
     filtersMatch: "",
 }
 
-export const Context = createContext<[FeedState, React.Dispatch<Action>]>([initialState, () => {console.error("too soon to call feed dispatch")}])
+export const Context = createContext<[FeedState, React.Dispatch<Action>]>([initialState, () => { console.error("too soon to call feed dispatch") }])
 
 /***********************   SELECTORS   ***********************/
 
 export const useGetFeed = (): Item[] => {
-	const [{ feed }] = useContext(Context)
+    const [{ feed }] = useContext(Context)
     return feed;
 }
 
 export const useReloadFeed = (): Symbol => {
-	const [{ witness }] = useContext(Context)
+    const [{ witness }] = useContext(Context)
     return witness;
 }
 
 export const useFilteredFeed = (): Item[] => {
     const [{ filters, filtersMatch }] = useContext(Context)
-    const feeds = useGetFeed().map((item: Item) => ({...item}));
+    const feeds = useGetFeed().map((item: Item) => ({ ...item }));
     if (filters.length == 0) {
         return feeds;
     }
@@ -42,10 +42,10 @@ export const useFilteredFeed = (): Item[] => {
 /***********************   REDUCERS   ***********************/
 
 const _set_feed = (state: FeedState, feed: Item[]): FeedState => {
-	return {
-		...state,
-		feed: [...feed],
-	}
+    return {
+        ...state,
+        feed: [...feed],
+    }
 }
 
 const _reload_feed = (state: FeedState): FeedState => {
@@ -76,25 +76,25 @@ const _add_feed_filter_match = (state: FeedState, filtersMatch: string): FeedSta
 }
 
 export type Action = {
-	payload: any
-	func: (state: FeedState, any: any) => FeedState
+    payload: any
+    func: (state: FeedState, any: any) => FeedState
 }
 
 const reducer = (state: FeedState, action: Action): FeedState => {
-	try {
-		if (action.func) {
-			return action.func(state, action.payload);
-		}
-	} catch (err) {
-		console.error("config reducer", err);
-	}
-	return state
+    try {
+        if (action.func) {
+            return action.func(state, action.payload);
+        }
+    } catch (err) {
+        console.error("config reducer", err);
+    }
+    return state
 }
 
 const actions = {
-	setFeed: (payload: Item[]) => ({
-		payload,
-		func: _set_feed,
+    setFeed: (payload: Item[]) => ({
+        payload,
+        func: _set_feed,
     }),
     reloadFeed: () => ({
         payload: null,
@@ -117,18 +117,18 @@ const actions = {
 /***********************   CONTEXT   ***********************/
 
 const FeedProvider = ({ children }: { children: React.ReactNode }) => {
-	const [state, dispatch] = useReducer(reducer, initialState)
-	
-	return (
-		<Context.Provider value={[state, dispatch]}>
-		{children}
-		</Context.Provider>
-	)
+    const [state, dispatch] = useReducer(reducer, initialState)
+
+    return (
+        <Context.Provider value={[state, dispatch]}>
+            {children}
+        </Context.Provider>
+    )
 }
 
 export const useDispatch = (): React.Dispatch<Action> => {
-	const [_, dispatch] = useContext(Context)
-	return dispatch
+    const [_, dispatch] = useContext(Context)
+    return dispatch
 }
 
 export default FeedProvider

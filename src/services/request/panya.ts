@@ -1,27 +1,40 @@
 import { Channel } from "src/entity/channel";
 import { Item } from "src/entity/item";
+import { Error } from "src/errors/errors";
 import { ConfigState } from "src/global_states/config";
+import { TokenStorage } from "src/storages/custom/token_storage";
 import appConfig from "../../appConfig";
 import { make_feed_url } from "../feed_builder";
+import { IdentityError } from "../identity/types";
 import { Mapp } from "../map/mapp";
 import { add_scheme } from "../normalization/url";
 import { log } from "./logchest";
 
 export enum TypeErrorEnum {
+    Unauthorized = "Unauthorized",
     NetworkRequestFailed = "Network request failed",
-    Unknown = "Unknown error"
+    Unknown = "Unknown error",
+    ReadingResponseError = "ReadingResponseError"
 }
 
-type PanyaErrors = TypeErrorEnum | null;
-
-const handleError = (typeErr: TypeError): PanyaErrors => {
-    switch (typeErr.message) {
-        case TypeErrorEnum.NetworkRequestFailed:
-            return TypeErrorEnum.NetworkRequestFailed;
+const handleResponse = async (res: Response): Promise<any> => {
+    if (res.status === 200) {
+        return await res.json();
     }
-    return TypeErrorEnum.Unknown;
-}
+    if (res.status === 401) {
+        throw new IdentityError(401, TypeErrorEnum.Unauthorized, appConfig.labels.en.UNAUTHORIZED_RELOG)
+    }
+    let body: any = null;
+    try {
+        body = await res.json();
+    } catch (err) {
+        throw new IdentityError(500, TypeErrorEnum.ReadingResponseError, appConfig.labels.en.SERVICE_ERROR)
+    }
 
+    if (body.error && body.error.reason && body.error.code && body.error.description) {
+        throw body.error;
+    }
+}
 
 export const add_feed_source = async (url: string): Promise<Channel | null> => {
     try {
@@ -44,28 +57,34 @@ export const add_feed_source = async (url: string): Promise<Channel | null> => {
 export const get_feed = async (
     channels: Mapp<number, Channel>,
     config?: ConfigState
-): Promise<[Item[], PanyaErrors]> => {
+): Promise<[Item[], Error | null]> => {
     const ctrl = new AbortController();
     const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
     try {
+        const token = await TokenStorage.retrieve();
         const res = await fetch(make_feed_url(channels, config), {
+            credentials: "include",
             method: "GET",
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token?.jwt}`
             },
             signal: ctrl.signal,
         });
-        const feed = await res.json();
+        const feed = await handleResponse(res);
         return [feed, null];
     } catch (err) {
-        log(`Could not get feed channel: ${err}`);
-        console.error("Could not get feed channel", err);
-        return [[], handleError(err as TypeError)];
+        let idErr = err as IdentityError;
+        if (typeof err !== "object") {
+            idErr = new IdentityError(500, err as string);
+        }
+        log(`Could not get feed channel: ${idErr.reason}`);
+        console.error("Could not get feed channel:", idErr.getMessage() || idErr.getReason());
+        return [[], idErr];
     } finally {
         clearTimeout(timeoutId);
     }
-    return [[], null];
 }
 
 export const add_channel = async (url: string): Promise<Channel | null> => {
@@ -73,6 +92,7 @@ export const add_channel = async (url: string): Promise<Channel | null> => {
     url = add_scheme(url);
     const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
     try {
+        const token = await TokenStorage.retrieve();
         const res = await fetch(`${appConfig.panyaAPIURL}/channel`, {
             body: JSON.stringify({
                 'channel_url': url,
@@ -80,7 +100,8 @@ export const add_channel = async (url: string): Promise<Channel | null> => {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token?.jwt}`
             },
             signal: ctrl.signal,
         });

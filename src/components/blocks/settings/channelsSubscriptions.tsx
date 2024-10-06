@@ -1,7 +1,6 @@
 import React, { RefObject, useCallback } from "react";
 import { View } from "react-native";
 import CheckButton from "src/components/ui/checkButton";
-import { MenuSectionTitle } from "src/components/ui/menuSectionTitle";
 
 // import { addFeed, reloadFeeds } from "../../feed_builder";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
@@ -38,7 +37,7 @@ const ChannelSub = ({ channel, modalRef, channelUpdater }: ChannelSubProps): JSX
 
     return (
         <View style={{
-            ...tw`flex flex-col pb-0.5 border-b border-purple-700`,
+            ...tw`mb-1`,
             zIndex: -1,
             elevation: -1
         }}>
@@ -46,13 +45,12 @@ const ChannelSub = ({ channel, modalRef, channelUpdater }: ChannelSubProps): JSX
                 textStyle={tw`text-lg`}
                 title={channel.channel_name}
                 checked={channel.is_sub}
-                trailing={<Icon name={`chevron-right`}
-                    style={tw`text-3xl text-white`} />}
+                trailing={<Icon name="chevron-double-right" style={tw`text-3xl text-white`} />}
                 onLongPress={() => {
                     try {
                         channel.is_sub = !channel.is_sub;
                         setSub(channel.channel_id, channel.is_sub);
-                        channelUpdater({...channel})
+                        channelUpdater({ ...channel })
                     } catch (err) {
                         log("" + err);
                         console.error(err);
@@ -66,12 +64,10 @@ const ChannelSub = ({ channel, modalRef, channelUpdater }: ChannelSubProps): JSX
 
 const ChannelsSubscriptions = ({ modalRef, channelUpdater }: ChannelSubscriptionsProps): React.ReactNode => {
     const channels = useChannelsList();
-
     return (
         <View style={{
-            ...tw`justify-center`,
+            ...tw`justify-center flex flex-col`,
         }}>
-            <MenuSectionTitle label='Feeds Subscription' textStyle={tw`text-2xl underline`} iconStyle={tw`text-xl`} />
             {channels.map(([channel_id, channel]) => {
                 return (
                     <ChannelSub channelUpdater={channelUpdater} key={channel_id} channel={channel} channel_id={channel_id} modalRef={modalRef} />

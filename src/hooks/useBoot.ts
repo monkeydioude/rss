@@ -58,7 +58,7 @@ const useBoot = (onBootFinish?: () => void): boolean => {
         } catch (err) {
             console.error("💀 could not load feed");
             log(`Boot: could not load feed: ${err}`);
-        } 
+        }
     }
 
     // bootLocalUserConfig handles loading of the user config, from the 
@@ -70,7 +70,7 @@ const useBoot = (onBootFinish?: () => void): boolean => {
             if (!config) {
                 logger.info(":O ⚙️ No config to retrieve from storage");
                 logger.info("<< ⚙️ Config loader DONE");
-                return ;
+                return;
             }
             configDispatch(initConfig(config));
             logger.info("<< ⚙️ Config loader DONE");

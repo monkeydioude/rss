@@ -25,6 +25,7 @@
     "@react-navigation/material-top-tabs": "^6.6.14",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
+    "@rneui/themed": "^4.0.0-rc.8",
     "axios": "^1.6.2",
     "expo": "^51.0.21",
     "expo-blur": "~13.0.2",
@@ -47,6 +48,7 @@
     "react-native-svg": "15.2.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-toast-message": "^2.2.0",
+    "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.10",
     "twrnc": "^3.6.5"
   },

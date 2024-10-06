@@ -1,34 +1,33 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { router, Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Image } from "react-native";
 import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import 'react-native-reanimated';
 import Toast from "react-native-toast-message";
-import appConfig from "src/appConfig";
 import Stores from "src/global_states";
-import { useIsSignedIn } from "src/services/identity/state";
-import useAuth from "src/services/identity/useAuth";
+import style from "src/style/style";
 
 const RootNavigator = (): JSX.Element => {
-    const { initSignin } = useAuth();
-    const isSignedIn = useIsSignedIn();
-
-    useEffect(() => {
-        (async () => {
-            await initSignin();
-        })()
-    }, []);
-    useEffect(() => {
-        if (isSignedIn === true) {
-            router.replace("(authenticated)");
-            return;
-        }
-    }, [isSignedIn]);
-
     return (
-        <Slot />
+        <Stack
+            screenOptions={{
+                headerShadowVisible: false,
+                headerTitleAlign: "center",
+                headerStyle: {
+                    backgroundColor: style.primaryColor,
+                },
+                headerShown: false,
+            }}>
+            <Stack.Screen
+                name="(tabs)"
+                options={{
+                    headerShown: true,
+                    headerTitle: () => <Image source={require("assets/cookie_transparent.png")} style={{ width: 50, height: 50 }} />,
+                }} />
+        </Stack>
     )
 };
 
@@ -41,7 +40,7 @@ const App = () => {
                     <>
                         <StatusBar style="light" />
                         <RootNavigator />
-                        <Toast visibilityTime={appConfig.toastTimer} />
+                        <Toast />
                     </>
                 </Stores>
             </BottomSheetModalProvider>

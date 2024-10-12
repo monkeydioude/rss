@@ -1,11 +1,8 @@
 import { Stack } from "expo-router";
 import React from "react";
 
-type Props = {
-    children?: React.ReactNode | React.ReactNode[],
-}
 
-const Layout = (props: Props): React.ReactNode => {
+const Layout = (): React.ReactNode => {
     return (
         <Stack>
             <Stack.Screen

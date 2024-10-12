@@ -7,12 +7,11 @@ const SettingCSS = StyleSheet.create({
         // minHeight: 50,
     },
     textLabel: {
-        ...tw`text-xl m-0 p-0 text-white flex flex-row items-center`,
-        width: "70%"
+        ...tw`text-xl m-0 p-0 text-white flex flex-row items-center flex-grow`,
     },
     item: {
-        ...tw`p-0 m-0 flex justify-center`,
-        width: "30%"
+        ...tw`p-0 m-0 flex flex-shrink`,
+        minWidth: "15%",
     },
     textInput: {
         ...tw`rounded p-1 m-0 mx-2 w-90 absolute bottom-0 bg-gray-100`, minHeight: 0

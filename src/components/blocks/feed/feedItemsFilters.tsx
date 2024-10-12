@@ -3,6 +3,7 @@ import { TextInput } from "@react-native-material/core";
 import React, { useState } from "react";
 import { Keyboard, Pressable, View } from "react-native";
 import { addFeedFilter, addFeedFilterMatch, resetFeedFilters, useDispatch } from "src/global_states/feed";
+import i18n from "src/i18n";
 import { textFilter } from "src/services/feed/filter";
 import tw from 'twrnc';
 
@@ -43,7 +44,7 @@ const FeedItemsFilters = (): JSX.Element => {
                     </View>
                 )}
                 nativeID='filter_text'
-                placeholder='FILTER BY TEXT'
+                placeholder={i18n.en.FEED_ITEM_FILTER_PLACEHOLDER}
                 className="border-gray-900 grow"
             />
         </View>

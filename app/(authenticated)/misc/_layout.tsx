@@ -12,8 +12,8 @@ const App = () => {
         <Stack
             screenOptions={{
                 headerShadowVisible: false,
-                headerTitleAlign: "center",
                 headerTintColor: style.thirdColor,
+                headerTitleAlign: "center",
                 headerTitle: () => <Image source={require("assets/cookie_transparent.png")} style={{ width: 50, height: 50 }} />,
                 headerStyle: {
                     backgroundColor: style.primaryColor,

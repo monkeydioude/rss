@@ -1,6 +1,6 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import React, { useRef } from "react";
-import { Animated, Keyboard, Linking, Text, View } from "react-native";
+import { router } from 'expo-router';
+import React, { useCallback, useRef } from "react";
+import { Text, View } from "react-native";
 import appConfig, { ChannelTitleMode } from "src/appConfig";
 import { Item } from "src/entity/item";
 import { normalizeItemCategory } from "src/services/normalization/item_ops";
@@ -27,40 +27,41 @@ const getDateText = (pubDate?: number): string => {
     if (!(+d)) {
         return ""
     }
-    return `~${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+    return `~${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 }
 
 const FeedItem = ({ it, item, displayChannelTitle, displayCategories }: Props): JSX.Element => {
     const isOpened = useRef(false);
-    const slideValue = new Animated.Value(0);
-    const descH = useRef(0);
+    // const slideValue = new Animated.Value(0);
+    // const descH = useRef(0);
     const formatedPubDate = getDateText(item.pubDate);
 
-    const onPressText = () => {
-        Keyboard.dismiss();
-        if (!isOpened.current) {
-            slideValue.setValue(0);
-            toValue = appConfig.maxHeightFeedDescAnimation;
-        } else {
-            slideValue.setValue(descH.current);
-            toValue = 0;
-        }
-        Animated.timing(slideValue, {
-            toValue,
-            duration: descH.current / appConfig.maxHeightFeedDescAnimation * appConfig.openSpeedDescAnimation,
-            useNativeDriver: false,
-        }).start();
-        isOpened.current = !isOpened.current;
-    };
+    // const onPressText = useCallback(() => {
+    //     Keyboard.dismiss();
+    //     if (!isOpened.current) {
+    //         slideValue.setValue(0);
+    //         toValue = appConfig.maxHeightFeedDescAnimation;
+    //     } else {
+    //         slideValue.setValue(descH.current);
+    //         toValue = 0;
+    //     }
+    //     Animated.timing(slideValue, {
+    //         toValue,
+    //         duration: descH.current / appConfig.maxHeightFeedDescAnimation * appConfig.openSpeedDescAnimation,
+    //         useNativeDriver: false,
+    //     }).start();
+    //     isOpened.current = !isOpened.current;
+    // }, [isOpened, descH, slideValue]);
 
-    const openMegaphoneLink = () => {
-        if (isOpened.current) {
-            Linking.openURL(item.link);
-        }
-    };
+    const openMegaphoneLink = useCallback(() => {
+        // if (isOpened.current) {
+        router.push({ pathname: "/misc/webview", params: { uri: item.link } });
+        // }
+    }, [isOpened, item]);
+
     const preTagChar = displayChannelTitle === ChannelTitleMode.Inline ? "" : "\n";
     let toValue = appConfig.maxHeightFeedDescAnimation;
-    const categories = displayCategories ? normalizeItemCategory(item.category) : "";
+    const categories = displayCategories ? normalizeItemCategory(item.categories) : "";
 
     return (
         <View style={{
@@ -69,15 +70,15 @@ const FeedItem = ({ it, item, displayChannelTitle, displayCategories }: Props): 
         }}>
             <Text
                 style={tw`font-normal text-base px-1 pt-0.5 pb-0 m-0 flex flex-wrap text-lg`}
-                onPress={onPressText}
+                onPress={openMegaphoneLink}
             >
                 {handleHighlights(cleanString(item.title || item.description))}
-                
+
                 {(item.channelTitle || item.description) &&
                     <Text style={tw`text-neutral-500 text-sm m-0 p-0 mx-1`}>{preTagChar}@{item.channelTitle || item.description} {formatedPubDate}</Text>
                 }
             </Text>
-            <Animated.View
+            {/* <Animated.View
                 style={{
                     maxHeight: slideValue,
                     margin: 0,
@@ -92,7 +93,7 @@ const FeedItem = ({ it, item, displayChannelTitle, displayCategories }: Props): 
                     onPress={openMegaphoneLink}>
                     <Ionicons name="megaphone" /> {handleHighlights(cleanString(item.description))}
                 </Text>
-            </Animated.View>
+            </Animated.View> */}
             {categories !== "" &&
                 <Text style={tw`font-normal text-purple-600 m-0 px-1`}>
                     #{categories}

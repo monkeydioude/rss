@@ -1,8 +1,7 @@
 // import { Button } from "@react-native-material/core";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Button, View } from "react-native";
-import tw from 'twrnc';
+import { Button } from "react-native";
 
 const LocalDataView = (): JSX.Element => {
     const router = useRouter();
@@ -12,13 +11,11 @@ const LocalDataView = (): JSX.Element => {
     }
 
     return (
-        <View style={{...tw`flex`, zIndex: -1}}>
-            <Button
-                title="View Local Data"
-                color="orange"
-                onPress={onPress} />
+        <Button
+            title="View Local Data"
+            color="green"
+            onPress={onPress} />
 
-        </View>
     )
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Text, TextStyle, View, ViewStyle } from "react-native";
+import { ColorValue, Switch, Text, TextStyle, View, ViewStyle } from "react-native";
 import customeStyle from "src/style/style";
 import tw from 'twrnc';
 import SettingCSS from "./settings.css";
@@ -11,9 +11,10 @@ type Props = {
     containerStyle?: ViewStyle;
     textStyle?: TextStyle;
     switchStyle?: ViewStyle;
+    thumbColor?: ColorValue;
 }
 
-const SettingWithSwitch = ({ label, onValueChange, checked, containerStyle, textStyle, switchStyle }: Props): JSX.Element => {
+const SettingWithSwitch = ({ label, onValueChange, checked, containerStyle, textStyle, switchStyle, thumbColor }: Props): JSX.Element => {
     return (
         <View
             style={{
@@ -34,7 +35,7 @@ const SettingWithSwitch = ({ label, onValueChange, checked, containerStyle, text
                         ...switchStyle
                     }}
                     value={checked}
-                    thumbColor={customeStyle.primaryColorDark}
+                    thumbColor={thumbColor || customeStyle.primaryColor}
                     trackColor={{
                         false: "#d0d0d0",
                         true: customeStyle.thirdColorLight,

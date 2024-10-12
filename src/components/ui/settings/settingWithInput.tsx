@@ -34,6 +34,7 @@ const SettingWithEditInput = ({ onSubmitEditing, text: _text, style, textStyle, 
 
     useEffect(() => {
         setText(_text);
+        setInputText(_text);
     }, [_text])
 
     return (
@@ -59,7 +60,7 @@ const SettingWithEditInput = ({ onSubmitEditing, text: _text, style, textStyle, 
                     name="pencil"
                     style={{
                         ...tw`text-3xl grow-1 text-white m-0 p-0`,
-                        color: customeStyle.primaryColor,
+                        color: customeStyle.thirdColor,
                     }} />
             </Pressable>
             {inputVisible &&

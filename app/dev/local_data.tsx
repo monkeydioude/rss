@@ -1,5 +1,7 @@
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Button, ScrollView, Text, View } from "react-native";
+import { DoomsDayButtons } from "src/components/blocks/dev";
 import { Channel } from "src/entity/channel";
 import { Item } from "src/entity/item";
 import { ConfigState } from "src/global_states/config";
@@ -32,28 +34,33 @@ const Page = (): React.ReactNode => {
     let _token = token || { jwt: "", expires: 0 };
 
     return (
-        <ScrollView style={tw`h-full bg-orange-100`}
-            nestedScrollEnabled={true}
-            scrollEnabled={true}
-        >
-            <Text style={tw`text-lg underline font-bold`}>Channels</Text>
-            {channels.map(([k, v]) => {
-                return (
-                    <View key={k} style={tw`flex-col`}>
-                        <View style={tw`flex flex-row mb-2`}>
-                            <Text style={tw`font-bold p-1`}>id: {k}</Text>
-                            <Text style={tw`p-1`}>channel: {typeof v === "object" ? `${JSON.stringify(v, null, 2)}` : " " + v}</Text>
+        <View>
+            <Button color="purple" title="Back to settings" onPress={() => router.replace("/settings")} />
+            <DoomsDayButtons />
+            <ScrollView style={tw`h-full bg-orange-100 gap-1`}
+                nestedScrollEnabled={true}
+                scrollEnabled={true}
+            >
+
+                <Text style={tw`text-lg underline font-bold`}>Channels</Text>
+                {channels.map(([k, v]) => {
+                    return (
+                        <View key={k} style={tw`flex-col`}>
+                            <View style={tw`flex flex-row mb-2`}>
+                                <Text style={tw`font-bold p-1`}>id: {k}</Text>
+                                <Text style={tw`p-1`}>channel: {typeof v === "object" ? `${JSON.stringify(v, null, 2)}` : " " + v}</Text>
+                            </View>
                         </View>
-                    </View>
-                )
-            })}
-            <Text style={tw`text-lg underline font-bold`}>Config</Text>
-            <Text>{JSON.stringify(config)}</Text>
-            <Text style={tw`text-lg underline font-bold`}>Token</Text>
-            <Text>{JSON.stringify({ ..._token, expiresHuman: new Date(_token.expires) }, null, 2)}</Text>
-            <Text style={tw`text-lg underline font-bold`}>Feed</Text>
-            <Text>{JSON.stringify(feed, null, 2)}</Text>
-        </ScrollView>
+                    )
+                })}
+                <Text style={tw`text-lg underline font-bold`}>Config</Text>
+                <Text>{JSON.stringify(config)}</Text>
+                <Text style={tw`text-lg underline font-bold`}>Token</Text>
+                <Text>{JSON.stringify({ ..._token, expiresHuman: new Date(_token.expires) }, null, 2)}</Text>
+                <Text style={tw`text-lg underline font-bold`}>Feed</Text>
+                <Text>{JSON.stringify(feed, null, 2)}</Text>
+            </ScrollView>
+        </View>
     )
 };
 

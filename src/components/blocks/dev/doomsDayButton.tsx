@@ -4,6 +4,7 @@ import { setChannels, useDispatch as useChannelsListDispatch } from 'src/global_
 import { setFeed, useDispatch as useFeedDispatch } from 'src/global_states/feed';
 import { setToken, useDispatch as useAuthDispatch } from 'src/services/identity/state';
 import { Mapp } from 'src/services/map/mapp';
+import { ChannelStorage } from 'src/storages/custom';
 import { TokenStorage } from 'src/storages/custom/token_storage';
 import { clearAllData } from 'src/storages/storage';
 
@@ -33,6 +34,14 @@ const DoomsDayButtons = (): JSX.Element => {
                             style: "cancel"
                         }
                     ])
+                }}
+                color="red" />
+            <Button
+                title="Erase Channels"
+                onPress={async () => {
+                    await ChannelStorage.update(new Mapp());
+                    channelsDispatch(setChannels(new Mapp()));
+                    feedDispatch(setFeed([]));
                 }}
                 color="red" />
             <Button

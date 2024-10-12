@@ -59,7 +59,9 @@ const FeedsView = (): JSX.Element => {
                         />
                     </View>
                 )}
-                ListEmptyComponent={<Text style={tw`text-xl mx-auto`}>{emojiDispenser("not_found")}</Text>}
+                ListEmptyComponent={<>
+                    <Text style={tw`text-xl mx-auto`}>{emojiDispenser("not_found")}</Text>
+                </>}
             />
             <BackToTop ref={bttRef} linkRef={flatListRef} />
         </View>

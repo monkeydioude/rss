@@ -1,15 +1,16 @@
+import DoomsDayButton from "../dev/doomsDayButton";
+import LocalDataView from "../dev/localDataView";
 import AddFeedInput from "./addFeedInput";
-import AppSettings from "./appSettings";
 import ChannelsSubscriptions from "./channelsSubscriptions";
-import DoomsDayButton from "./doomsDayButton";
-import LocalDataView from "./localDataView";
+import FeedSettings from "./feedSettings";
 import RecommendedFeeds from "./recommendedFeeds";
 
 export {
     AddFeedInput,
-    AppSettings,
     ChannelsSubscriptions,
     DoomsDayButton,
+    FeedSettings,
     LocalDataView,
     RecommendedFeeds
 };
+

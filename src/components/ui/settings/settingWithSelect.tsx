@@ -1,14 +1,14 @@
 import React from "react";
 import { Text, View, ViewStyle } from "react-native";
+import Dropdown from 'react-native-input-select';
 import tw from 'twrnc';
 import SettingCSS from "./settings.css";
-import DropdownPlease from 'react-native-input-select';
 
 type SettingWithSelectProps = {
     style?: ViewStyle;
     label: string;
-    onValueChange: (value: string | number) => void;
-    value?: string | number;
+    onValueChange: (value: any) => void;
+    value?: string | number | boolean;
     items: (string | number)[];
 }
 
@@ -24,12 +24,23 @@ const SettingWithSelect = ({ label, onValueChange, items, value, style }: Settin
     }));
     return (
         <View style={{ ...SettingCSS.container, ...style }}>
-            <Text style={{ ...SettingCSS.textLabel }}>{label}</Text>
-            <View style={{ ...SettingCSS.item }}>
-                <DropdownPlease
+            <Text style={{ ...SettingCSS.textLabel, ...tw`grow` }}>{label}</Text>
+            <View style={{ ...SettingCSS.item, ...tw`shrink` }}>
+                <Dropdown
                     dropdownContainerStyle={tw`m-0 p-0`}
                     selectedItemStyle={tw`text-xl`}
-                    checkboxLabelStyle={tw`text-xl`}
+                    dropdownStyle={{
+                        paddingVertical: 0,
+                        paddingHorizontal: 10,
+                        paddingRight: 25,
+                        minHeight: 40,
+                        borderWidth: 0,
+                    }}
+                    dropdownIconStyle={{ top: 16, right: 5 }}
+                    checkboxControls={{
+                        checkboxStyle: tw`text-xl`
+                    }}
+                    placeholderStyle={tw`p-0 m-0`}
                     options={options}
                     optionLabel="label"
                     optionValue="value"

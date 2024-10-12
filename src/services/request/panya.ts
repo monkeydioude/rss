@@ -17,6 +17,15 @@ export enum TypeErrorEnum {
     ReadingResponseError = "ReadingResponseError"
 }
 
+export type APIChannel = {
+    url: string;
+    name: string;
+    source_type?: string;
+    id: number;
+    is_sub: boolean;
+    limit?: number;
+}
+
 const handleResponse = async (res: Response): Promise<any> => {
     if (res.status === 200) {
         return await res.json();
@@ -78,6 +87,9 @@ export const get_feed = async (
         let idErr = err as IdentityError;
         if (typeof err !== "object") {
             idErr = new IdentityError(500, err as string);
+        } else if (!(err instanceof IdentityError)) {
+            const tmpErr = err as any
+            idErr = new IdentityError(500, tmpErr.name, tmpErr.message);
         }
         log(`Could not get feed channel: ${idErr.reason}`);
         console.error("Could not get feed channel:", idErr.getMessage() || idErr.getReason());
@@ -86,6 +98,7 @@ export const get_feed = async (
         clearTimeout(timeoutId);
     }
 }
+
 
 export const add_channel = async (url: string): Promise<Channel | null> => {
     const ctrl = new AbortController();
@@ -116,4 +129,32 @@ export const add_channel = async (url: string): Promise<Channel | null> => {
         clearTimeout(timeoutId);
     }
     return null;
+}
+
+export const get_channels = async (): Promise<APIChannel[]> => {
+    const ctrl = new AbortController();
+    const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
+    try {
+        const token = await TokenStorage.retrieve();
+        const res = await fetch(`${appConfig.panyaAPIURL}/channels`, {
+            credentials: "include",
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token?.jwt}`
+            },
+            signal: ctrl.signal,
+        });
+        if (res.status > 200) {
+            throw await res.text();
+        }
+        return await res.json();
+    } catch (err) {
+        log(`Could not add channel: ${err}`);
+        console.error("Could not add channel", err);
+    } finally {
+        clearTimeout(timeoutId);
+    }
+    return [];
 }

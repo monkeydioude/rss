@@ -1,46 +1,46 @@
 {
-  "expo": {
-    "name": "cookie",
-    "slug": "cookie",
-    "scheme": "cookie",
-    "version": "0.1.1",
-    "orientation": "portrait",
-    "icon": "./assets/cookie.png",
-    "owner": "monkeydioude",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "expo": {
+        "name": "cookie",
+        "slug": "cookie",
+        "scheme": "cookie",
+        "version": "0.1.1",
+        "orientation": "portrait",
+        "icon": "./assets/cookie.png",
+        "owner": "monkeydioude",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.calq.cookie"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            },
+            "package": "com.calq.cookie"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "extra": {
+            "eas": {
+                "projectId": "e4fef8ce-34dd-4d3b-b6c2-26fcd0b2b05f"
+            },
+            "router": {
+                "origin": false
+            }
+        },
+        "plugins": [
+            "expo-router"
+        ]
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.calq.cookie"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.calq.cookie"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "e4fef8ce-34dd-4d3b-b6c2-26fcd0b2b05f"
-      },
-      "router": {
-        "origin": false
-      }
-    },
-    "plugins": [
-      "expo-router"
-    ]
-  },
-  "name": "cookie"
+    "name": "cookie"
 }

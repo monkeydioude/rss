@@ -1,14 +1,13 @@
 import React from "react";
-import { Text, View } from "react-native";
-import appConfig, { isDev } from "src/appConfig";
-import { ChannelTitle, DisplayCategories, MaxItemPerFeed } from "src/components/ui/settings";
+import { View } from "react-native";
+import { MaxItemPerFeed } from "src/components/ui/settings";
 import { updateConfig, useConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
 import { ConfigStorage } from "src/storages/custom";
 import tw from 'twrnc';
-import DoomsDayButtons from "./doomsDayButton";
-import LocalDataView from "./localDataView";
+import ChannelTitle from "./channelTitle";
+import DisplayCategories from "./displayCategories";
 
-const AppSettings = (): JSX.Element => {
+const FeedSettings = (): JSX.Element => {
     const config = useConfig();
     const configDispatch = useConfigDispatch();
 
@@ -26,18 +25,9 @@ const AppSettings = (): JSX.Element => {
                             maxItemPerFeed
                         });
                     }} />
-                {isDev() && (
-                    <>
-                        <LocalDataView />
-                        <DoomsDayButtons />
-                    </>
-                )}
-            </View>
-            <View style={tw`flex flex-row justify-end pr-2 w-93`}>
-                <Text style={tw`text-lg text-white`}>{appConfig.appVersion}</Text>
             </View>
         </>
     )
 }
 
-export default AppSettings;
+export default FeedSettings;

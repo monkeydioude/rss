@@ -14,7 +14,7 @@ export class MapStorage<KT, VT> implements Entity<Mapp<KT, VT>> {
         return new Mapp<KT, VT>(await this.storage.retrieve());
     }
     async retrieveOrNew(): Promise<Mapp<KT, VT>> {
-         return new Mapp<KT, VT>((await this.storage.retrieve()) || []);
+        return new Mapp<KT, VT>((await this.storage.retrieve()) || []);
     }
     async map<T>(cb: (param: [KT, VT]) => T): Promise<T[]> {
         return Array.from(await this.retrieve() || new Map<KT, VT>()).map(cb)
@@ -25,5 +25,11 @@ export class MapStorage<KT, VT> implements Entity<Mapp<KT, VT>> {
             return;
         mapp.set(key, value);
         await this.update(mapp);
+    }
+    async removeOne(key: KT): Promise<boolean> {
+        const mapp = await this.retrieve();
+        if (!mapp)
+            return false;
+        return mapp.delete(key);
     }
 }

@@ -5,7 +5,7 @@ export type Item = {
     description: string;
     pubDate: number;
     channelTitle?: string;
-    category?: string[] | string;
+    categories?: string[] | string;
     channel_id: number;
     // 'content:encoded': string;
     // guid: string;

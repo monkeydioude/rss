@@ -1,10 +1,8 @@
 import { router } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Alert } from "react-native";
-import Toast from "react-native-toast-message";
 import appConfig from "src/appConfig";
+import toast from "src/services/toast";
 import { TokenStorage } from "src/storages/custom/token_storage";
-import tw from "src/style/twrnc";
 import { shouldRefreshToken, signinWithEmailPassword, signupWithEmailPassword } from "./client";
 import { refresh, status } from "./request";
 import { setToken, useDispatch, useIsAuthentified, useToken } from "./state";
@@ -31,13 +29,7 @@ const useAuth = () => {
 
         if (newToken.error) {
             if (newToken.error.reason == "TokenExpiredError") {
-                Toast.show({
-                    type: "error",
-                    text1: appConfig.labels.en.SESSION_EXPIRED_1,
-                    text2: appConfig.labels.en.SESSION_EXPIRED_2,
-                    text1Style: tw`text-sm`,
-                    text2Style: tw`text-sm`
-                });
+                toast.err(appConfig.labels.en.SESSION_EXPIRED_1, appConfig.labels.en.SESSION_EXPIRED_2);
                 dispatch(setToken(null));
                 await TokenStorage.clear();
             }
@@ -71,21 +63,9 @@ const useAuth = () => {
             if (error) {
                 throw error.getMessage();
             }
-            Toast.show({
-                type: "success",
-                text1: appConfig.labels.en.SIGN_UP_SUCCESS_1,
-                text2: appConfig.labels.en.SIGN_UP_SUCCESS_2,
-                text1Style: tw`text-sm`,
-                text2Style: tw`text-sm`
-            });
+            toast.ok(appConfig.labels.en.SIGN_UP_SUCCESS_1, appConfig.labels.en.SIGN_UP_SUCCESS_2);
         } catch (err) {
-            Toast.show({
-                type: "error",
-                text1: appConfig.labels.en.SIGN_UP_ERR_1,
-                text2: "" + err,
-                text1Style: tw`text-sm`,
-                text2Style: tw`text-sm`
-            });
+            toast.err(appConfig.labels.en.SIGN_UP_ERR_1, "" + err);
         } finally {
             setLoading(false);
         }
@@ -106,37 +86,19 @@ const useAuth = () => {
             }
             await TokenStorage.update(token);
             dispatch(setToken(token));
-            Toast.show({
-                type: "success",
-                text1: appConfig.labels.en.LOG_IN_SUCCESS_1,
-                text1Style: tw`text-sm`
-            });
+            toast.ok(appConfig.labels.en.LOG_IN_SUCCESS_1);
             router.replace("/");
         } catch (err) {
-            console.log(err)
-            Toast.show({
-                type: "error",
-                text1: appConfig.labels.en.LOG_IN_ERR_1,
-                text2: err as string,
-                text1Style: tw`text-sm`,
-                text2Style: tw`text-sm`
-            });
+            console.error(err)
+            toast.err(appConfig.labels.en.LOG_IN_ERR_1, err as string);
         } finally {
             setLoading(false);
         }
     }, []);
 
     const signout = useCallback(async () => {
-        Alert.alert(appConfig.labels.en.LOG_OUT_ASK_1, appConfig.labels.en.LOG_OUT_ASK_2, [
-            { text: 'Cancel', onPress: () => { }, style: 'cancel' },
-            {
-                text: 'OK', onPress: async () => {
-                    await TokenStorage.clear();
-                    dispatch(setToken(null));
-                }
-            },
-        ]);
-
+        await TokenStorage.clear();
+        dispatch(setToken(null));
     }, []);
 
     const initSignin = useCallback(async () => {

@@ -1,5 +1,5 @@
 const style = {
-    beige: "rgba(255, 200, 94, 0.20)",
+    beige: "rgba(255, 200, 94, 0.33)",
     beigeHex: "#ffc85e",
     primaryColorLight: "#c084fc",
     primaryColor: "#9333ea",

@@ -9,7 +9,8 @@ module.exports = {
             colors: {
                 'primaryColor': "#9333ea",
                 'secondaryColor': "#72371f",
-                'thirdColor': "#ffc85e"
+                'thirdColor': "#ffc85e",
+                'primaryColorDark': "#6d28d9",
             }
         },
     },

@@ -1,8 +1,10 @@
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { default as Icon } from "@expo/vector-icons/MaterialCommunityIcons";
 import { Button } from "@react-native-material/core";
 import { router } from "expo-router";
 import React from 'react';
 import { Text, View, ViewStyle } from 'react-native';
+import customStyle from "src/style/style";
 import tw from 'twrnc';
 
 type Props = {
@@ -11,9 +13,10 @@ type Props = {
     style?: ViewStyle;
     textStyle?: ViewStyle;
     iconStyle?: ViewStyle;
+    icon: keyof typeof Ionicons.glyphMap;
 }
 
-const MenuButton = <TProps extends Props & { name: string },>({ label, name, style, textStyle, iconStyle, link }: TProps): JSX.Element => (
+const MenuButton = ({ label, icon, style, textStyle, iconStyle, link }: Props): JSX.Element => (
     <Button
         onPress={() => {
             if (link) {
@@ -24,8 +27,12 @@ const MenuButton = <TProps extends Props & { name: string },>({ label, name, sty
             ...style,
             paddingVertical: 4
         }}
+        color={customStyle.primaryColorDark}
         title={() => (<View style={tw`items-center flex flex-row justify-center`}>
-            <Icon color="white" name={name as any} style={iconStyle} />
+            <View style={{
+                ...tw`flex items-center`,
+                minWidth: 25,
+            }}><Ionicons color="white" name={icon} style={iconStyle} size={25} /></View>
             <Text style={{
                 ...tw`ml-2 items-center text-white grow-1`,
                 ...textStyle
@@ -34,9 +41,5 @@ const MenuButton = <TProps extends Props & { name: string },>({ label, name, sty
         </View>)}
     />
 )
-
-export const MenuSectionButton = (props: Props): JSX.Element => MenuButton({ ...props, name: "view-list" });
-export const MenuFeedsSectionTitle = (props: Props): JSX.Element => MenuButton({ ...props, name: "newspaper" });
-export const MenuSettingsButton = (props: Props): JSX.Element => MenuButton({ ...props, name: "chess-rook" });
 
 export default MenuButton;

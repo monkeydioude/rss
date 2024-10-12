@@ -10,8 +10,6 @@ export const addErrorMessage = (idErr: IdentityError): IdentityError => {
         )
     }
 
-    console.log("idErr", idErr)
-
     if (idErr.code == 401 && idErr.reason == "InvalidCredentials") {
         idErr.message = "email and password did not match"
         return idErr;

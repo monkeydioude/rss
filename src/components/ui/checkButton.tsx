@@ -45,9 +45,9 @@ const CheckButton = ({
                     <View style={tw`flex flex-row items-center justify-start`}>
                         {checked &&
                             <>
-                                <Ionicons name='checkmark' color="white" style={tw`w-2.5`} />
+                                <Ionicons name='checkmark' style={tw`w-2.5 text-white`} />
                                 <Text style={{
-                                    ...tw`text-white p-1 grow-1`,
+                                    ...tw`text-green-600 p-1 grow-1`,
                                     ...textStyle,
                                 }} >{title}</Text>
                             </>
@@ -56,8 +56,8 @@ const CheckButton = ({
                             <>
                                 <Ionicons name='close' style={tw`w-2.5 text-red-600`} />
                                 <Text style={{
-                                    ...tw`text-red-600 p-1 grow-1`,
                                     ...textStyle,
+                                    ...tw`text-red-600 p-1 grow-1`,
                                 }} >{title}</Text>
                             </>
                         }

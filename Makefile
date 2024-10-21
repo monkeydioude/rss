@@ -27,3 +27,7 @@ docker-update:
 .PHONY: docker-logs
 docker-logs:
 	docker compose logs --follow
+
+.PHONY: adb
+adb:
+	adb reverse tcp:8100 tcp:8100 && adb reverse tcp:8083 tcp:8083

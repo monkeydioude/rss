@@ -56,6 +56,7 @@ const FeedsView = (): JSX.Element => {
                             it={index}
                             displayCategories={config.displayCategories}
                             displayChannelTitle={config.displayChannelTitle}
+                            categoriesAmount={config.maxAmntCategories}
                         />
                     </View>
                 )}

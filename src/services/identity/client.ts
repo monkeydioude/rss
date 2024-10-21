@@ -1,12 +1,13 @@
-import { signin, signup } from './request';
+import { TokenStorage } from 'src/storages/custom/token_storage';
+import { deactivate, signin, signup, updatePasswordRequest, updateUsernameRequest } from './request';
 import { Credentials, IdentityError, IdentityResponse, IdentityToken } from './types';
 
 export const addErrorMessage = (idErr: IdentityError): IdentityError => {
     if (!idErr) {
         return new IdentityError(
             500,
-            "unknown",
-            "unknown"
+            "UnknownError",
+            "unknown error"
         )
     }
 
@@ -25,19 +26,59 @@ export const signupWithEmailPassword = async (credentials: Credentials): Promise
 }
 
 export const signinWithEmailPassword = async (credentials: Credentials): Promise<IdentityResponse> => {
-    const response = await signin(credentials);
-    if (!response) {
-        return {
-            token: null,
-            error: new IdentityError(500, "UnknownError", "unknown error"),
+    try {
+        const response = await signin(credentials);
+        if (!response) {
+            throw new IdentityError(500, "UnknownError", "unknown error");
         }
-    }
-    if (response.error) {
-        return {
-            error: addErrorMessage(response.error),
+        if (response.error) {
+            return { error: addErrorMessage(response.error) };
         }
+        return response
+    } catch (err) {
+        if (err instanceof IdentityError) {
+            return { error: addErrorMessage(err) };
+        }
+        return { error: new IdentityError(500, "UnknownError", "" + err) }
     }
-    return response
+}
+
+export const updateEmailAddr = async (email: string, password: string): Promise<IdentityError | null> => {
+    try {
+        let _token = await TokenStorage.retrieve();
+        if (!_token) {
+            throw new IdentityError(401, "InvalidCredentials", "missing Bearer jwt");
+        }
+        const [_, err] = await updateUsernameRequest(_token, {
+            new_login: email,
+            password,
+        });
+        return err;
+    } catch (err) {
+        if (err instanceof IdentityError) {
+            return addErrorMessage(err);
+        }
+        return new IdentityError(500, "UnknownError", "" + err)
+    }
+}
+
+export const updatePassword = async (old_password: string, new_password: string): Promise<IdentityError | null> => {
+    try {
+        let _token = await TokenStorage.retrieve();
+        if (!_token) {
+            throw new IdentityError(401, "InvalidCredentials", "missing Bearer jwt");
+        }
+        const [_, err] = await updatePasswordRequest(_token, {
+            password: old_password,
+            new_password,
+        });
+        return err;
+    } catch (err) {
+        if (err instanceof IdentityError) {
+            return addErrorMessage(err);
+        }
+        return new IdentityError(500, "UnknownError", "" + err)
+    }
 }
 
 export const shouldRefreshToken = (token: IdentityToken, refreshInterval: number): boolean => {
@@ -45,4 +86,20 @@ export const shouldRefreshToken = (token: IdentityToken, refreshInterval: number
         return false
     }
     return token.expires - refreshInterval <= +new Date();
+}
+
+export const deactivateUser = async () => {
+    try {
+        let _token = await TokenStorage.retrieve();
+        if (!_token) {
+            throw new IdentityError(401, "InvalidCredentials", "missing Bearer jwt");
+        }
+        const [_, err] = await deactivate(_token);
+        return err;
+    } catch (err) {
+        if (err instanceof IdentityError) {
+            return addErrorMessage(err);
+        }
+        return new IdentityError(500, "UnknownError", "" + err)
+    }
 }

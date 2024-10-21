@@ -27,7 +27,7 @@ const DisplayCategories = (): JSX.Element => {
                     dispatch(updateConfig({ maxAmntCategories: value as number }));
                 }}
                 label={i18n.en.SETTINGS_APP_NUM_SHOWN_CATEG}
-                value={1}
+                value={config.maxAmntCategories}
                 items={appConfig.categoryAmount} />
             {/* <SettingWithEditInput
                 style={tw`mt-4 my-1 py-1 bg-primaryColorDark rounded`}

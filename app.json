@@ -3,7 +3,7 @@
         "name": "cookie",
         "slug": "cookie",
         "scheme": "cookie",
-        "version": "0.1.1",
+        "version": "9",
         "orientation": "portrait",
         "icon": "./assets/cookie.png",
         "owner": "monkeydioude",
@@ -41,6 +41,5 @@
         "plugins": [
             "expo-router"
         ]
-    },
-    "name": "cookie"
+    }
 }

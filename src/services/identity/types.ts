@@ -5,6 +5,12 @@ export type Credentials = {
     password: string;
 }
 
+export type EditUser = {
+    new_login?: string;
+    password: string;
+    new_password?: string;
+}
+
 export type IdentityToken = {
     jwt: string;
     expires: number;
@@ -34,4 +40,8 @@ export class IdentityError implements Error {
 export type IdentityResponse = {
     token?: IdentityToken | null;
     error?: IdentityError | null;
+}
+
+export type User = {
+    login: string;
 }

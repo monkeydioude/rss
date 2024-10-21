@@ -17,7 +17,7 @@ export const toLower = (text: string): string => (
 export const removeWhiteSpaces = (text: string): string => (
     text.replaceAll(" ", "")
 )
-export const normalizeItemCategory = (category: string|string[]|undefined): string => {
+export const normalizeItemCategory = (category: string | string[] | undefined, categoriesAmount: number): string => {
     return ifNotThenArrayOf<string>(category)
         .filter((el: string, index: number) => !isUnwantedCategories(el) && index < 5)
         .map((el: string) => (
@@ -27,5 +27,6 @@ export const normalizeItemCategory = (category: string|string[]|undefined): stri
                 removeWhiteSpaces,
             ], el)
         ))
-        .join(", #") 
+        .slice(0, categoriesAmount)
+        .join(", #")
 }

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { log } from 'src/services/request/logchest';
-import sleep from '../services/sleep';
+import sleep from '../services/time';
 
 let locked = false;
 

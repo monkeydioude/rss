@@ -8,6 +8,7 @@ import SettingModal, { SettingModalHandle } from 'src/components/modals/SettingM
 import { SettingWithEditInput, SettingWithSwitch } from 'src/components/ui/settings';
 import SettingsSectionTitle from "src/components/ui/settings/settingsSectionTitle";
 import { Channel } from 'src/entity/channel';
+import { useSubbedChannelIDs } from 'src/global_states/channels';
 import { useChannels } from 'src/hooks/useChannels';
 import useComponentsDataBridge from 'src/hooks/useComponentsDataBridge';
 import i18n from 'src/i18n';
@@ -131,11 +132,12 @@ const FeedsSettings = (): React.ReactNode => {
     // The setChannel function is triggered when onChannelChange is called
     // by the component initiating the data transfer.
     const [onChannelChange, modalChannelSetter] = useComponentsDataBridge<Channel>();
+    const channels = useSubbedChannelIDs();
 
     return (
         <View style={{ ...tw`flex-1 flex-col grow-1 bg-primaryColor` }}>
             <AddFeedInput />
-            <SettingsSectionTitle title={appConfig.labels.en.SETTINGS_FEED_SECTION_TITLE} iconIo="list" />
+            <SettingsSectionTitle title={`${i18n.en.SETTINGS_SOURCES_SECTION_TITLE} (${channels.length})`} iconIo="list" />
             <ChannelsSubscriptions
                 modalRef={bsRef}
                 channelUpdater={modalChannelSetter}

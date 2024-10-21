@@ -5,7 +5,7 @@ import { ConfigState } from "src/global_states/config";
 import { shouldReload } from "src/services/feed/refresh";
 import logger from "src/services/logger";
 import { Mapp } from "src/services/map/mapp";
-import sleep from "src/services/sleep";
+import sleep from "src/services/time";
 import useFeed from "./useFeed";
 
 export const useFeedRefresh = () => {

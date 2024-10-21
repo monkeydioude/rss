@@ -1,5 +1,5 @@
 import React, { RefObject, useCallback } from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import CheckButton from "src/components/ui/checkButton";
 
 // import { addFeed, reloadFeeds } from "../../feed_builder";
@@ -9,7 +9,7 @@ import { Channel } from "src/entity/channel";
 import { useChannelsList } from "src/global_states/channels";
 import { useChannels } from "src/hooks/useChannels";
 import { log } from "src/services/request/logchest";
-import tw from 'twrnc';
+import tw from "src/style/twrnc";
 
 interface ChannelSubscriptionsProps {
     modalRef: RefObject<SettingModalHandle>,
@@ -19,9 +19,10 @@ interface ChannelSubscriptionsProps {
 interface ChannelSubProps extends ChannelSubscriptionsProps {
     channel: Channel,
     channel_id: number,
+    nth: number,
 }
 
-const ChannelSub = ({ channel, modalRef, channelUpdater }: ChannelSubProps): JSX.Element => {
+const ChannelSub = ({ channel, modalRef, channelUpdater, nth }: ChannelSubProps): JSX.Element => {
     const { setSub } = useChannels();
 
     const onCheckButtonPress = useCallback(() => {
@@ -34,7 +35,6 @@ const ChannelSub = ({ channel, modalRef, channelUpdater }: ChannelSubProps): JSX
             console.error(e);
         }
     }, [channel, modalRef.current]);
-
     return (
         <View style={{
             ...tw`mb-1`,
@@ -42,8 +42,8 @@ const ChannelSub = ({ channel, modalRef, channelUpdater }: ChannelSubProps): JSX
             elevation: -1
         }}>
             <CheckButton
-                textStyle={tw`text-lg`}
-                title={channel.channel_name}
+                textStyle={tw`text-lg text-white`}
+                title={`${nth}. ${channel.channel_name}`}
                 checked={channel.is_sub}
                 trailing={<Icon name="chevron-double-right" style={tw`text-3xl text-white`} />}
                 onLongPress={() => {
@@ -64,15 +64,26 @@ const ChannelSub = ({ channel, modalRef, channelUpdater }: ChannelSubProps): JSX
 
 const ChannelsSubscriptions = ({ modalRef, channelUpdater }: ChannelSubscriptionsProps): React.ReactNode => {
     const channels = useChannelsList();
+    let it = 0;
     return (
         <View style={{
-            ...tw`justify-center flex flex-col`,
+            ...tw`justify-center flex-1 flex-col`,
         }}>
-            {channels.map(([channel_id, channel]) => {
-                return (
-                    <ChannelSub channelUpdater={channelUpdater} key={channel_id} channel={channel} channel_id={channel_id} modalRef={modalRef} />
-                )
-            })}
+            <ScrollView
+                nestedScrollEnabled={true}
+                scrollEnabled={true}>
+                {channels
+                    .map(([channel_id, channel]) => (
+                        <ChannelSub
+                            nth={++it}
+                            channelUpdater={channelUpdater}
+                            key={channel_id}
+                            channel={channel}
+                            channel_id={channel_id}
+                            modalRef={modalRef}
+                        />
+                    ))}
+            </ScrollView>
         </View>
     )
 }

@@ -8,8 +8,7 @@ export enum ChannelTitleMode {
 }
 
 export const isDev = (): boolean => (
-    true
-    // !!env && !!process.env.NODE_ENV && process.env.NODE_ENV === "development"
+    !!env && !!process.env.NODE_ENV && process.env.NODE_ENV === "development"
 )
 
 const getLogchestAPIURL = (): string => (
@@ -61,13 +60,14 @@ const appConfig = {
         global_config: "global_config",
         channel_ids: "channel_ids",
         feed_items: "feed_items",
-        identity_token: "identity_token"
+        identity_token: "identity_token",
+        user: "user",
     },
     maxHeightFeedDescAnimation: 500,
     openSpeedDescAnimation: 500,
     maxItemPerFeed: 10,
     maxItemPerFeedChoices: [5, 10, 15, 20],
-    categoryAmount: [0, 1, 2, 3, 4],
+    categoryAmount: [1, 2, 3, 5, 10],
     feedsRefreshTimer: 20 * 1000, // in millisecond
     feedsManualRefreshTimer: 10 * 1000, // in ms
     appTitle: "RSS",
@@ -78,7 +78,7 @@ const appConfig = {
     displayChannelTitle: ChannelTitleMode.NewLine,
     displayCategories: true,
     maxAmntCategories: 4,
-    appVersion: "v0.2.1",
+    appVersion: "v0.1.2",
     requestTimeout: 5000,
     toastTimer: 2500,
     channelsErrorEnum: {
@@ -86,6 +86,8 @@ const appConfig = {
         [ChannelsErrorEnum.URLIssue]: "Maybe an invalid URL?"
     },
     labels: i18n,
+    userUpdateThreshold: 20 * 1000,
+    passwordMinSize: 4,
 }
 
 export default appConfig;

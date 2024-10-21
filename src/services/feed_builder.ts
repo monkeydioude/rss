@@ -14,6 +14,6 @@ export const make_feed_url = (
         .forEach((channel: Channel) => {
             ids.push(channel.channel_id);
             limits.push(`limits[${channel.channel_id}]=${channel.limit || config?.maxItemPerFeed || appConfig.maxItemPerFeed}`);
-    });
+        });
     return `${appConfig.panyaAPIURL}/feed?ids=${ids.join(",")}&${limits.join("&")}`
 }

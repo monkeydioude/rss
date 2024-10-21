@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import appConfig, { isDev } from 'src/appConfig';
+import appConfig from 'src/appConfig';
 import { DevMenu } from 'src/components/blocks/dev';
 import { AddFeedInput } from 'src/components/blocks/settings';
 import Logout from 'src/components/blocks/settings/logout';
@@ -42,10 +42,19 @@ const Settings = (): JSX.Element => {
                             link="/settings/feed"
                             icon='book-outline'
                         />
+                        <MenuButton
+                            style={{ marginVertical: 2 }}
+                            label={i18n.en.SETTINGS_USER_SECTION_TITLE}
+                            textStyle={tw`text-xl`}
+                            iconStyle={tw`text-xl`}
+                            link="/settings/user"
+                            icon='people'
+                        />
                         <Hr />
                         <Logout />
                         <Hr />
-                        {isDev() && <DevMenu />}
+                        {/* {isDev() && <DevMenu />} */}
+                        <DevMenu />
                         <View style={tw`flex flex-row justify-end pr-2 w-93`}>
                             <Text style={tw`text-white`}>{appConfig.appVersion}</Text>
                         </View>

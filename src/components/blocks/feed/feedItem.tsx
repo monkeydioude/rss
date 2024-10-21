@@ -14,14 +14,15 @@ type Props = {
     it: number;
     displayChannelTitle: ChannelTitleMode;
     displayCategories: boolean;
+    categoriesAmount: number;
 }
 
 const getDateText = (pubDate?: number): string => {
     if (!pubDate)
         return "";
     // ghetto
-    if (pubDate * 1000 < +new Date())
-        pubDate *= 1000;
+    // if (pubDate * 1000 < +new Date())
+    // pubDate *= 1000;
     const d = new Date(pubDate);
 
     if (!(+d)) {
@@ -30,7 +31,7 @@ const getDateText = (pubDate?: number): string => {
     return `~${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 }
 
-const FeedItem = ({ it, item, displayChannelTitle, displayCategories }: Props): JSX.Element => {
+const FeedItem = ({ it, item, displayChannelTitle, displayCategories, categoriesAmount }: Props): JSX.Element => {
     const isOpened = useRef(false);
     // const slideValue = new Animated.Value(0);
     // const descH = useRef(0);
@@ -61,7 +62,7 @@ const FeedItem = ({ it, item, displayChannelTitle, displayCategories }: Props): 
 
     const preTagChar = displayChannelTitle === ChannelTitleMode.Inline ? "" : "\n";
     let toValue = appConfig.maxHeightFeedDescAnimation;
-    const categories = displayCategories ? normalizeItemCategory(item.categories) : "";
+    const categories = displayCategories ? normalizeItemCategory(item.categories, categoriesAmount) : "";
 
     return (
         <View style={{

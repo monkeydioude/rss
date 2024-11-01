@@ -20,8 +20,9 @@ export const addErrorMessage = (idErr: IdentityError): IdentityError => {
 }
 
 export const signupWithEmailPassword = async (credentials: Credentials): Promise<IdentityResponse> => {
+    const res = await signup(credentials);
     return {
-        error: await signup(credentials) ? null : new IdentityError(500, "UnknownError")
+        error: res[0] ? null : res[1],
     }
 }
 

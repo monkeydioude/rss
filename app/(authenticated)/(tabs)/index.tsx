@@ -1,3 +1,4 @@
+import { useScrollToTop } from '@react-navigation/native';
 import React, { useCallback, useRef, useState } from 'react';
 import { RefreshControl, Text, View } from 'react-native';
 import Animated, {
@@ -20,6 +21,7 @@ const FeedsView = (): JSX.Element => {
     const flatListRef = useAnimatedRef<Animated.FlatList<any>>();
     const bttRef = useRef<BackToTopButtonHandle>(null)
     const config = useConfig();
+    useScrollToTop(flatListRef);
 
     const onScroll = useCallback((event: any) => {
         const scrollPosition = event.nativeEvent.contentOffset.y;

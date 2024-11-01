@@ -12,6 +12,7 @@ export default {
         "LOG_IN_ERR_1": "Could not log in",
         "SIGN_UP_SUCCESS_1": "🍪 Signed up 👍",
         "SIGN_UP_ERR_1": "Could not sign up",
+        "SIGN_UP_PASSWORDS_DONT_MATCH": "Passwords don't match",
         "SIGN_UP_SUCCESS_2": "You can now log in",
         "SETTINGS_SCREEN_TITLE": "Settings",
         "SETTINGS_SOURCES_SECTION_TITLE": "Feed sources",

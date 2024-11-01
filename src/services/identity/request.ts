@@ -2,30 +2,12 @@ import appConfig from "src/appConfig";
 import { log } from "src/services/request/logchest";
 import { Credentials, EditUser, IdentityError, IdentityResponse, IdentityToken } from "./types";
 
-export const signup = async (credentials: Credentials): Promise<boolean> => {
-    const ctrl = new AbortController();
-    const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
-    try {
-        const res = await fetch(`${appConfig.identityAPIURL}/v1/auth/signup`, {
-            body: JSON.stringify(credentials),
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            signal: ctrl.signal,
-        });
-        if (res.status > 200) {
-            throw await res.text();
-        }
-        return true;
-    } catch (err) {
-        log(`Could not signup: ${err}`);
-        console.error("Could not signup", err);
-    } finally {
-        clearTimeout(timeoutId);
+export const signup = async (credentials: Credentials): Promise<[boolean, IdentityError | null]> => {
+    const res = await new Request<Response>({ url: `${appConfig.identityAPIURL}/v1/auth/signup`, method: "POST" }).do(JSON.stringify(credentials));
+    if (!res[0]) {
+        return [false, res[1]];
     }
-    return false;
+    return [res[0].status < 400, res[1]];
 }
 
 function cookieParser(cookieString: string | null): Map<string, string> {
@@ -200,7 +182,7 @@ export class Request<T> {
 
     private hydrateToken(fetchOptions: RequestInit) {
         if (!this.token) {
-            return ;
+            return;
         }
 
         fetchOptions.headers = {
@@ -260,7 +242,7 @@ export class Request<T> {
         } catch (err) {
             return [null, new IdentityError(500, err as string)]
         }
-    } 
+    }
 }
 
 export const updateUsernameRequest = async (token: IdentityToken, editUser: EditUser): Promise<[Response | null, IdentityError | null]> => {

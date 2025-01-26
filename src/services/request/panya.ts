@@ -84,6 +84,7 @@ export const get_feed = async (
         const feed = await handleResponse(res);
         return [feed, null];
     } catch (err) {
+        console.log("?heee?s", err)
         let idErr = err as IdentityError;
         if (typeof err !== "object") {
             idErr = new IdentityError(500, err as string);

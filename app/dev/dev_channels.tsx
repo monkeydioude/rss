@@ -1,4 +1,3 @@
-import Clipboard from '@react-native-clipboard/clipboard';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, ScrollView, Text } from "react-native";
@@ -23,15 +22,6 @@ const DevChannels = (): React.ReactNode => {
             }
         })();
     }, [appChannels.length]);
-
-    const copyClipboardCommaSep = useCallback(() => {
-        try {
-            Clipboard.setString(channels.map<string>((channel: APIChannel) => channel.url || "").join(","));
-            toast.ok("Copied to clipboard");
-        } catch (e) {
-            toast.err((e as any).toString());
-        }
-    }, [channels]);
 
     const subscribeAllChannels = useCallback(async () => {
         for (const apiChannel of channels) {
@@ -69,7 +59,6 @@ const DevChannels = (): React.ReactNode => {
     return (
         <ScrollView style={tw`flex`}>
             <Button color="purple" title="Back to settings" onPress={() => router.replace("/settings")} />
-            <Button title="Copy comma separated" onPress={copyClipboardCommaSep} />
             <Button color={"orange"} title="Subscribe to all those feeds sources" onPress={subscribeAllChannels} />
             <Button color={"orange"} title="Add 10 random channels" onPress={() => addRandomChannels(10)} />
             <Text>{JSON.stringify(channels, null, 2)}</Text>

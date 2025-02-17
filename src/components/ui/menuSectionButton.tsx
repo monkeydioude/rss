@@ -1,11 +1,11 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { default as Icon } from "@expo/vector-icons/MaterialCommunityIcons";
-import { Button } from "@react-native-material/core";
 import { router } from "expo-router";
 import React from 'react';
 import { Text, View, ViewStyle } from 'react-native';
 import customStyle from "src/style/style";
 import tw from 'twrnc';
+import Button from "./react-native-material/Button";
 
 type Props = {
     label: string;

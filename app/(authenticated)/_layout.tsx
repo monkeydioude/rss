@@ -22,6 +22,7 @@ const RootNavigator = (): JSX.Element => {
                 headerShown: false,
             }}>
             <Stack.Screen
+                key="(tabs)"
                 name="(tabs)"
                 options={{
                     headerShown: true,

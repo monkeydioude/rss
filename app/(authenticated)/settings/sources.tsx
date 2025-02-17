@@ -109,6 +109,7 @@ const SettingModalProxy = ({ bsRef, onChannelChange }: ProxyProps) => {
                         ...tw`grow-0 shrink-1`,
                     }}
                     onPress={onRemovePress}
+                    useNativeDriver={true}
                 />
                 <Button
                     title={i18n.en.CLOSE}
@@ -117,6 +118,7 @@ const SettingModalProxy = ({ bsRef, onChannelChange }: ProxyProps) => {
                         backgroundColor: style.primaryColorDark
                     }}
                     onPress={bsRef.current?.close}
+                    useNativeDriver={true}
                 />
             </View>
 

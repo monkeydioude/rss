@@ -1,7 +1,8 @@
-import { Button, TextInput } from "@react-native-material/core";
+import { TextInput } from "@react-native-material/core";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GestureResponderEvent, Modal, Pressable, Text, View } from "react-native";
 import appConfig from "src/appConfig";
+import Button from "src/components/ui/react-native-material/Button";
 import i18n from "src/i18n";
 import { passwordsValidations } from "src/services/constraints/password";
 import { updatePassword } from "src/services/identity/client";

@@ -1,5 +1,4 @@
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { Button } from "@react-native-material/core";
 import { useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { Alert, View } from "react-native";
@@ -68,6 +67,7 @@ const UserSettings = (): React.ReactNode => {
                         trailingContainerStyle={tw`shrink-1 absolute right-0`}
                         trailing={<Icon name="chevron-double-right" style={tw`text-3xl text-black`} />}
                         onPress={() => setOpenModal(ModalType.USERNAME)}
+                        useNativeDriver={true}
                         />
                     <Button
                         title={i18n.en.SETTINGS_USER_CHANGE_PASSWORD}
@@ -76,6 +76,7 @@ const UserSettings = (): React.ReactNode => {
                         trailingContainerStyle={tw`shrink-1 absolute right-0`}
                         trailing={<Icon name="chevron-double-right" style={tw`text-3xl text-white`} />}
                         onPress={() => setOpenModal(ModalType.PASSWORD)}
+                        useNativeDriver={true}
                     />
                     <Hr />
                     <Button
@@ -83,6 +84,7 @@ const UserSettings = (): React.ReactNode => {
                         color="red"
                         tintColor="black"
                         onPress={onPressDeactivate}
+                        useNativeDriver={true}
                     />
                 </View>
                 <UpdateUsernameModal

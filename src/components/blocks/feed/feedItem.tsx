@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useCallback, useRef } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text } from "react-native";
 import appConfig, { ChannelTitleMode } from "src/appConfig";
 import { Item } from "src/entity/item";
 import { normalizeItemCategory } from "src/services/normalization/item_ops";
@@ -54,8 +54,9 @@ const FeedItem = ({ it, item, displayChannelTitle, displayCategories, categories
     //     isOpened.current = !isOpened.current;
     // }, [isOpened, descH, slideValue]);
 
-    const openMegaphoneLink = useCallback(() => {
+    const openMegaphoneLink = useCallback((event: any) => {
         // if (isOpened.current) {
+        event.preventDefault();
         router.push({ pathname: "/misc/webview", params: { uri: item.link } });
         // }
     }, [isOpened, item]);
@@ -65,18 +66,21 @@ const FeedItem = ({ it, item, displayChannelTitle, displayCategories, categories
     const categories = displayCategories ? normalizeItemCategory(item.categories, categoriesAmount) : "";
 
     return (
-        <View style={{
-            ...tw`pb-0.5 pt-1`,
-            backgroundColor: it % 2 === 1 ? style.beige : "",
-        }}>
+        <Pressable
+            onPress={openMegaphoneLink}
+            style={{
+                ...tw`pb-0.5 pt-1`,
+                backgroundColor: it % 2 === 1 ? style.beige : "",
+            }}>
             <Text
                 style={tw`font-normal text-base px-1 pt-0.5 pb-0 m-0 flex flex-wrap text-lg`}
-                onPress={openMegaphoneLink}
             >
                 {handleHighlights(cleanString(item.title || item.description))}
 
                 {(item.channelTitle || item.description) &&
-                    <Text style={tw`text-neutral-500 text-sm m-0 p-0 mx-1`}>{preTagChar}@{item.channelTitle || item.description} {formatedPubDate}</Text>
+                    <Text style={tw`text-neutral-500 text-sm m-0 p-0 mx-1`}>
+                        {preTagChar}@{item.channelTitle || item.description} {formatedPubDate}
+                    </Text>
                 }
             </Text>
             {/* <Animated.View
@@ -100,7 +104,7 @@ const FeedItem = ({ it, item, displayChannelTitle, displayCategories, categories
                     #{categories}
                 </Text>
             }
-        </View>
+        </Pressable>
     )
 }
 

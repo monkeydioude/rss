@@ -1,7 +1,8 @@
-import { Button, TextInput } from "@react-native-material/core";
+import { TextInput } from "@react-native-material/core";
 import React, { useCallback, useRef, useState } from "react";
 import { GestureResponderEvent, Modal, Pressable, Text, View } from "react-native";
 import appConfig from "src/appConfig";
+import Button from "src/components/ui/react-native-material/Button";
 import i18n from "src/i18n";
 import { updateEmailAddr } from "src/services/identity/client";
 import { canIRefresh, displayRemainingTime } from "src/services/time";

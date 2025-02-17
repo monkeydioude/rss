@@ -33,7 +33,8 @@ const FeedsView = (): JSX.Element => {
                 ref={flatListRef}
                 keyExtractor={(_, index) => "" + index}
                 keyboardDismissMode='on-drag'
-                canCancelContentTouches={false}
+                // canCancelContentTouches={false}
+                keyboardShouldPersistTaps="handled"
                 scrollEnabled={true}
                 onScroll={onScroll}
                 scrollEventThrottle={16}

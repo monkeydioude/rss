@@ -1,14 +1,14 @@
-import { ActivityIndicator, Button } from "@react-native-material/core";
+import { ActivityIndicator } from "@react-native-material/core";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { KeyboardAvoidingView, StyleSheet, TextInput, View } from "react-native";
+import { Button, KeyboardAvoidingView, StyleSheet, TextInput, View } from "react-native";
 import useAuth from "src/services/identity/useAuth";
 import style from "src/style/style";
 import tw from "src/style/twrnc";
 
 const Login = (): React.ReactNode => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("cabane143@yopmail.com");
+    const [password, setPassword] = useState("cabane123");
     const { loading, signup, signin } = useAuth();
 
     return (
@@ -21,20 +21,22 @@ const Login = (): React.ReactNode => {
                     autoCapitalize="none"
                     onChangeText={setEmail}
                     keyboardType="email-address"
+                    value={email}
                 />
                 <TextInput
                     style={styles.input}
                     autoCapitalize="none"
                     placeholder="Password"
                     onChangeText={setPassword}
+                    value={password}
                     secureTextEntry
                 />
                 {loading ?
                     <ActivityIndicator size="small" style={{ margin: 28 }} />
                     :
                     <>
-                        <Button onPress={() => signup(email, password)} style={styles.button} title="Sign up" />
-                        <Button onPress={() => signin(email, password)} style={styles.button} title="Log in" />
+                        <Button onPress={() => signup(email, password)} title="Sign up" />
+                        <Button onPress={() => signin(email, password)} title="Log in" />
                     </>
                 }
             </KeyboardAvoidingView>

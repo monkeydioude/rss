@@ -1,9 +1,10 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Button, Text } from "@react-native-material/core";
+import { Text } from "@react-native-material/core";
 import React from "react";
 import { GestureResponderEvent, TextStyle, View } from "react-native";
 import customStyle from "src/style/style";
 import tw from 'twrnc';
+import Button from './react-native-material/Button';
 
 type Props = {
     checked: boolean;

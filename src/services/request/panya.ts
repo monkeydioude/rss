@@ -100,7 +100,6 @@ export const get_feed = async (
     }
 }
 
-
 export const add_channel = async (url: string): Promise<Channel | null> => {
     const ctrl = new AbortController();
     url = add_scheme(url);

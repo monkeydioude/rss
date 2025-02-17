@@ -6,7 +6,7 @@ export const signup = async (credentials: Credentials): Promise<boolean> => {
     const ctrl = new AbortController();
     const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
     try {
-        const res = await fetch(`${appConfig.identityAPIURL}/v1/auth/signup`, {
+        const res = await fetch(`${appConfig.panyaAPIURL}/user/signup`, {
             body: JSON.stringify(credentials),
             method: "POST",
             headers: {
@@ -32,10 +32,14 @@ function cookieParser(cookieString: string | null): Map<string, string> {
     const res = new Map<string, string>();
     if (!cookieString || cookieString === "")
         return res;
+    console.log("cookieString", cookieString)
     cookieString.
         split(";")
         .map((cookie: string) => cookie.split("="))
         .forEach((cookie: string[]) => {
+            if (!cookie || cookie.length === 0 || !cookie[0] || !cookie[1]) {
+                return;
+            }
             res.set(decodeURIComponent(cookie[0].trim()), decodeURIComponent(cookie[1].trim().replaceAll("\"", "")));
         });
     return res;
@@ -66,9 +70,9 @@ export const signin = async (credentials: Credentials): Promise<IdentityResponse
     const ctrl = new AbortController();
     const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
     try {
-        const res = await fetch(`${appConfig.identityAPIURL}/v1/auth/login`, {
+        const res = await fetch(`${appConfig.panyaAPIURL}/user/login`, {
             body: JSON.stringify(credentials),
-            method: "PUT",
+            method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

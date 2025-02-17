@@ -10,6 +10,7 @@ import { Redirect, withLayoutContext } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { setIsBooted, useDispatch } from 'src/global_states/boot';
 import useBoot from 'src/hooks/useBoot';
 import { useIsLoading, useIsSignedIn } from 'src/services/identity/state';
@@ -30,6 +31,7 @@ const TabsLayout = () => {
     const dispatch = useDispatch();
     const isSignedIn = useIsSignedIn();
     const isLoading = useIsLoading();
+    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         dispatch(setIsBooted(bootDone));
@@ -47,6 +49,7 @@ const TabsLayout = () => {
     }
     return (
         <MaterialTopTabs
+            key="topTabs"
             tabBarPosition='bottom'
             screenOptions={{
                 tabBarInactiveTintColor: getBackgroundColor("bg-gray-100"),
@@ -57,19 +60,22 @@ const TabsLayout = () => {
                 },
                 tabBarStyle: {
                     backgroundColor: style.primaryColor,
+                    paddingBottom: insets.bottom,
+                    margin: 0,
                 },
                 tabBarItemStyle: {
                     padding: 0,
                 },
                 tabBarLabelStyle: {
-                    margin: 0,
+                    // margin: 0,
                     padding: 0,
                     textTransform: "capitalize",
-                    fontSize: 15
+                    fontSize: 15,
                 },
             }}
         >
             <MaterialTopTabs.Screen
+                key="index"
                 name="index"
                 options={{
                     title: "Feed",
@@ -78,6 +84,7 @@ const TabsLayout = () => {
             />
             <MaterialTopTabs.Screen
                 name="settings"
+                key="settings"
                 options={{
                     title: "Settings",
                     tabBarIcon: ({ color }) => <FontAwesome size={25} name="sliders" color={color} />,

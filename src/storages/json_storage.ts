@@ -4,8 +4,8 @@ import { Entity, Storage } from "./storage";
 export class JSONStorage<T> implements Entity<T> {
     readonly storage: Storage;
 
-    constructor(key: string) {
-        this.storage = new Storage(key);
+    constructor(_key: string) {
+        this.storage = new Storage(_key);
     }
 
     async update(entity: T): Promise<void> {

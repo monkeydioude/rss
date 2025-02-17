@@ -1,7 +1,7 @@
-import { Button } from "@react-native-material/core";
 import React, { useCallback } from "react";
 import { Alert } from "react-native";
 import appConfig from "src/appConfig";
+import Button from "src/components/ui/react-native-material/Button";
 import useAuth from "src/services/identity/useAuth";
 import style from "src/style/style";
 

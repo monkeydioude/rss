@@ -49,19 +49,19 @@ export interface DBStorage {
 
 // Storage is used to store any kind of local data
 export class Storage implements DBStorage {
-  readonly key: string;
+  readonly _key: string;
 
-  constructor(key: string) {
-    this.key = key;
+    constructor(_key: string) {
+        this._key = _key;
   }
 
   getKeyStorageKey(): string {
-    return this.key;
+      return this._key;
   }
 
   async insert(data: string): Promise<void> {
     try {
-      await new Locker().onUnlock(async () => AsyncStorage.setItem(this.key, data))
+        await new Locker().onUnlock(async () => AsyncStorage.setItem(this._key, data))
     } catch (e) {
       throw e;
     }
@@ -71,7 +71,7 @@ export class Storage implements DBStorage {
     try {
       let res: string | null = "";
       await new Locker().onUnlock(async () => {
-        res = await AsyncStorage.getItem(this.key)
+          res = await AsyncStorage.getItem(this._key)
       })
       return res;
     } catch (e) {
@@ -81,7 +81,7 @@ export class Storage implements DBStorage {
 
   async delete(): Promise<void> {
     try {
-      await new Locker().onUnlock(async () => AsyncStorage.removeItem(this.key))
+        await new Locker().onUnlock(async () => AsyncStorage.removeItem(this._key))
     } catch (e) {
       throw e;
     }

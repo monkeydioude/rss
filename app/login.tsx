@@ -7,7 +7,7 @@ import style from "src/style/style";
 import tw from "src/style/twrnc";
 
 const Login = (): React.ReactNode => {
-    const [email, setEmail] = useState("cabane143@yopmail.com");
+    const [email, setEmail] = useState("cabane124@yopmail.com");
     const [password, setPassword] = useState("cabane123");
     const { loading, signup, signin } = useAuth();
 

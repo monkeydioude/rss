@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import appConfig from "src/appConfig";
 import toast from "src/services/toast";
+import { ChannelStorage, ConfigStorage, FeedStorage } from "src/storages/custom";
 import { TokenStorage } from "src/storages/custom/token_storage";
 import { shouldRefreshToken, signinWithEmailPassword, signupWithEmailPassword } from "./client";
 import { refresh, status } from "./request";
@@ -99,6 +100,9 @@ const useAuth = () => {
     const signout = useCallback(async () => {
         await TokenStorage.clear();
         dispatch(setToken(null));
+        await ChannelStorage.clear();
+        await ConfigStorage.clear();
+        await FeedStorage.clear();
     }, []);
 
     const initSignin = useCallback(async () => {

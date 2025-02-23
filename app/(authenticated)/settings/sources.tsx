@@ -1,10 +1,11 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Button, Text } from '@react-native-material/core';
+import { Text } from '@react-native-material/core';
 import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 import appConfig from 'src/appConfig';
 import { AddFeedInput, ChannelsSubscriptions } from 'src/components/blocks/settings';
 import SettingModal, { SettingModalHandle } from 'src/components/modals/SettingModal';
+import Button from 'src/components/ui/react-native-material/Button';
 import { SettingWithEditInput, SettingWithSwitch } from 'src/components/ui/settings';
 import SettingsSectionTitle from "src/components/ui/settings/settingsSectionTitle";
 import { Channel } from 'src/entity/channel';
@@ -109,7 +110,6 @@ const SettingModalProxy = ({ bsRef, onChannelChange }: ProxyProps) => {
                         ...tw`grow-0 shrink-1`,
                     }}
                     onPress={onRemovePress}
-                    useNativeDriver={true}
                 />
                 <Button
                     title={i18n.en.CLOSE}
@@ -118,7 +118,6 @@ const SettingModalProxy = ({ bsRef, onChannelChange }: ProxyProps) => {
                         backgroundColor: style.primaryColorDark
                     }}
                     onPress={bsRef.current?.close}
-                    useNativeDriver={true}
                 />
             </View>
 

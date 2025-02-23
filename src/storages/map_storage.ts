@@ -32,4 +32,7 @@ export class MapStorage<KT, VT> implements Entity<Mapp<KT, VT>> {
             return false;
         return mapp.delete(key);
     }
+    async clear(): Promise<void> {
+        return this.storage.clear();
+    }
 }

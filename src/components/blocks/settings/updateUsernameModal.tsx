@@ -3,6 +3,7 @@ import React, { useCallback, useRef, useState } from "react";
 import { GestureResponderEvent, Modal, Pressable, Text, View } from "react-native";
 import appConfig from "src/appConfig";
 import Button from "src/components/ui/react-native-material/Button";
+import { useUserRefresh } from "src/hooks/useUserRefresh";
 import i18n from "src/i18n";
 import { updateEmailAddr } from "src/services/identity/client";
 import { canIRefresh, displayRemainingTime } from "src/services/time";
@@ -19,6 +20,8 @@ const UpdateUsernameModal = ({ visible, onRequestClose }: Props): React.ReactNod
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const lastUpdate = useRef(0);
+    const { userFullRefresh } = useUserRefresh();
+
     const cancelPropagation = useCallback((e: GestureResponderEvent) => {
         e.stopPropagation();
         e.preventDefault();
@@ -37,6 +40,7 @@ const UpdateUsernameModal = ({ visible, onRequestClose }: Props): React.ReactNod
             i18n.en.SETTINGS_USER_CHANGE_LOGIN_REQUEST_FAIL_1
         );
         lastUpdate.current = +new Date();
+        await userFullRefresh();
         onRequestClose();
     }, [username, password, lastUpdate.current, onRequestClose]);
     return (

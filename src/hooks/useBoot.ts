@@ -3,11 +3,13 @@ import { Channel } from "src/entity/channel";
 import { setChannels, useDispatch as useChannelsDispatch, useChannelsList } from "src/global_states/channels";
 import { initConfig, useConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
 import { setFeed, useDispatch as useFeedDispatch, useReloadFeed } from "src/global_states/feed";
+import { useDispatch as useUserDispatch } from "src/global_states/user";
 import logger from "src/services/logger";
 import { Mapp } from 'src/services/map/mapp';
 import { log } from "src/services/request/logchest";
 import { ChannelStorage, ConfigStorage, FeedStorage } from "src/storages/custom";
 import { useFeedRefresh } from "./useFeedRefresh";
+import { useUserRefresh } from "./useUserRefresh";
 
 // useBoot is a hook handling the app boot sequence configuration.
 // Should (and will) be called only once.
@@ -19,6 +21,10 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     const channelsList = useChannelsList();
     const witness = useReloadFeed();
     const config = useConfig();
+
+    const userDispatch = useUserDispatch();
+    const { userFullRefresh } = useUserRefresh();
+
     const { managedFeedRefresh, resetCoroutineFeedRefresh } = useFeedRefresh();
 
     useEffect(() => {
@@ -80,6 +86,19 @@ const useBoot = (onBootFinish?: () => void): boolean => {
         }
     }
 
+    const bootLocalUserData = async () => {
+        try {
+            logger.info(">> ⚙️ User loader STARTING");
+            // const usrRes = await get_user();
+            // userDispatch(setUser(await usrRes[0]?.json()));
+            await userFullRefresh();
+            logger.info("<< ⚙️ User loader DONE");
+        } catch (err) {
+            console.error("💀 could not load user", err);
+            log(`Boot: could not load uonfig: ${err}`);
+        }
+    }
+
     useEffect(() => {
         // in case of global state modification that would re-trigger the boot sequence.
         // Also in dev, so Expo hot reload won't fire this every time it refreshes.
@@ -93,6 +112,8 @@ const useBoot = (onBootFinish?: () => void): boolean => {
                 await bootLocalUserConfig();
                 // hydrate channels store with localStorage data
                 await bootLocalChannels();
+
+                await bootLocalUserData();
                 // load latest feed items
                 // await bootFeed();
                 if (onBootFinish) {

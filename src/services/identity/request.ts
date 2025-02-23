@@ -32,7 +32,6 @@ function cookieParser(cookieString: string | null): Map<string, string> {
     const res = new Map<string, string>();
     if (!cookieString || cookieString === "")
         return res;
-    console.log("cookieString", cookieString)
     cookieString.
         split(";")
         .map((cookie: string) => cookie.split("="))
@@ -81,7 +80,8 @@ export const signin = async (credentials: Credentials): Promise<IdentityResponse
         });
         if (res.status > 200) {
             const err = await res.json();
-            throw new IdentityError(res.status, err.Message);
+            console.log(err)
+            throw new IdentityError(res.status, err.reason, err.message);
         }
         const token = getIdentityTokenFromHeaders(res.headers)
         if (!token) {
@@ -223,7 +223,7 @@ export class Request<T> {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'Cookie': `Authorization=Bearer ${this.token?.jwt};`,
+                    'Authorization': `Bearer ${this.token?.jwt}`,
                 },
                 signal: ctrl.signal,
             };
@@ -268,13 +268,13 @@ export class Request<T> {
 }
 
 export const updateUsernameRequest = async (token: IdentityToken, editUser: EditUser): Promise<[Response | null, IdentityError | null]> => {
-    return new Request<Response>({ url: `${appConfig.identityAPIURL}/v1/user/login`, method: "PUT" }, token).do(editUser);
+    return new Request<Response>({ url: `${appConfig.panyaAPIURL}/user/username`, method: "PUT" }, token).do(editUser);
 }
 
 export const updatePasswordRequest = async (token: IdentityToken, editUser: EditUser): Promise<[Response | null, IdentityError | null]> => {
-    return new Request<Response>({ url: `${appConfig.identityAPIURL}/v1/user/password`, method: "PUT" }, token).do(editUser);
+    return new Request<Response>({ url: `${appConfig.panyaAPIURL}/user/password`, method: "PUT" }, token).do(editUser);
 }
 
 export const deactivate = async (token: IdentityToken): Promise<[Response | null, IdentityError | null]> => {
-    return await new Request<Response>({ url: `${appConfig.identityAPIURL}/v1/user/deactivate`, method: "DELETE" }, token).do();
+    return await new Request<Response>({ url: `${appConfig.panyaAPIURL}/user/deactivate`, method: "DELETE" }, token).do();
 }

@@ -5,6 +5,7 @@ import { ConfigState } from "src/global_states/config";
 import { TokenStorage } from "src/storages/custom/token_storage";
 import appConfig from "../../appConfig";
 import { make_feed_url } from "../feed_builder";
+import { Request } from "../identity/request";
 import { IdentityError } from "../identity/types";
 import { Mapp } from "../map/mapp";
 import { add_scheme } from "../normalization/url";
@@ -84,7 +85,6 @@ export const get_feed = async (
         const feed = await handleResponse(res);
         return [feed, null];
     } catch (err) {
-        console.log("?heee?s", err)
         let idErr = err as IdentityError;
         if (typeof err !== "object") {
             idErr = new IdentityError(500, err as string);
@@ -157,4 +157,12 @@ export const get_channels = async (): Promise<APIChannel[]> => {
         clearTimeout(timeoutId);
     }
     return [];
+}
+
+export const get_user = async (): Promise<[Response | null, IdentityError | null]> => {
+    const token = await TokenStorage.retrieve();
+    if (!token) {
+        return [null, null];
+    }
+    return await new Request<Response>({ url: `${appConfig.panyaAPIURL}/user`, method: "GET" }, token).do();
 }

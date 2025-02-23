@@ -38,6 +38,7 @@ export default {
         "SETTINGS_USER_CHANGE_PASSWORD_INPUT1_PLACEHOLDER": "Enter your new password",
         "SETTINGS_USER_CHANGE_PASSWORD_INPUT2_PLACEHOLDER": "Enter your new password again",
         "SETTINGS_USER_CHANGE_LOGIN_INPUT_PLACEHOLDER": "Change your email address",
+        "SETTINGS_USER_CHANGE_PASSWORD_REQUIRED_INPUT_PLACEHOLDER": "Enter your password",
         "SETTINGS_USER_CHANGE_PASSWORD_REQUIRED": "Password required for this action",
         "SETTINGS_USER_CHANGE_PASSWORD_INPUT_PLACEHOLDER": "Change your password",
         "SETTINGS_USER_CHANGE_PASSWORD_OLD_PASSWORD": "Your current password",

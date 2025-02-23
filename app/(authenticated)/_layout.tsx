@@ -11,6 +11,7 @@ import Stores from "src/global_states";
 import style from "src/style/style";
 
 const RootNavigator = (): JSX.Element => {
+
     return (
         <Stack
             screenOptions={{

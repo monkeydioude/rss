@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RefreshControl, Text, View } from 'react-native';
 import Animated, {
     useAnimatedRef
@@ -11,6 +11,7 @@ import { useIsBooted } from 'src/global_states/boot';
 import { useConfig } from 'src/global_states/config';
 import { reloadFeed, useDispatch, useFilteredFeed } from 'src/global_states/feed';
 import { emojiDispenser } from 'src/services/emoji_dispenser';
+import { get_user } from 'src/services/request/panya';
 import tw from 'src/style/twrnc';
 
 const FeedsView = (): JSX.Element => {
@@ -25,6 +26,12 @@ const FeedsView = (): JSX.Element => {
         const scrollPosition = event.nativeEvent.contentOffset.y;
         bttRef.current?.handleScroll(scrollPosition);
     }, [bttRef.current]);
+
+    useEffect(() => {
+        (async () => {
+            console.log(await get_user());
+        })()
+    }, []);
 
     return (
         <View style={tw`flex-1 m-0 p-0`}>

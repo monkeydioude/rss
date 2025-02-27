@@ -1,10 +1,10 @@
 {
     "expo": {
         "newArchEnabled": true,
-        "name": "cookie",
+        "name": "Cookie Reader",
         "slug": "cookie",
         "scheme": "cookie",
-        "version": "9",
+        "version": "1.1.0",
         "orientation": "portrait",
         "icon": "./assets/cookie.png",
         "owner": "monkeydioude",
@@ -19,7 +19,7 @@
         ],
         "ios": {
             "supportsTablet": true,
-            "bundleIdentifier": "com.calq.cookie"
+            "bundleIdentifier": "com.calq.cookiereader"
         },
         "android": {
             "adaptiveIcon": {

@@ -1,10 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { ActivityIndicator } from '@react-native-material/core';
-import {
-    createMaterialTopTabNavigator,
-    MaterialTopTabNavigationEventMap,
-    MaterialTopTabNavigationOptions,
-} from "@react-navigation/material-top-tabs";
+
+import { createMaterialTopTabNavigator, MaterialTopTabNavigationEventMap, MaterialTopTabNavigationOptions } from '@react-navigation/material-top-tabs';
 import { ParamListBase, TabNavigationState } from "@react-navigation/native";
 import { Redirect, withLayoutContext } from "expo-router";
 import { StatusBar } from 'expo-status-bar';

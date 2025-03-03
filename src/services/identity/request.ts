@@ -268,11 +268,11 @@ export class Request<T> {
 }
 
 export const updateUsernameRequest = async (token: IdentityToken, editUser: EditUser): Promise<[Response | null, IdentityError | null]> => {
-    return new Request<Response>({ url: `${appConfig.panyaAPIURL}/user/username`, method: "PUT" }, token).do(editUser);
+    return new Request<Response>({ url: `${appConfig.panyaAPIURL}/me/username`, method: "PUT" }, token).do(editUser);
 }
 
 export const updatePasswordRequest = async (token: IdentityToken, editUser: EditUser): Promise<[Response | null, IdentityError | null]> => {
-    return new Request<Response>({ url: `${appConfig.panyaAPIURL}/user/password`, method: "PUT" }, token).do(editUser);
+    return new Request<Response>({ url: `${appConfig.panyaAPIURL}/me/password`, method: "PUT" }, token).do(editUser);
 }
 
 export const deactivate = async (token: IdentityToken): Promise<[Response | null, IdentityError | null]> => {

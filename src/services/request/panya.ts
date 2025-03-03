@@ -106,7 +106,7 @@ export const add_channel = async (url: string): Promise<Channel | null> => {
     const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
     try {
         const token = await TokenStorage.retrieve();
-        const res = await fetch(`${appConfig.panyaAPIURL}/channel`, {
+        const res = await fetch(`${appConfig.panyaAPIURL}/me/channel`, {
             body: JSON.stringify({
                 'channel_url': url,
             }),
@@ -164,5 +164,31 @@ export const get_user = async (): Promise<[Response | null, IdentityError | null
     if (!token) {
         return [null, null];
     }
-    return await new Request<Response>({ url: `${appConfig.panyaAPIURL}/user`, method: "GET" }, token).do();
+    return await new Request<Response>({ url: `${appConfig.panyaAPIURL}/me`, method: "GET" }, token).do();
+}
+
+export const update_channels = async (channel_ids: [number, boolean][]): Promise<[Response | null, IdentityError | null]> => {
+    const token = await TokenStorage.retrieve();
+    if (!token) {
+        return [null, null];
+    }
+    return await new Request<Response>({ url: `${appConfig.panyaAPIURL}/me/channels`, method: "PUT" }, token).do(channel_ids);
+}
+
+export type PanyaChannel = {
+    name: string;
+    id: number;
+} 
+
+export const get_channels_list = async (): Promise<[PanyaChannel[], IdentityError | null]> => {
+    try {
+        const token = await TokenStorage.retrieve();
+        if (!token) {
+            return [[], null];
+        }
+        let channels_raw = await new Request<Response>({ url: `${appConfig.panyaAPIURL}/me/channels`, method: "GET" }, token).do();
+        return [await channels_raw[0]?.json(), null];
+    } catch (err) {
+        return [[], new IdentityError(500, "" + err)];
+    }
 }

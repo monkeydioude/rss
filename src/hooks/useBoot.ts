@@ -7,6 +7,7 @@ import { useDispatch as useUserDispatch } from "src/global_states/user";
 import logger from "src/services/logger";
 import { Mapp } from 'src/services/map/mapp';
 import { log } from "src/services/request/logchest";
+import { get_channels_list, PanyaChannel } from "src/services/request/panya";
 import { ChannelStorage, ConfigStorage, FeedStorage } from "src/storages/custom";
 import { useFeedRefresh } from "./useFeedRefresh";
 import { useUserRefresh } from "./useUserRefresh";
@@ -43,6 +44,13 @@ const useBoot = (onBootFinish?: () => void): boolean => {
         try {
             logger.info(">> 📺 Channels loader STARTING")
             channels = await ChannelStorage.retrieveOrNew();
+             (await get_channels_list())[0].forEach((channel: PanyaChannel) => {
+                channels.set(channel.id, {
+                    channel_name: channel.name,
+                    channel_id: channel.id,
+                    is_sub: true,
+                });
+            });
             channelsDispatch(setChannels(channels));
             logger.info("<< 📺 Channels loader DONE")
         } catch (err) {

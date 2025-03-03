@@ -1,6 +1,6 @@
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { TextInput } from "@react-native-material/core";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Keyboard, NativeSyntheticEvent, Pressable, TextInputSubmitEditingEventData, View } from "react-native";
 import { useChannelsList } from "src/global_states/channels";
 import { useChannels } from "src/hooks/useChannels";
@@ -10,8 +10,13 @@ import { add_feed_source } from "src/services/request/panya";
 import toast from "src/services/toast";
 import tw from 'twrnc';
 
-const AddFeedInput = (): JSX.Element => {
-    const [text, setText] = useState<string>("");
+type Props = {
+    onTextChange?: (text: string) => void;
+    text?: string;
+}
+
+const AddFeedInput = ({ onTextChange, text: propsText }: Props): JSX.Element => {
+    const [text, setText] = useState<string>(propsText || "");
     // const dispatch = useDispatch();
     const channels = useChannelsList();
     const { push: pushChannel } = useChannels();
@@ -26,6 +31,18 @@ const AddFeedInput = (): JSX.Element => {
             }} name="close" />
         </Pressable>
     </View>);
+    
+    useEffect(() => {
+        if (onTextChange) {
+            onTextChange(text);
+        }
+    }, [text]);
+
+    useEffect(() => {
+        if (propsText) {
+            setText(propsText);
+        }
+    }, [propsText]);
 
     const onSubmit = async (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
         try {

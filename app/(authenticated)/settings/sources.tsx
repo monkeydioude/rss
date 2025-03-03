@@ -9,10 +9,11 @@ import Button from 'src/components/ui/react-native-material/Button';
 import { SettingWithEditInput, SettingWithSwitch } from 'src/components/ui/settings';
 import SettingsSectionTitle from "src/components/ui/settings/settingsSectionTitle";
 import { Channel } from 'src/entity/channel';
-import { useSubbedChannelIDs } from 'src/global_states/channels';
+import { useChannelsList, useSubbedChannelIDs } from 'src/global_states/channels';
 import { useChannels } from 'src/hooks/useChannels';
 import useComponentsDataBridge from 'src/hooks/useComponentsDataBridge';
 import i18n from 'src/i18n';
+import { update_channels } from 'src/services/request/panya';
 import { getBackgroundColor } from 'src/services/tailwind';
 import toast from 'src/services/toast';
 import style from 'src/style/style';
@@ -133,7 +134,30 @@ const FeedsSettings = (): React.ReactNode => {
     // The setChannel function is triggered when onChannelChange is called
     // by the component initiating the data transfer.
     const [onChannelChange, modalChannelSetter] = useComponentsDataBridge<Channel>();
-    const channels = useSubbedChannelIDs();
+    const channels  = useSubbedChannelIDs();
+    const allChans = useChannelsList();
+    const channelsBefore = useRef<number[]>([...channels]);
+
+    // check for difference in channels update
+    useEffect(() => {
+        try {
+            const CurrentSet = new Set(channels);
+            const BeforeSet = new Set(channelsBefore.current);
+            const diff = [
+                ...channels.filter(item => !BeforeSet.has(item)),
+                ...channelsBefore.current.filter(item => !CurrentSet.has(item)),
+            ];
+            if (diff.length > 0) {
+                channelsBefore.current = [...channels];
+                update_channels(allChans.map(chan => [chan[0], chan[1].is_sub]))
+                    .catch((err) => {
+                        toast.err(i18n.en.SETTINGS_CHANNELS_UPDATE_ERR, err);
+                    })
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }, [channels]);
 
     return (
         <View style={{ ...tw`flex-1 flex-col grow-1 bg-primaryColor` }}>

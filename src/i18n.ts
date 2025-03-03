@@ -55,5 +55,7 @@ export default {
         "SETTINGS_USER_DEACTIVATE_ACCOUNT": "Deactivate your account",
         "SETTINGS_USER_DEACTIVATE_ACCOUNT_ALERT": "You are about to deactivate your account",
         "SETTINGS_USER_DEACTIVATE_ACCOUNT_FAIL_1": "Could not deactivate account",
+        "SETTINGS_CHANNELS_UPDATE_SUCCESS": "Channels updated with success 👍",
+        "SETTINGS_CHANNELS_UPDATE_ERR": "Could not update channels list",
     }
 }

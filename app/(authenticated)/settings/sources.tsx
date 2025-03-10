@@ -149,7 +149,7 @@ const FeedsSettings = (): React.ReactNode => {
             ];
             if (diff.length > 0) {
                 channelsBefore.current = [...channels];
-                update_channels(allChans.map(chan => [chan[0], chan[1].is_sub]))
+                update_channels(allChans.map(chan => [chan[0], chan[1].is_sub || false]))
                     .catch((err) => {
                         toast.err(i18n.en.SETTINGS_CHANNELS_UPDATE_ERR, err);
                     })

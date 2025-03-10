@@ -3,7 +3,6 @@ import { Channel } from "src/entity/channel";
 import { setChannels, useDispatch as useChannelsDispatch, useChannelsList } from "src/global_states/channels";
 import { initConfig, useConfig, useDispatch as useConfigDispatch } from "src/global_states/config";
 import { setFeed, useDispatch as useFeedDispatch, useReloadFeed } from "src/global_states/feed";
-import { useDispatch as useUserDispatch } from "src/global_states/user";
 import logger from "src/services/logger";
 import { Mapp } from 'src/services/map/mapp';
 import { log } from "src/services/request/logchest";
@@ -23,8 +22,8 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     const witness = useReloadFeed();
     const config = useConfig();
 
-    const userDispatch = useUserDispatch();
     const { userFullRefresh } = useUserRefresh();
+    // const { getUser } = useUser();
 
     const { managedFeedRefresh, resetCoroutineFeedRefresh } = useFeedRefresh();
 
@@ -44,11 +43,11 @@ const useBoot = (onBootFinish?: () => void): boolean => {
         try {
             logger.info(">> 📺 Channels loader STARTING")
             channels = await ChannelStorage.retrieveOrNew();
-             (await get_channels_list())[0].forEach((channel: PanyaChannel) => {
+            (await get_channels_list())[0].forEach((channel: PanyaChannel) => {
                 channels.set(channel.id, {
                     channel_name: channel.name,
                     channel_id: channel.id,
-                    is_sub: true,
+                    is_sub: channel.sub,
                 });
             });
             channelsDispatch(setChannels(channels));
@@ -118,10 +117,9 @@ const useBoot = (onBootFinish?: () => void): boolean => {
                 // start app boot routine.
                 logger.info("!!! 🏁 Boot STARTING !!!")
                 await bootLocalUserConfig();
+                await bootLocalUserData();
                 // hydrate channels store with localStorage data
                 await bootLocalChannels();
-
-                await bootLocalUserData();
                 // load latest feed items
                 // await bootFeed();
                 if (onBootFinish) {

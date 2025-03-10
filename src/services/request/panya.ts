@@ -178,6 +178,7 @@ export const update_channels = async (channel_ids: [number, boolean][]): Promise
 export type PanyaChannel = {
     name: string;
     id: number;
+    sub: boolean;
 } 
 
 export const get_channels_list = async (): Promise<[PanyaChannel[], IdentityError | null]> => {

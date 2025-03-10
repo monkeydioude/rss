@@ -2,8 +2,8 @@
 docker-all: docker-update docker-restart
 
 .PHONY: dev
-dev: docker-start
-	npm run expo:start --clear -- --port 8082
+dev:
+	npx expo start -c -- --port 8082s
 
 .PHONY: test
 test:

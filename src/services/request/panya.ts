@@ -131,12 +131,16 @@ export const add_channel = async (url: string): Promise<Channel | null> => {
     return null;
 }
 
-export const get_channels = async (): Promise<APIChannel[]> => {
+export const get_channels = async (q?: string): Promise<APIChannel[]> => {
     const ctrl = new AbortController();
     const timeoutId = setTimeout(() => ctrl.abort(), appConfig.requestTimeout);
     try {
+        let query = "";
+        if (q) {
+            query = `q=${q}`
+        }
         const token = await TokenStorage.retrieve();
-        const res = await fetch(`${appConfig.panyaAPIURL}/channels`, {
+        const res = await fetch(`${appConfig.panyaAPIURL}/channels?${query}`, {
             credentials: "include",
             method: "GET",
             headers: {

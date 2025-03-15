@@ -53,7 +53,6 @@ const Settings = (): JSX.Element => {
                         <Hr />
                         <Logout />
                         <Hr />
-                        {/* {isDev() && <DevMenu />} */}
                         <DevMenu />
                         <View style={tw`flex flex-row justify-end pr-2 w-93`}>
                             <Text style={tw`text-white`}>{appConfig.appVersion}</Text>

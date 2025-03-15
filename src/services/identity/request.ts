@@ -80,7 +80,7 @@ export const signin = async (credentials: Credentials): Promise<IdentityResponse
         });
         if (res.status > 200) {
             const err = await res.json();
-            console.log(err)
+            console.log(err);
             throw new IdentityError(res.status, err.reason, err.message);
         }
         const token = getIdentityTokenFromHeaders(res.headers)
@@ -231,7 +231,6 @@ export class Request<T> {
             if (payload) {
                 fetchOptions.body = JSON.stringify(payload);
             }
-            console.log(fetchOptions);
             const res = await fetch(this.fetchParams.url, fetchOptions);
 
             if (res.status > 200) {

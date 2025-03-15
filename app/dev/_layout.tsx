@@ -1,18 +1,14 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Stack, useNavigation } from "expo-router";
+import { Stack } from "expo-router";
 import React from "react";
-
+import HeaderBackButton from "src/components/ui/headerBackButton";
 
 const Layout = (): React.ReactNode => {
-    const navigation = useNavigation();
 
     return (
         <Stack
             screenOptions={{
                 headerShown: true,
-                headerLeft: () => (
-                    <Ionicons name="arrow-back" size={24} onPress={() => navigation.goBack()} />
-                ),
+                headerLeft: () => <HeaderBackButton />,
         }}>
             <Stack.Screen
                 name="dev_channels"

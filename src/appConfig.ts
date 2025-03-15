@@ -38,8 +38,11 @@ const appConfig = {
             "૮₍˶Ó﹏Ò ⑅₎ა", "¯\\_(ツ)_/¯", "(つ﹏⊂)", "(´･ω･`)?", "(눈‸눈)"
         ]
     },
+    suggestionHeaderSize: 145,
     panyaAPIURL: getPanyaServerAddr(),
     logchestAPIURL: getLogchestAPIURL(),
+    suggestionWaitingTime: 500,
+    suggestionMinChars: 3,
     fetchRequestTimeout: 4 * 1000, // in millisecond
     bootFetchRequestTimeout: 8 * 1000,
     fetchThreshold: 30 * 1000, // in millisecond

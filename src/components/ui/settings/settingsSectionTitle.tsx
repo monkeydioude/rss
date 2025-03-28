@@ -14,6 +14,7 @@ type Props = {
 const SettingsSectionTitle = ({ title, iconFA, iconIo }: Props): React.ReactNode => {
     return (
         <View style={{
+            zIndex: 1,
             ...tw`items-center flex flex-row justify-center`,
         }}>
             {iconFA && !iconIo && <FontAwesome color="white" name={iconFA} style={tw`text-xl`} />}

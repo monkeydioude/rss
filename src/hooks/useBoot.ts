@@ -19,7 +19,7 @@ const useBoot = (onBootFinish?: () => void): boolean => {
     const configDispatch = useConfigDispatch();
     const feedDispatch = useFeedDispatch();
     const channelsList = useChannelsList();
-    const witness = useReloadFeed();
+    const { witness, method } = useReloadFeed();
     const config = useConfig();
 
     const { userFullRefresh } = useUserRefresh();
@@ -32,8 +32,8 @@ const useBoot = (onBootFinish?: () => void): boolean => {
             return;
         }
         resetCoroutineFeedRefresh(channelsList, config);
-        managedFeedRefresh(channelsList, config);
-    }, [channelsList, bootFinished, config, witness]);
+        managedFeedRefresh(channelsList, config, method);
+    }, [channelsList, bootFinished, config, witness, method]);
 
     // bootLocalChannels try to fetch channels ids from local storage
     // and hydrate our channels global state with them

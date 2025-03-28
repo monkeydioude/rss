@@ -6,7 +6,7 @@ export const shouldReload = (
 ): [boolean, Error] => {
     if (!feedsRefreshTimer)
         feedsRefreshTimer = appConfig.feedsRefreshTimer;
-    const res = lastRefresh + (feedsRefreshTimer * 0.75) <= +new Date();
+    const res = lastRefresh + (feedsRefreshTimer) <= +new Date();
     let err: Error = new Error();
     if (!res) {
         err = new Error(`should not refresh, too early: ${lastRefresh} + ${feedsRefreshTimer} > ${+new Date()}`)

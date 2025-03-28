@@ -46,7 +46,7 @@ const FeedsView = (): JSX.Element => {
                                 return;
                             }
                             setRefreshing(true);
-                            dispatch(reloadFeed());
+                            dispatch(reloadFeed("manual"));
                             setRefreshing(false);
                         }} />
                 }

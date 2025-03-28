@@ -7,6 +7,7 @@ type FeedState = {
     witness: Symbol,
     filters: FeedItemFilter[],
     filtersMatch: string,
+    method: "manual"| "auto",
 }
 
 const initialState: FeedState = {
@@ -14,6 +15,7 @@ const initialState: FeedState = {
     witness: Symbol(),
     filters: [],
     filtersMatch: "",
+    method: "auto",
 }
 
 export const Context = createContext<[FeedState, React.Dispatch<Action>]>([initialState, () => { console.error("too soon to call feed dispatch") }])
@@ -25,9 +27,9 @@ export const useGetFeed = (): Item[] => {
     return feed;
 }
 
-export const useReloadFeed = (): Symbol => {
-    const [{ witness }] = useContext(Context)
-    return witness;
+export const useReloadFeed = (): FeedState => {
+    const [state] = useContext(Context)
+    return state;
 }
 
 export const useFilteredFeed = (): Item[] => {
@@ -48,10 +50,11 @@ const _set_feed = (state: FeedState, feed: Item[]): FeedState => {
     }
 }
 
-const _reload_feed = (state: FeedState): FeedState => {
+const _reload_feed = (state: FeedState, method: "manual" | "auto"): FeedState => {
     return {
         ...state,
         witness: Symbol(),
+        method,
     };
 }
 
@@ -96,8 +99,8 @@ const actions = {
         payload,
         func: _set_feed,
     }),
-    reloadFeed: () => ({
-        payload: null,
+    reloadFeed: (method: "manual" | "auto") => ({
+        payload: method,
         func: _reload_feed,
     }),
     addFeedFilter: (payload: FeedItemFilter) => ({
